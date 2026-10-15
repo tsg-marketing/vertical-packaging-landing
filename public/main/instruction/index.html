@@ -40,9 +40,9 @@
         <ol><li><a href="/main/index.html">Макет</a></li><li><span aria-current="page">Инструкция по переносу</span></li></ol>
       </nav>
       <h1 class="page-head__title">Перенос дизайна в Django через Cline</h1>
-      <p class="page-head__subtitle">Все внутренние страницы, кроме главной: профессии, курсы, школы, сравнение, блог. Пошаговые промпты для VS Code + Cline с учётом того, что часть данных в вашей PostgreSQL ещё нет.</p>
+      <p class="page-head__subtitle">Все страницы: главная, профессии, курсы, школы, сравнение, блог. Пошаговые промпты для VS Code + Cline с учётом того, что часть данных в вашей PostgreSQL ещё нет.</p>
       <div class="ins-download">
-        <a href="/django-export.zip" class="btn btn--primary btn--lg" download>Скачать пакет (ZIP, 0,5 МБ)</a>
+        <a href="/django-export.zip" class="btn btn--primary btn--lg" download>Скачать пакет (ZIP, 1,0 МБ)</a>
         <p>Папка в проекте: <code>public/django-export/</code> · архив: <code>public/django-export.zip</code></p>
       </div>
     </section>
@@ -65,6 +65,7 @@
             <li><a href="#step-7">Шаг 7. Школы: список и страница школы</a></li>
             <li><a href="#step-8">Шаг 8. Сравнение курсов</a></li>
             <li><a href="#step-9">Шаг 9. Блог: лента и статья</a></li>
+            <li><a href="#step-home">Шаг 9.5. Главная страница</a></li>
             <li><a href="#step-10">Шаг 10. Карта сайта, редиректы, финальная проверка</a></li>
             <li><a href="#step-11">Если что-то пошло не так</a></li>
           </ol>
@@ -76,7 +77,7 @@
       <section class="ins-step" id="package">
         <h2 class="ins-step__title">Что в пакете</h2>
         <ul class="ins-files">
-          <li><code>mockups/</code><span>9 HTML-макетов — эталон вёрстки. В каждом динамическом месте стоит метка <code>&lt;!-- DATA: course.price --&gt;</code>, у реклам — <code>&lt;!-- AD SLOT --&gt;</code>.</span></li>
+          <li><code>mockups/</code><span>10 HTML-макетов (главная + 9 внутренних) — эталон вёрстки. В каждом динамическом месте стоит метка <code>&lt;!-- DATA: course.price --&gt;</code>, у реклам — <code>&lt;!-- AD SLOT --&gt;</code>.</span></li>
           <li><code>static/edukursy/</code><span>Готовая статика: один <code>style.css</code> (без сборки, без Tailwind), <code>script.js</code> (меню, фильтры на мобильном, сортировка, FAQ), картинки-заглушки.</span></li>
           <li><code>DATA_MAP.md</code><span>Карта всех полей по сущностям: школа, профессия, курс, сравнение, блог. Для каждого поля — где используется и что выводить, если его нет.</span></li>
           <li><code>.clinerules</code><span>Правила для Cline: не переписывать CSS, сохранять разметку, не трогать существующие таблицы, скрывать пустые блоки.</span></li>
@@ -88,6 +89,7 @@
           <table>
             <thead><tr><th>Страница</th><th>Макет</th><th>Адрес в Django</th></tr></thead>
             <tbody>
+              <tr><td><a href="/main/index.html" target="_blank">Главная</a></td><td><code>mockups/index.html</code></td><td><code>/</code></td></tr>
               <tr><td><a href="/main/professions/index.html" target="_blank">Список профессий</a></td><td><code>mockups/professions/index.html</code></td><td><code>/professions/</code></td></tr>
               <tr><td><a href="/main/professions/backend-razrabotchik/index.html" target="_blank">Страница профессии</a></td><td><code>mockups/professions/backend-razrabotchik/index.html</code></td><td><code>/professions/&lt;slug&gt;/</code></td></tr>
               <tr><td><a href="/main/courses/index.html" target="_blank">Каталог курсов</a></td><td><code>mockups/courses/index.html</code></td><td><code>/courses/</code></td></tr>
@@ -307,6 +309,35 @@
         </div>
       </section>
 
+      <section class="ins-step" id="step-home">
+        <h2 class="ins-step__title">Шаг 9.5. Главная страница</h2>
+        <p>Макет: <code>mockups/index.html</code> (в проекте — <code>public/main/index.html</code>, открывается по адресу <a href="/main/index.html" target="_blank">/main</a>). Делается после внутренних страниц: главная использует их карточки, каталог и фильтры.</p>
+        <p class="ins-note">Если на сайте уже есть главная, Cline сначала повесит новую на <code>/new-home/</code>, и только после вашей проверки переключит адрес <code>/</code>.</p>
+        <div class="prompt">
+          <div class="prompt__bar"><span>Промпт для Cline</span><button type="button" class="copy-btn" data-target="p-home">Копировать</button></div>
+          <pre class="prompt__code" id="p-home">Сделай главную страницу / по макету _design/mockups/index.html. Прочитай раздел «7. Главная страница» в _design/DATA_MAP.md.
+
+ВАЖНО: на сайте уже может быть своя главная. Сначала найди текущий view и шаблон для &quot;/&quot; (urls.py) и покажи мне. НЕ удаляй её: новый шаблон сделай templates/edukursy/home.html, новый view — HomeView. Переключение URL &quot;/&quot; — только после моего подтверждения (до этого повесь новую главную на /new-home/ для проверки).
+
+Секции (разметка 1:1 из макета, наследуй base.html, шапку/подвал — из partials):
+1. Первый экран: заголовок, поиск (GET; если отдельного поиска нет — action=&quot;{% url &#x27;courses&#x27; %}&quot; с параметром q и обработай q в каталоге), счётчики курсов/школ/профессий (Count, кэшировать через django cache на 1 час).
+2. Виджет «Подбор курса»: GET-форма на каталог /courses/. Профессии — из БД. Поля level, duration (short ≤3 мес, mid 3–9, long &gt;9), price_max, certificate, installment, mentor — каталог должен их понимать; если соответствующего поля в модели нет — убери этот фильтр из формы (не оставляй нерабочих чекбоксов). Ползунок бюджета уже работает через script.js (#pk-budget).
+3. Популярные профессии: 8–12 шт. (по Profession.order или по числу курсов), annotate courses_count, min_price. Карточка article.profession-card.
+4. Реклама after_professions — partials/ad_slot.html.
+5. Популярные курсы: 6–12 шт. (is_featured, иначе по популярности), select_related(&#x27;school&#x27;). Карточка article.course-card — вынеси в partials/cards/course_card_big.html. Рейтинг, отзывы, формат, старая цена, рассрочка — каждое в {% if %}.
+6. «Как это работает» и «Как мы сравниваем» — статично в шаблоне.
+7. Реклама native_middle.
+8. Школы: все активные школы с courses_count и min_price.
+9. Блог: 3 последние статьи (partials/cards/post_card.html). Нет статей — секцию скрыть.
+10. SEO-текст (класс prose prose--wide) — статично или из SiteText, FAQ — из FAQ(page_key=&quot;home&quot;) или статично, с микроразметкой FAQPage.
+11. Реклама bottom_wide.
+
+Общее число SQL-запросов на главной — не больше 12 (проверь). Title, description и canonical &quot;https://&lt;домен&gt;/&quot; — через блоки base.html. Добавь Organization + WebSite (SearchAction) в JSON-LD.
+
+После: сравни с макетом на 1440 и 390 px и перечисли отличия.</pre>
+        </div>
+      </section>
+
       <section class="ins-step" id="step-10">
         <h2 class="ins-step__title">Шаг 10. Карта сайта, редиректы, финальная проверка</h2>
         <div class="prompt">
@@ -314,7 +345,7 @@
           <pre class="prompt__code" id="p10">1. Добавь страницы в sitemap.xml (django.contrib.sitemaps): профессии, курсы, школы, статьи. /compare/ с параметрами — не добавлять.
 2. Проверь robots.txt: не закрыты ли новые разделы.
 3. Если раньше эти разделы жили по другим адресам — сделай 301-редиректы.
-4. Пройди все страницы: /professions/, /professions/&lt;slug&gt;/, /courses/, /courses/&lt;school&gt;/&lt;course&gt;/, /schools/, /schools/&lt;slug&gt;/, /compare/?courses=..., /blog/, /blog/&lt;slug&gt;/.
+4. Пройди все страницы: / (главная), /professions/, /professions/&lt;slug&gt;/, /courses/, /courses/&lt;school&gt;/&lt;course&gt;/, /schools/, /schools/&lt;slug&gt;/, /compare/?courses=..., /blog/, /blog/&lt;slug&gt;/.
    Для каждой: нет ошибок 500, нет «None»/пустых плашек, нет N+1 (число SQL-запросов ≤ 15), вёрстка совпадает с макетом на 1440 и 390 px.
 5. Удали из шаблонов все оставшиеся &lt;!-- DATA --&gt; комментарии.
 6. Составь короткий отчёт: что сделано, какие блоки скрыты из-за отсутствия данных, какие поля нужно заполнить в админке.</pre>

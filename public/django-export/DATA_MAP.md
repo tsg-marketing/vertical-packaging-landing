@@ -142,3 +142,26 @@ Cline сравнивает поля с существующими моделям
 | Рекламные слоты (AD SLOT) | реклама | модель AdSlot(key, html, is_active) или include-шаблон |
 | current_year | подвал | `{% now "Y" %}` |
 | Ссылки меню / подвала | шапка, подвал | `{% url %}` |
+
+## 7. Главная страница (`/`)
+
+Макет: `mockups/index.html`. Секции сверху вниз и откуда брать данные:
+
+| Секция | Поля в макете | Источник | Если нет данных |
+|---|---|---|---|
+| Первый экран + поиск | stats.courses_total, stats.schools_total, stats.professions_total | вычисл. (`Count` по моделям, кэш 1 час) | скрыть счётчик |
+| Поиск (`form.search`, GET `/search/?q=`) | — | view поиска | если поиска нет — action на `/courses/?q=` |
+| Виджет «Подбор курса» (GET → `/courses/`) | profession, level (zero/base/pro), duration (short/mid/long), price_max, certificate, installment, mentor; picker.found_count | профессии — из БД; found_count — вычисл. | поле, которого нет в модели, — убрать из формы (и в каталоге его не обрабатывать) |
+| Популярные профессии (8–12) | profession.name, image, courses_count, min_price, min_price_month, url | Profession + annotate | нет картинки → `card-thumb--empty`; нет min_price_month → скрыть строку |
+| Реклама after_professions | — | AdSlot | не выводить |
+| Популярные курсы (6–12) | course.name, image, school.name, school.logo, rating, reviews_count, duration, format, price, old_price, price_month, old_price_month, url | Course (по popularity или флаг `is_featured`) | rating/reviews/формат/старая цена — скрыть по отдельности |
+| Как это работает | — | статично в шаблоне | — |
+| Реклама native_middle | — | AdSlot | не выводить |
+| Школы в каталоге | school.name, logo, rating, reviews_count, courses_count, min_price, url | School + annotate | скрыть рейтинг/отзывы по отдельности |
+| Как мы сравниваем | — | статично | — |
+| Блог (3–6 последних) | post.title, image, category, date, excerpt, url | BlogPost | если статей нет — скрыть секцию |
+| SEO-текст | — | статично или модель SiteText(key="home_seo") | — |
+| FAQ | вопросы | FAQ(page_key="home") или статично | — |
+| Реклама bottom_wide | — | AdSlot | не выводить |
+
+Новые поля, которые могут понадобиться только для главной: `Course.is_featured`, `Course.rating`, `Course.reviews_count`, `Course.old_price_month`, `Course.level` (zero/base/pro), `Profession.image`, `Profession.order`.

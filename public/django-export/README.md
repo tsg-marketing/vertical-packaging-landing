@@ -15,6 +15,7 @@ django-export/
 │   ├── js/script.js     — меню, фильтры на мобильном, сортировка, FAQ (ванильный JS)
 │   └── img/             — логотип, заглушки, обложки
 └── mockups/             — HTML-макеты (эталон), открываются в браузере
+    ├── index.html                        → / (главная)
     ├── professions/                      → /professions/
     ├── professions/backend-razrabotchik/ → /professions/<slug>/
     ├── courses/                          → /courses/
