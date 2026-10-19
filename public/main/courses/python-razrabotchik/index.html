@@ -10,7 +10,7 @@
   <link rel="canonical" href="https://edukursy.ru/courses/school-1/python-razrabotchik/">
   <link rel="stylesheet" href="../../style.css">
 </head>
-<body>
+<body data-compare-url="/main/compare/index.html">
 
   <!-- ============ ШАПКА (общая с главной) ============ -->
   <header class="site-header">
@@ -77,6 +77,9 @@
             <div><dt>Старт</dt><dd><!-- DATA: course.start_date -->20 октября 2025</dd></div>
             <div><dt>Документ</dt><dd><!-- DATA: course.certificate -->Удостоверение о ПК</dd></div>
           </dl>
+
+          <!-- COMPARE: вариант для шапки курса (под фактами). На десктопе дублирует кнопку в карточке цены — можно оставить только один из двух -->
+          <button type="button" class="cmp-btn cmp-btn--inline" data-compare-id="school-1/python-razrabotchik" data-compare-name="Python-разработчик" data-compare-school="Школа 1" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Добавить к сравнению</span><span class="cmp-btn__on">В сравнении — убрать</span></button>
         </div>
 
         <!-- ===== Карточка цены: на десктопе прилипает справа ===== -->
@@ -89,6 +92,10 @@
           <!-- DATA: course.partner_url — партнёрская ссылка на сайт школы -->
           <a href="https://example.com/python-razrabotchik/" class="btn btn--primary btn--lg btn--block" rel="sponsored noopener" target="_blank" itemprop="url">Перейти на сайт школы</a>
           <a href="https://example.com/python-razrabotchik/#program" class="btn btn--outline btn--block" rel="sponsored noopener" target="_blank">Бесплатный вводный урок</a>
+
+          <!-- COMPARE: кнопка в карточке цены + ссылка на сравнение (видна, когда выбран хотя бы 1 курс) -->
+          <button type="button" class="cmp-btn cmp-btn--block" data-compare-id="school-1/python-razrabotchik" data-compare-name="Python-разработчик" data-compare-school="Школа 1" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Добавить к сравнению</span><span class="cmp-btn__on">Добавлен к сравнению</span></button>
+          <a href="/main/compare/index.html" class="cmp-link" data-compare-link hidden>Перейти к сравнению <span data-compare-count>0</span></a>
 
           <ul class="price-box__notes">
             <li>Оплата и договор — напрямую со школой</li>
@@ -248,6 +255,8 @@
       <div class="catalog-grid catalog-grid--similar">
         <!-- DATA: 3–4 курса той же профессии из других школ -->
         <article class="catalog-card">
+          <!-- COMPARE: data-compare-id = "<school_slug>/<course_slug>"; aria-pressed="true", если курс уже в сравнении (сессия) -->
+          <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-2/golang-razrabotchik" data-compare-name="Go-разработчик" data-compare-school="Школа 2" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
           <a href="/courses/school-2/golang-razrabotchik/" class="catalog-card__link">
             <div class="card-thumb card-thumb--empty card-thumb--tone-4" aria-hidden="true">Ш</div>
             <div class="catalog-card__body">
@@ -261,6 +270,7 @@
           </a>
         </article>
         <article class="catalog-card">
+          <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-3/java-razrabotchik" data-compare-name="Java-разработчик с нуля" data-compare-school="Школа 3" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
           <a href="/courses/school-3/java-razrabotchik/" class="catalog-card__link">
             <img src="../../img/course-preview.svg" alt="Java-разработчик с нуля" class="card-thumb" width="640" height="360" loading="lazy">
             <div class="catalog-card__body">
@@ -274,6 +284,7 @@
           </a>
         </article>
         <article class="catalog-card">
+          <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-2/python-backend" data-compare-name="Python для бэкенда" data-compare-school="Школа 2" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
           <a href="/courses/school-2/python-backend/" class="catalog-card__link">
             <img src="../../img/course-preview.svg" alt="Python для бэкенда" class="card-thumb" width="640" height="360" loading="lazy">
             <div class="catalog-card__body">
@@ -287,6 +298,7 @@
           </a>
         </article>
         <article class="catalog-card">
+          <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-3/sql-i-bazy-dannyh" data-compare-name="SQL и базы данных для разработчиков" data-compare-school="Школа 3" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
           <a href="/courses/school-3/sql-i-bazy-dannyh/" class="catalog-card__link">
             <div class="card-thumb card-thumb--empty card-thumb--tone-6" aria-hidden="true">Ш</div>
             <div class="catalog-card__body">
@@ -348,7 +360,11 @@
   <!-- ===== Липкая кнопка на мобильном ===== -->
   <div class="sticky-cta">
     <p class="sticky-cta__price"><!-- DATA: course.price -->98 000 ₽ <span>или <!-- DATA: course.price_month -->4 900 ₽/мес</span></p>
-    <a href="https://example.com/python-razrabotchik/" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт школы</a>
+    <div class="sticky-cta__actions">
+      <!-- COMPARE: иконка в мобильной липкой панели -->
+      <button type="button" class="cmp-btn cmp-btn--icon" data-compare-id="school-1/python-razrabotchik" data-compare-name="Python-разработчик" data-compare-school="Школа 1" aria-pressed="false" aria-label="Сравнить курс"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></button>
+      <a href="https://example.com/python-razrabotchik/" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт школы</a>
+    </div>
   </div>
 
   <!-- ============ ПОДВАЛ (общий с главной) ============ -->
@@ -395,5 +411,7 @@
   </footer>
 
   <script src="../../script.js"></script>
+  <!-- COMPARE: скрипт кнопки «Сравнить» и плавающей панели -->
+  <script src="../../compare.js"></script>
 </body>
 </html>

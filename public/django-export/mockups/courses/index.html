@@ -9,7 +9,7 @@
   <link rel="canonical" href="https://edukursy.ru/courses/">
   <link rel="stylesheet" href="../style.css">
 </head>
-<body>
+<body data-compare-url="/main/compare/index.html">
 
   <!-- ============ ШАПКА (общая с главной) ============ -->
   <header class="site-header">
@@ -197,6 +197,8 @@
 
           <!-- Карточка: СОСТОЯНИЕ 1 — картинка есть -->
           <article class="catalog-card">
+            <!-- COMPARE: data-compare-id = "<school_slug>/<course_slug>"; aria-pressed="true", если курс уже в сравнении (сессия) -->
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-1/python-razrabotchik" data-compare-name="Python-разработчик с нуля" data-compare-school="Школа 1" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
             <a href="/courses/school-1/python-razrabotchik/" class="catalog-card__link"><!-- DATA: /courses/<school-slug>/<course-slug>/ -->
               <img src="../img/course-preview.svg" alt="Python-разработчик с нуля" class="card-thumb" width="640" height="360" loading="lazy"><!-- DATA: course.image_url, alt = course.name -->
               <div class="catalog-card__body">
@@ -210,6 +212,7 @@
 
           <!-- Карточка: СОСТОЯНИЕ 2 — картинки нет -->
           <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-2/frontend-razrabotchik" data-compare-name="Фронтенд-разработчик: HTML, CSS и JavaScript для начинающих" data-compare-school="Школа 2" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
             <a href="/courses/school-2/frontend-razrabotchik/" class="catalog-card__link">
               <div class="card-thumb card-thumb--empty card-thumb--tone-2" aria-hidden="true"><!-- DATA: course.school.name|first -->Ш</div>
               <div class="catalog-card__body">
@@ -222,6 +225,7 @@
           </article>
 
           <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-3/java-osnovy" data-compare-name="Java: основы программирования" data-compare-school="Школа 3" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
             <a href="/courses/school-3/java-osnovy/" class="catalog-card__link">
               <img src="../img/course-preview.svg" alt="Java: основы программирования" class="card-thumb" width="640" height="360" loading="lazy">
               <div class="catalog-card__body">
@@ -234,6 +238,7 @@
           </article>
 
           <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-1/sql-dlya-nachinayushchih" data-compare-name="SQL для начинающих" data-compare-school="Школа 1" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
             <a href="/courses/school-1/sql-dlya-nachinayushchih/" class="catalog-card__link">
               <div class="card-thumb card-thumb--empty card-thumb--tone-1" aria-hidden="true">Ш</div>
               <div class="catalog-card__body">
@@ -246,6 +251,7 @@
           </article>
 
           <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-2/golang-razrabotchik" data-compare-name="Go-разработчик" data-compare-school="Школа 2" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
             <a href="/courses/school-2/golang-razrabotchik/" class="catalog-card__link">
               <img src="../img/course-preview.svg" alt="Go-разработчик" class="card-thumb" width="640" height="360" loading="lazy">
               <div class="catalog-card__body">
@@ -258,6 +264,7 @@
           </article>
 
           <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-3/git-i-komandnaya-razrabotka" data-compare-name="Git и командная разработка" data-compare-school="Школа 3" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
             <a href="/courses/school-3/git-i-komandnaya-razrabotka/" class="catalog-card__link">
               <div class="card-thumb card-thumb--empty card-thumb--tone-3" aria-hidden="true">Ш</div>
               <div class="catalog-card__body">
@@ -270,6 +277,7 @@
           </article>
 
           <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-1/backend-na-python" data-compare-name="Бэкенд на Python: Django и базы данных" data-compare-school="Школа 1" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
             <a href="/courses/school-1/backend-na-python/" class="catalog-card__link">
               <img src="../img/course-preview.svg" alt="Бэкенд на Python: Django и базы данных" class="card-thumb" width="640" height="360" loading="lazy">
               <div class="catalog-card__body">
@@ -282,6 +290,7 @@
           </article>
 
           <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-2/algoritmy-i-struktury-dannyh" data-compare-name="Алгоритмы и структуры данных для подготовки к собеседованиям" data-compare-school="Школа 2" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
             <a href="/courses/school-2/algoritmy-i-struktury-dannyh/" class="catalog-card__link">
               <div class="card-thumb card-thumb--empty card-thumb--tone-4" aria-hidden="true">Ш</div>
               <div class="catalog-card__body">
@@ -294,6 +303,7 @@
           </article>
 
           <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-3/javascript-prodvinutyj" data-compare-name="JavaScript: продвинутый уровень" data-compare-school="Школа 3" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
             <a href="/courses/school-3/javascript-prodvinutyj/" class="catalog-card__link">
               <img src="../img/course-preview.svg" alt="JavaScript: продвинутый уровень" class="card-thumb" width="640" height="360" loading="lazy">
               <div class="catalog-card__body">
@@ -506,5 +516,7 @@
   </footer>
 
   <script src="../script.js"></script>
+  <!-- COMPARE: скрипт кнопки «Сравнить» и плавающей панели -->
+  <script src="../compare.js"></script>
 </body>
 </html>

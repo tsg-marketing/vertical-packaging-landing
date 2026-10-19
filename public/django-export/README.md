@@ -10,6 +10,7 @@ django-export/
 ├── PROMPTS.md           — промпты для Cline по шагам (0–10)
 ├── DATA_MAP.md          — какие данные нужны каждой странице и что делать, если их нет
 ├── .clinerules          — правила проекта для Cline (положить в корень Django-проекта)
+├── compare_addon/       — кнопка «Сравнить»: JS, шаблоны, тег, context processor (шаг 8.5)
 ├── static/edukursy/     — готовая статика → в папку static/ Django
 │   ├── css/style.css    — все стили (один файл, без сборки)
 │   ├── js/script.js     — меню, фильтры на мобильном, сортировка, FAQ (ванильный JS)

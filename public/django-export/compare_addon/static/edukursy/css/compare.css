@@ -1,0 +1,477 @@
+/* Если style.css уже подключён целиком — этот файл не нужен: в style.css этот блок уже есть. */
+
+/* ============================================================
+   КНОПКА «СРАВНИТЬ» + ПАНЕЛЬ СРАВНЕНИЯ (compare.js)
+   ============================================================ */
+
+/* ----- Кнопка: общее ----- */
+.cmp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.cmp-btn svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cmp-btn__on,
+.cmp-btn .cmp-btn__icon-on {
+  display: none;
+}
+.cmp-btn[aria-pressed="true"] .cmp-btn__on,
+.cmp-btn[aria-pressed="true"] .cmp-btn__icon-on {
+  display: inline;
+}
+.cmp-btn[aria-pressed="true"] .cmp-btn__off,
+.cmp-btn[aria-pressed="true"] .cmp-btn__icon-off {
+  display: none;
+}
+.cmp-btn:focus-visible {
+  outline: 3px solid rgba(31, 94, 255, 0.35);
+  outline-offset: 2px;
+}
+
+/* ----- Вариант 1: на карточке каталога (поверх обложки) ----- */
+.catalog-card {
+  position: relative;
+}
+.cmp-btn--card {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--c-text);
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgba(20, 23, 28, 0.14);
+  backdrop-filter: blur(4px);
+}
+.cmp-btn--card:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.cmp-btn--card[aria-pressed="true"] {
+  border-color: var(--c-primary);
+  background: var(--c-primary);
+  color: #fff;
+}
+.cmp-btn--card[aria-pressed="true"]:hover {
+  background: var(--c-primary-dark);
+  color: #fff;
+}
+@media (hover: hover) and (min-width: 768px) {
+  .cmp-btn--card[aria-pressed="false"] .cmp-btn__off {
+    max-width: 0;
+    overflow: hidden;
+    transition: max-width 0.2s;
+  }
+  .cmp-btn--card[aria-pressed="false"] {
+    gap: 0;
+    padding: 0 9px;
+  }
+  .catalog-card:hover .cmp-btn--card[aria-pressed="false"],
+  .cmp-btn--card[aria-pressed="false"]:focus-visible {
+    gap: 6px;
+    padding: 0 12px;
+  }
+  .catalog-card:hover .cmp-btn--card[aria-pressed="false"] .cmp-btn__off,
+  .cmp-btn--card[aria-pressed="false"]:focus-visible .cmp-btn__off {
+    max-width: 120px;
+  }
+}
+.catalog-card:has(.cmp-btn--card[aria-pressed="true"]) {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 1px var(--c-primary);
+}
+
+/* ----- Вариант 2: в карточке цены (на всю ширину) ----- */
+.cmp-btn--block {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 16px;
+  border: 1px dashed #b9c3d6;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--c-text);
+  font-size: 15px;
+}
+.cmp-btn--block:hover {
+  border-style: solid;
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.cmp-btn--block[aria-pressed="true"] {
+  border: 1px solid #b8ccff;
+  background: #eef3ff;
+  color: var(--c-primary-dark);
+}
+.price-box .cmp-btn--block {
+  margin-top: 10px;
+}
+
+/* Ссылка «Перейти к сравнению (N)» */
+.cmp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-primary);
+}
+.cmp-link[hidden] {
+  display: none;
+}
+.cmp-link span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--c-primary);
+  color: #fff;
+  font-size: 12px;
+}
+.price-box .cmp-link {
+  display: flex;
+  justify-content: center;
+}
+.price-box .cmp-link[hidden] {
+  display: none;
+}
+
+/* ----- Вариант 3: в шапке курса, рядом с фактами ----- */
+.cmp-btn--inline {
+  margin-top: 16px;
+  height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--c-primary);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--c-primary);
+  font-size: 15px;
+}
+.cmp-btn--inline:hover {
+  background: #eef3ff;
+}
+.cmp-btn--inline[aria-pressed="true"] {
+  background: var(--c-primary);
+  color: #fff;
+}
+
+/* ----- Вариант 4: иконка в липкой мобильной панели ----- */
+.cmp-btn--icon {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--c-text);
+}
+.cmp-btn--icon svg {
+  width: 20px;
+  height: 20px;
+}
+.cmp-btn--icon[aria-pressed="true"] {
+  border-color: var(--c-primary);
+  background: #eef3ff;
+  color: var(--c-primary);
+}
+.sticky-cta__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ----- Счётчик в меню «Сравнения» ----- */
+.nav-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--c-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: 2px;
+}
+.nav-count[hidden] {
+  display: none;
+}
+
+/* ----- Плавающая панель сравнения ----- */
+.cmp-tray {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 120;
+  width: min(1080px, calc(100% - 24px));
+  transform: translateX(-50%);
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(20, 23, 28, 0.18);
+  animation: cmp-in 0.2s ease-out;
+}
+.cmp-tray[hidden] {
+  display: none;
+}
+@keyframes cmp-in {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+.cmp-tray__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 12px 12px 16px;
+}
+.cmp-tray__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--c-text);
+  text-align: left;
+  cursor: default;
+}
+.cmp-tray__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #eef3ff;
+  color: var(--c-primary);
+}
+.cmp-tray svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cmp-tray__title {
+  display: flex;
+  flex-direction: column;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.cmp-tray__count {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--c-muted);
+}
+.cmp-tray__chevron {
+  display: none;
+}
+.cmp-tray__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.cmp-tray__chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 48px;
+  padding: 0 6px 0 12px;
+  border-radius: 10px;
+  background: var(--c-bg-light);
+}
+.cmp-tray__chip--empty {
+  justify-content: center;
+  padding: 0;
+  border: 1px dashed var(--c-border);
+  background: none;
+  color: #9aa1ad;
+  font-size: 13px;
+}
+.cmp-tray__chip-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.25;
+}
+.cmp-tray__chip-name {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cmp-tray__chip-school {
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--c-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cmp-tray__remove {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--c-muted);
+  cursor: pointer;
+}
+.cmp-tray__remove:hover {
+  background: #fff;
+  color: #c23d58;
+}
+.cmp-tray__remove svg {
+  width: 16px;
+  height: 16px;
+}
+.cmp-tray__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cmp-tray__clear {
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--c-muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.cmp-tray__clear:hover {
+  color: var(--c-text);
+}
+.cmp-tray__go {
+  min-height: 46px;
+  padding: 0 20px;
+  white-space: nowrap;
+}
+.cmp-tray__go--disabled {
+  background: #e7eaf0;
+  color: #8a919e;
+  font-weight: 600;
+  cursor: default;
+}
+body.has-cmp-tray {
+  padding-bottom: 100px;
+}
+
+@media (max-width: 1023.98px) {
+  .cmp-tray {
+    bottom: 0;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    border-bottom: 0;
+  }
+  .cmp-tray--raised {
+    bottom: 66px;
+    border-radius: 16px 16px 0 0;
+  }
+  .cmp-tray__inner {
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  .cmp-tray__head {
+    cursor: pointer;
+  }
+  .cmp-tray__chevron {
+    display: block;
+    color: var(--c-muted);
+    transition: transform 0.2s;
+  }
+  .cmp-tray.is-collapsed .cmp-tray__chevron {
+    transform: rotate(180deg);
+  }
+  .cmp-tray__list {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cmp-tray.is-collapsed .cmp-tray__list {
+    display: none;
+  }
+  .cmp-tray__actions {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .cmp-tray__clear {
+    display: none;
+  }
+  .cmp-tray__go {
+    min-height: 42px;
+    padding: 0 14px;
+    font-size: 15px;
+  }
+  body.has-cmp-tray {
+    padding-bottom: 170px;
+  }
+}
+@media (max-width: 1023.98px) {
+  .cmp-tray__chip--empty {
+    display: none;
+  }
+}
+
+/* ----- Тост ----- */
+.cmp-toast {
+  position: fixed;
+  left: 50%;
+  top: calc(var(--header-h) + 12px);
+  z-index: 130;
+  max-width: calc(100% - 24px);
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--c-text);
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 8px 24px rgba(20, 23, 28, 0.25);
+  opacity: 0;
+  transform: translate(-50%, -8px);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.cmp-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+.cmp-toast a {
+  margin-left: 6px;
+  color: #9db9ff;
+  font-weight: 700;
+}

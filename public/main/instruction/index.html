@@ -64,6 +64,7 @@
             <li><a href="#step-6">Шаг 6. Каталог курсов и страница курса</a></li>
             <li><a href="#step-7">Шаг 7. Школы: список и страница школы</a></li>
             <li><a href="#step-8">Шаг 8. Сравнение курсов</a></li>
+            <li><a href="#step-compare-btn">Шаг 8.5. Кнопка «Сравнить»</a></li>
             <li><a href="#step-9">Шаг 9. Блог: лента и статья</a></li>
             <li><a href="#step-home">Шаг 9.5. Главная страница</a></li>
             <li><a href="#step-10">Шаг 10. Карта сайта, редиректы, финальная проверка</a></li>
@@ -287,6 +288,889 @@
 - &lt;meta name=&quot;robots&quot; content=&quot;noindex, follow&quot;&gt;.
 - Логику сравнения вынеси в отдельный модуль compare.py (функция build_comparison(courses) → строки, лучшие значения, итоги) и покрой простыми тестами.</pre>
         </div>
+      </section>
+
+      <section class="ins-step" id="step-compare-btn">
+        <h2 class="ins-step__title">Шаг 8.5. Кнопка «Сравнить» в листинге и на странице курса</h2>
+        <p>Посетитель отмечает до 4 курсов в каталоге или на странице курса, внизу появляется панель с выбранными курсами и кнопкой «Сравнить». Выбор хранится в браузере и в cookie — без регистрации и без новых таблиц в базе.</p>
+        <p>Как это выглядит: <a href="/main/courses/index.html" target="_blank">каталог курсов</a> (кнопка на обложке карточки) и <a href="/main/courses/python-razrabotchik/index.html" target="_blank">страница курса</a> (кнопка в блоке цены и иконка в мобильной панели). В макетах все места помечены <code>&lt;!-- COMPARE: --&gt;</code>.</p>
+
+        <div class="ins-cards">
+          <div class="ins-card"><p class="ins-card__tag">card</p><p>На обложке карточки. На компьютере — круглая иконка, при наведении раскрывается подпись «Сравнить». Выбранная — синяя «✓ В сравнении», рамка карточки подсвечена.</p></div>
+          <div class="ins-card"><p class="ins-card__tag">block</p><p>В карточке цены под «Бесплатным уроком». Пунктирная → голубая «✓ Добавлен к сравнению» + ссылка «Перейти к сравнению 2».</p></div>
+          <div class="ins-card"><p class="ins-card__tag">icon</p><p>В липкой мобильной панели рядом с «На сайт школы». Не занимает места под цену.</p></div>
+          <div class="ins-card"><p class="ins-card__tag">inline</p><p>Замена вашей текущей «Сравнить курс» в шапке. Используйте только если нет карточки цены — чтобы не было двух кнопок.</p></div>
+        </div>
+
+        <div class="ins-download">
+          <a href="/django-compare-button.zip" class="btn btn--primary" download>Скачать файлы кнопки (ZIP, 11 КБ)</a>
+          <p>В проекте: <code>public/django-export/compare_addon/</code> · также входит в общий пакет</p>
+        </div>
+
+        <h3 class="ins-sub">Промпт для Cline</h3>
+        <div class="prompt">
+          <div class="prompt__bar"><span>Промпт для Cline</span><button type="button" class="copy-btn" data-target="p-cmpbtn">Копировать</button></div>
+          <pre class="prompt__code" id="p-cmpbtn">Добавь возможность выбирать курсы для сравнения из каталога и со страницы курса. Готовые файлы лежат в _design/compare_addon/ — используй их, не пиши с нуля. Эталон вида: _design/mockups/courses/index.html и _design/mockups/courses/python-razrabotchik/index.html (поиск по &quot;COMPARE:&quot;).
+
+1. Скопируй файлы (см. _design/compare_addon/README.md):
+   - static/edukursy/js/compare.js → в статику;
+   - templates/edukursy/partials/compare/*.html → в шаблоны;
+   - templatetags/compare_tags.py → в templatetags приложения каталога (если папки нет — создай с __init__.py);
+   - context_processors.py → в приложение и добавь &quot;&lt;app&gt;.context_processors.compare&quot; в settings.TEMPLATES[0][&quot;OPTIONS&quot;][&quot;context_processors&quot;].
+   - Стили: если style.css из пакета уже подключён — в нём есть блок «КНОПКА «СРАВНИТЬ»». Если у меня свой CSS — подключи static/edukursy/css/compare.css отдельно.
+2. Проверь фильтр compare_id: он строит &quot;&lt;school.slug&gt;/&lt;course.slug&gt;&quot;. Если у моих моделей поля называются иначе — поправь фильтр и parse_compare_ids, но формат идентификатора оставь «школа/курс».
+3. base.html:
+   - &lt;body data-compare-url=&quot;{% url &#x27;compare&#x27; %}&quot;&gt; (имя URL сравнения — как у меня в urls.py);
+   - перед &lt;/body&gt;, после script.js: {% include &quot;edukursy/partials/compare/scripts.html&quot; %}.
+4. Карточка курса (во ВСЕХ местах: каталог, страница профессии, страница школы, «Похожие курсы», главная):
+   - кнопка ставится ПЕРВЫМ ребёнком &lt;article class=&quot;catalog-card&quot;&gt;, ДО ссылки &lt;a class=&quot;catalog-card__link&quot;&gt; (кнопка не должна быть внутри &lt;a&gt; — это невалидный HTML и клик уводил бы на курс);
+   - {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;card&quot; %}
+   - если у меня свой шаблон карточки — добавь в его корневой элемент position: relative.
+5. Страница курса:
+   - в карточке цены (aside.price-box), сразу после кнопки «Бесплатный вводный урок»:
+     {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;block&quot; label_off=&quot;Добавить к сравнению&quot; label_on=&quot;Добавлен к сравнению&quot; %}
+     {% include &quot;edukursy/partials/compare/link.html&quot; %}
+   - в липкой мобильной панели .sticky-cta оберни кнопку «На сайт школы» в &lt;div class=&quot;sticky-cta__actions&quot;&gt; и поставь перед ней variant=&quot;icon&quot;.
+   - вариант variant=&quot;inline&quot; (в шапке под фактами) — НЕ добавляй, если у меня уже есть кнопка «Сравнить курс» в шапке: замени её на этот include, чтобы не было двух кнопок рядом. На десктопе должно остаться: кнопка в price-box. Кнопку в шапке оставь только если price-box на странице нет.
+6. Страница /compare/: возьми логику из compare_addon/compare_view_snippet.py:
+   - курсы берутся из ?courses=..., а если параметра нет — из cookie edukursy_compare (сделай redirect на URL с ?courses=, чтобы ссылкой можно было поделиться);
+   - в контекст передай compare_state — тогда плавающая панель на этой странице скрыта, а выбор в браузере совпадёт с таблицей;
+   - крестик «убрать курс» в таблице должен вести на URL без этого курса (так уже сделано в шаге 8) — compare.js подхватит новый список сам. Когда убирается последний курс, ссылка должна быть /compare/?courses= (с пустым параметром), иначе редирект по cookie вернёт курс обратно.
+7. Кэш: если страницы каталога кэшируются целиком (cache_page / nginx), состояние кнопок всё равно восстановит JS при загрузке. Ничего не ломается, но в кэшированных страницах aria-pressed будет &quot;false&quot; до запуска скрипта — это нормально. Заголовок Vary: Cookie добавлять НЕ нужно.
+8. Проверь руками:
+   - добавь курс в каталоге → кнопка «✓ В сравнении», рамка карточки синяя, снизу появилась панель «Сравнение 1 из 4», в меню у «Сравнения» счётчик 1;
+   - добавь 2-й → в панели активна кнопка «Сравнить 2 курса», она ведёт на /compare/?courses=a/b,c/d;
+   - 5-й курс не добавляется, появляется подсказка;
+   - перезагрузи страницу → состояние сохранилось, кнопки сразу нажаты (без мигания — это работа context processor);
+   - открой страницу курса → в price-box «Добавлен к сравнению» и ссылка «Перейти к сравнению 2»;
+   - мобильная ширина 390px: панель снизу сворачивается по тапу на заголовок, над липкой кнопкой «На сайт школы», не перекрывает её;
+   - работа с клавиатуры: Tab до кнопки, Enter переключает, aria-pressed меняется.
+Покажи мне diff шаблонов перед сохранением.</pre>
+        </div>
+
+        <h3 class="ins-sub">Код файлов</h3>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/partials/compare/button.html</code><span>Шаблон кнопки (4 варианта)</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>button.html</span><button type="button" class="copy-btn" data-target="cf0">Копировать</button></div>
+            <pre class="prompt__code" id="cf0">{% comment %}
+Кнопка «Сравнить».
+  {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;card&quot; %}
+variant: card (на обложке карточки) | block (в карточке цены) | inline (в шапке курса) | icon (липкая мобильная панель)
+label_off / label_on — необязательные подписи.
+Нужен контекст-процессор compare_ids (см. context_processors.py) — по нему ставится aria-pressed.
+{% endcomment %}
+{% load compare_tags %}
+{% with cid=course|compare_id %}
+{% if variant == &quot;icon&quot; %}
+&lt;button type=&quot;button&quot; class=&quot;cmp-btn cmp-btn--icon&quot; data-compare-id=&quot;{{ cid }}&quot; data-compare-name=&quot;{{ course.name }}&quot; data-compare-school=&quot;{{ course.school.name }}&quot; aria-pressed=&quot;{% if cid in compare_ids %}true{% else %}false{% endif %}&quot; aria-label=&quot;Сравнить курс&quot;&gt;{% include &quot;edukursy/partials/compare/_icons.html&quot; %}&lt;/button&gt;
+{% else %}
+&lt;button type=&quot;button&quot; class=&quot;cmp-btn cmp-btn--{{ variant|default:&#x27;card&#x27; }}&quot; data-compare-id=&quot;{{ cid }}&quot; data-compare-name=&quot;{{ course.name }}&quot; data-compare-school=&quot;{{ course.school.name }}&quot; aria-pressed=&quot;{% if cid in compare_ids %}true{% else %}false{% endif %}&quot;&gt;{% include &quot;edukursy/partials/compare/_icons.html&quot; %}&lt;span class=&quot;cmp-btn__off&quot;&gt;{{ label_off|default:&quot;Сравнить&quot; }}&lt;/span&gt;&lt;span class=&quot;cmp-btn__on&quot;&gt;{{ label_on|default:&quot;В сравнении&quot; }}&lt;/span&gt;&lt;/button&gt;
+{% endif %}
+{% endwith %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/partials/compare/link.html</code><span>Ссылка «Перейти к сравнению (N)»</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>link.html</span><button type="button" class="copy-btn" data-target="cf1">Копировать</button></div>
+            <pre class="prompt__code" id="cf1">{% comment %}Ссылка «Перейти к сравнению (N)» — показывается, когда выбран хотя бы 1 курс.{% endcomment %}
+&lt;a href=&quot;{% url &#x27;compare&#x27; %}{% if compare_ids %}?courses={{ compare_ids|join:&#x27;,&#x27; }}{% endif %}&quot; class=&quot;cmp-link&quot; data-compare-link{% if not compare_ids %} hidden{% endif %}&gt;Перейти к сравнению &lt;span data-compare-count&gt;{{ compare_ids|length }}&lt;/span&gt;&lt;/a&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/partials/compare/scripts.html</code><span>Подключение скрипта в base.html</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>scripts.html</span><button type="button" class="copy-btn" data-target="cf2">Копировать</button></div>
+            <pre class="prompt__code" id="cf2">{% comment %}
+Подключить в base.html перед &lt;/body&gt;, ПОСЛЕ script.js:
+  {% include &quot;edukursy/partials/compare/scripts.html&quot; %}
+На странице /compare/ передайте в контекст compare_state (список словарей id/name/school) —
+тогда список в браузере синхронизируется с тем, что открыто в таблице, а плавающая панель скрывается.
+{% endcomment %}
+{% load static %}
+{% if compare_state %}{{ compare_state|json_script:&quot;compare-state&quot; }}{% endif %}
+&lt;script src=&quot;{% static &#x27;edukursy/js/compare.js&#x27; %}&quot; defer&gt;&lt;/script&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/partials/compare/_icons.html</code><span>Иконки</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>_icons.html</span><button type="button" class="copy-btn" data-target="cf3">Копировать</button></div>
+            <pre class="prompt__code" id="cf3">&lt;svg class=&quot;cmp-btn__icon-off&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M8 3 4 7l4 4&quot;/&gt;&lt;path d=&quot;M4 7h16&quot;/&gt;&lt;path d=&quot;m16 21 4-4-4-4&quot;/&gt;&lt;path d=&quot;M20 17H4&quot;/&gt;&lt;/svg&gt;&lt;svg class=&quot;cmp-btn__icon-on&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/svg&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templatetags/compare_tags.py</code><span>Фильтр compare_id</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>compare_tags.py</span><button type="button" class="copy-btn" data-target="cf4">Копировать</button></div>
+            <pre class="prompt__code" id="cf4">from django import template
+
+register = template.Library()
+
+
+@register.filter
+def compare_id(course):
+    &quot;&quot;&quot;Идентификатор курса для сравнения: &quot;&lt;school_slug&gt;/&lt;course_slug&gt;&quot;.&quot;&quot;&quot;
+    return f&quot;{course.school.slug}/{course.slug}&quot;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>context_processors.py</code><span>Context processor — состояние кнопок с сервера</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>context_processors.py</span><button type="button" class="copy-btn" data-target="cf5">Копировать</button></div>
+            <pre class="prompt__code" id="cf5">from urllib.parse import unquote
+
+COOKIE = &quot;edukursy_compare&quot;
+MAX_COMPARE = 4
+
+
+def parse_compare_ids(raw):
+    &quot;&quot;&quot;&#x27;a/b,c/d&#x27; -&gt; [&#x27;a/b&#x27;, &#x27;c/d&#x27;] без дублей, не больше MAX_COMPARE.&quot;&quot;&quot;
+    result = []
+    for part in unquote(raw or &quot;&quot;).split(&quot;,&quot;):
+        part = part.strip().strip(&quot;/&quot;)
+        if part.count(&quot;/&quot;) == 1 and part not in result:
+            result.append(part)
+    return result[:MAX_COMPARE]
+
+
+def compare(request):
+    &quot;&quot;&quot;Выбранные для сравнения курсы из cookie — чтобы кнопки рендерились сразу в нужном состоянии.&quot;&quot;&quot;
+    return {&quot;compare_ids&quot;: parse_compare_ids(request.COOKIES.get(COOKIE, &quot;&quot;)), &quot;compare_max&quot;: MAX_COMPARE}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>compare_view_snippet.py</code><span>Фрагмент для view /compare/</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>compare_view_snippet.py</span><button type="button" class="copy-btn" data-target="cf6">Копировать</button></div>
+            <pre class="prompt__code" id="cf6">&quot;&quot;&quot;
+Фрагмент для view страницы /compare/. Встроить в существующий CompareView.
+
+Источник списка курсов (по приоритету):
+1) GET ?courses=school/course,school/course — ссылка, которой можно поделиться;
+2) cookie edukursy_compare — если параметра нет (пользователь нажал «Сравнения» в меню).
+&quot;&quot;&quot;
+from django.db.models import Q
+from django.shortcuts import redirect
+
+from .context_processors import COOKIE, parse_compare_ids
+
+
+def resolve_compare_courses(request, Course):
+    raw = request.GET.get(&quot;courses&quot;)
+    ids = parse_compare_ids(raw if raw is not None else request.COOKIES.get(COOKIE, &quot;&quot;))
+    if not ids:
+        return [], []
+    q = Q()
+    for cid in ids:
+        school_slug, course_slug = cid.split(&quot;/&quot;)
+        q |= Q(school__slug=school_slug, slug=course_slug)
+    found = {f&quot;{c.school.slug}/{c.slug}&quot;: c for c in Course.objects.filter(q).select_related(&quot;school&quot;)}
+    courses = [found[cid] for cid in ids if cid in found]
+    state = [{&quot;id&quot;: f&quot;{c.school.slug}/{c.slug}&quot;, &quot;name&quot;: c.name, &quot;school&quot;: c.school.name} for c in courses]
+    return courses, state
+
+
+# Пример внутри view:
+#
+# def compare_view(request):
+#     if &quot;courses&quot; not in request.GET and request.COOKIES.get(COOKIE):
+#         ids = parse_compare_ids(request.COOKIES[COOKIE])
+#         if ids:
+#             return redirect(f&quot;{request.path}?courses={&#x27;,&#x27;.join(ids)}&quot;)
+#     courses, state = resolve_compare_courses(request, Course)
+#     context = {&quot;courses&quot;: courses, &quot;compare_state&quot;: state, ...}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/edukursy/js/compare.js</code><span>Скрипт: кнопки, панель, счётчик, тост</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>compare.js</span><button type="button" class="copy-btn" data-target="cf7">Копировать</button></div>
+            <pre class="prompt__code" id="cf7">(function () {
+  var KEY = &#x27;edukursy_compare&#x27;;
+  var MAX = 4;
+  var body = document.body;
+  var compareUrl = body.getAttribute(&#x27;data-compare-url&#x27;) || &#x27;/compare/&#x27;;
+
+  var ICON_SWAP = &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M8 3 4 7l4 4&quot;/&gt;&lt;path d=&quot;M4 7h16&quot;/&gt;&lt;path d=&quot;m16 21 4-4-4-4&quot;/&gt;&lt;path d=&quot;M20 17H4&quot;/&gt;&lt;/svg&gt;&#x27;;
+  var ICON_X = &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M18 6 6 18&quot;/&gt;&lt;path d=&quot;m6 6 12 12&quot;/&gt;&lt;/svg&gt;&#x27;;
+  var ICON_UP = &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m18 15-6-6-6 6&quot;/&gt;&lt;/svg&gt;&#x27;;
+
+  function read() {
+    try {
+      var v = JSON.parse(localStorage.getItem(KEY) || &#x27;[]&#x27;);
+      return Array.isArray(v) ? v.slice(0, MAX) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function syncCookie(list) {
+    var ids = list.map(function (c) { return c.id; }).join(&#x27;,&#x27;);
+    document.cookie = KEY + &#x27;=&#x27; + encodeURIComponent(ids) + &#x27;;path=/;max-age=&#x27; + (ids ? 2592000 : 0) + &#x27;;SameSite=Lax&#x27;;
+  }
+  function write(list) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(list));
+    } catch (e) {}
+    syncCookie(list);
+    render();
+  }
+  function has(list, id) {
+    for (var i = 0; i &lt; list.length; i++) if (list[i].id === id) return true;
+    return false;
+  }
+  function esc(s) {
+    return String(s || &#x27;&#x27;).replace(/[&amp;&lt;&gt;&quot;]/g, function (c) {
+      return { &#x27;&amp;&#x27;: &#x27;&amp;amp;&#x27;, &#x27;&lt;&#x27;: &#x27;&amp;lt;&#x27;, &#x27;&gt;&#x27;: &#x27;&amp;gt;&#x27;, &#x27;&quot;&#x27;: &#x27;&amp;quot;&#x27; }[c];
+    });
+  }
+  function plural(n) {
+    var m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 &amp;&amp; m100 !== 11) return &#x27;курс&#x27;;
+    if (m10 &gt;= 2 &amp;&amp; m10 &lt;= 4 &amp;&amp; (m100 &lt; 12 || m100 &gt; 14)) return &#x27;курса&#x27;;
+    return &#x27;курсов&#x27;;
+  }
+  function urlFor(list) {
+    return compareUrl + (list.length ? &#x27;?courses=&#x27; + list.map(function (c) { return c.id; }).join(&#x27;,&#x27;) : &#x27;&#x27;);
+  }
+
+  var state = document.getElementById(&#x27;compare-state&#x27;);
+  if (state) {
+    try {
+      var fromServer = JSON.parse(state.textContent);
+      if (Array.isArray(fromServer)) localStorage.setItem(KEY, JSON.stringify(fromServer.slice(0, MAX)));
+    } catch (e) {}
+  }
+
+  var toastEl, toastTimer;
+  function toast(text, linkText) {
+    if (!toastEl) {
+      toastEl = document.createElement(&#x27;div&#x27;);
+      toastEl.className = &#x27;cmp-toast&#x27;;
+      toastEl.setAttribute(&#x27;role&#x27;, &#x27;status&#x27;);
+      toastEl.setAttribute(&#x27;aria-live&#x27;, &#x27;polite&#x27;);
+      body.appendChild(toastEl);
+    }
+    toastEl.innerHTML = esc(text) + (linkText ? &#x27; &lt;a href=&quot;&#x27; + esc(urlFor(read())) + &#x27;&quot;&gt;&#x27; + esc(linkText) + &#x27;&lt;/a&gt;&#x27; : &#x27;&#x27;);
+    toastEl.classList.add(&#x27;is-visible&#x27;);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove(&#x27;is-visible&#x27;); }, 3200);
+  }
+
+  var tray = null;
+  var collapsed = false;
+  var hideTray = body.hasAttribute(&#x27;data-compare-hide-tray&#x27;) || !!state;
+
+  function buildTray() {
+    tray = document.createElement(&#x27;aside&#x27;);
+    tray.className = &#x27;cmp-tray&#x27;;
+    tray.setAttribute(&#x27;aria-label&#x27;, &#x27;Курсы для сравнения&#x27;);
+    if (document.querySelector(&#x27;.sticky-cta&#x27;)) tray.classList.add(&#x27;cmp-tray--raised&#x27;);
+    body.appendChild(tray);
+    tray.addEventListener(&#x27;click&#x27;, function (e) {
+      var rm = e.target.closest(&#x27;[data-compare-remove]&#x27;);
+      if (rm) {
+        var id = rm.getAttribute(&#x27;data-compare-remove&#x27;);
+        write(read().filter(function (c) { return c.id !== id; }));
+        return;
+      }
+      if (e.target.closest(&#x27;[data-compare-clear]&#x27;)) {
+        write([]);
+        return;
+      }
+      if (e.target.closest(&#x27;[data-compare-collapse]&#x27;)) {
+        collapsed = !collapsed;
+        render();
+      }
+    });
+  }
+
+  function renderTray(list) {
+    if (hideTray) return;
+    if (!tray) buildTray();
+    var n = list.length;
+    body.classList.toggle(&#x27;has-cmp-tray&#x27;, n &gt; 0);
+    tray.hidden = n === 0;
+    tray.classList.toggle(&#x27;is-collapsed&#x27;, collapsed);
+    if (!n) return;
+
+    var chips = &#x27;&#x27;;
+    for (var i = 0; i &lt; MAX; i++) {
+      var c = list[i];
+      chips += c
+        ? &#x27;&lt;li class=&quot;cmp-tray__chip&quot;&gt;&lt;span class=&quot;cmp-tray__chip-text&quot;&gt;&lt;span class=&quot;cmp-tray__chip-name&quot;&gt;&#x27; + esc(c.name) + &#x27;&lt;/span&gt;&lt;span class=&quot;cmp-tray__chip-school&quot;&gt;&#x27; + esc(c.school) + &#x27;&lt;/span&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;cmp-tray__remove&quot; data-compare-remove=&quot;&#x27; + esc(c.id) + &#x27;&quot; aria-label=&quot;Убрать из сравнения: &#x27; + esc(c.name) + &#x27;&quot;&gt;&#x27; + ICON_X + &#x27;&lt;/button&gt;&lt;/li&gt;&#x27;
+        : &#x27;&lt;li class=&quot;cmp-tray__chip cmp-tray__chip--empty&quot; aria-hidden=&quot;true&quot;&gt;+ курс&lt;/li&gt;&#x27;;
+    }
+    var ready = n &gt;= 2;
+    tray.innerHTML =
+      &#x27;&lt;div class=&quot;cmp-tray__inner&quot;&gt;&#x27; +
+        &#x27;&lt;button type=&quot;button&quot; class=&quot;cmp-tray__head&quot; data-compare-collapse aria-expanded=&quot;&#x27; + String(!collapsed) + &#x27;&quot;&gt;&#x27; +
+          &#x27;&lt;span class=&quot;cmp-tray__icon&quot;&gt;&#x27; + ICON_SWAP + &#x27;&lt;/span&gt;&#x27; +
+          &#x27;&lt;span class=&quot;cmp-tray__title&quot;&gt;Сравнение &lt;span class=&quot;cmp-tray__count&quot;&gt;&#x27; + n + &#x27; из &#x27; + MAX + &#x27;&lt;/span&gt;&lt;/span&gt;&#x27; +
+          &#x27;&lt;span class=&quot;cmp-tray__chevron&quot;&gt;&#x27; + ICON_UP + &#x27;&lt;/span&gt;&#x27; +
+        &#x27;&lt;/button&gt;&#x27; +
+        &#x27;&lt;ul class=&quot;cmp-tray__list&quot;&gt;&#x27; + chips + &#x27;&lt;/ul&gt;&#x27; +
+        &#x27;&lt;div class=&quot;cmp-tray__actions&quot;&gt;&#x27; +
+          &#x27;&lt;button type=&quot;button&quot; class=&quot;cmp-tray__clear&quot; data-compare-clear&gt;Очистить&lt;/button&gt;&#x27; +
+          (ready
+            ? &#x27;&lt;a href=&quot;&#x27; + esc(urlFor(list)) + &#x27;&quot; class=&quot;btn btn--primary cmp-tray__go&quot;&gt;Сравнить &#x27; + n + &#x27; &#x27; + plural(n) + &#x27;&lt;/a&gt;&#x27;
+            : &#x27;&lt;span class=&quot;btn cmp-tray__go cmp-tray__go--disabled&quot; aria-disabled=&quot;true&quot;&gt;Добавьте ещё 1 курс&lt;/span&gt;&#x27;) +
+        &#x27;&lt;/div&gt;&#x27; +
+      &#x27;&lt;/div&gt;&#x27;;
+  }
+
+  function renderNav(n) {
+    var links = document.querySelectorAll(&#x27;.main-nav a[href$=&quot;/compare/&quot;], .main-nav a[href$=&quot;compare/index.html&quot;]&#x27;);
+    for (var i = 0; i &lt; links.length; i++) {
+      var badge = links[i].querySelector(&#x27;.nav-count&#x27;);
+      if (!badge) {
+        badge = document.createElement(&#x27;span&#x27;);
+        badge.className = &#x27;nav-count&#x27;;
+        links[i].appendChild(badge);
+      }
+      badge.textContent = n;
+      badge.hidden = n === 0;
+      badge.setAttribute(&#x27;aria-label&#x27;, &#x27;выбрано: &#x27; + n);
+    }
+  }
+
+  function render() {
+    var list = read();
+    var btns = document.querySelectorAll(&#x27;[data-compare-id]&#x27;);
+    for (var i = 0; i &lt; btns.length; i++) {
+      var on = has(list, btns[i].getAttribute(&#x27;data-compare-id&#x27;));
+      btns[i].setAttribute(&#x27;aria-pressed&#x27;, String(on));
+      btns[i].classList.toggle(&#x27;is-active&#x27;, on);
+    }
+    var links = document.querySelectorAll(&#x27;[data-compare-link]&#x27;);
+    for (var j = 0; j &lt; links.length; j++) {
+      links[j].hidden = list.length === 0;
+      links[j].setAttribute(&#x27;href&#x27;, urlFor(list));
+      var cnt = links[j].querySelector(&#x27;[data-compare-count]&#x27;);
+      if (cnt) cnt.textContent = list.length;
+    }
+    renderNav(list.length);
+    renderTray(list);
+  }
+
+  document.addEventListener(&#x27;click&#x27;, function (e) {
+    var btn = e.target.closest(&#x27;[data-compare-id]&#x27;);
+    if (!btn) return;
+    e.preventDefault();
+    var id = btn.getAttribute(&#x27;data-compare-id&#x27;);
+    var list = read();
+    if (has(list, id)) {
+      write(list.filter(function (c) { return c.id !== id; }));
+      return;
+    }
+    if (list.length &gt;= MAX) {
+      toast(&#x27;Можно сравнить не больше &#x27; + MAX + &#x27; курсов. Уберите один из списка.&#x27;, &#x27;Открыть сравнение&#x27;);
+      return;
+    }
+    list.push({
+      id: id,
+      name: btn.getAttribute(&#x27;data-compare-name&#x27;) || id,
+      school: btn.getAttribute(&#x27;data-compare-school&#x27;) || &#x27;&#x27;
+    });
+    collapsed = false;
+    write(list);
+    if (list.length === 1) toast(&#x27;Курс добавлен. Выберите ещё хотя бы один для сравнения.&#x27;);
+  });
+
+  syncCookie(read());
+
+  window.addEventListener(&#x27;storage&#x27;, function (e) {
+    if (e.key === KEY) render();
+  });
+
+  render();
+})();</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/edukursy/css/compare.css</code><span>Стили (уже есть в style.css)</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>compare.css</span><button type="button" class="copy-btn" data-target="cf8">Копировать</button></div>
+            <pre class="prompt__code" id="cf8">/* Если style.css уже подключён целиком — этот файл не нужен: в style.css этот блок уже есть. */
+
+/* ============================================================
+   КНОПКА «СРАВНИТЬ» + ПАНЕЛЬ СРАВНЕНИЯ (compare.js)
+   ============================================================ */
+
+/* ----- Кнопка: общее ----- */
+.cmp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.cmp-btn svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cmp-btn__on,
+.cmp-btn .cmp-btn__icon-on {
+  display: none;
+}
+.cmp-btn[aria-pressed=&quot;true&quot;] .cmp-btn__on,
+.cmp-btn[aria-pressed=&quot;true&quot;] .cmp-btn__icon-on {
+  display: inline;
+}
+.cmp-btn[aria-pressed=&quot;true&quot;] .cmp-btn__off,
+.cmp-btn[aria-pressed=&quot;true&quot;] .cmp-btn__icon-off {
+  display: none;
+}
+.cmp-btn:focus-visible {
+  outline: 3px solid rgba(31, 94, 255, 0.35);
+  outline-offset: 2px;
+}
+
+/* ----- Вариант 1: на карточке каталога (поверх обложки) ----- */
+.catalog-card {
+  position: relative;
+}
+.cmp-btn--card {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--c-text);
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgba(20, 23, 28, 0.14);
+  backdrop-filter: blur(4px);
+}
+.cmp-btn--card:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.cmp-btn--card[aria-pressed=&quot;true&quot;] {
+  border-color: var(--c-primary);
+  background: var(--c-primary);
+  color: #fff;
+}
+.cmp-btn--card[aria-pressed=&quot;true&quot;]:hover {
+  background: var(--c-primary-dark);
+  color: #fff;
+}
+@media (hover: hover) and (min-width: 768px) {
+  .cmp-btn--card[aria-pressed=&quot;false&quot;] .cmp-btn__off {
+    max-width: 0;
+    overflow: hidden;
+    transition: max-width 0.2s;
+  }
+  .cmp-btn--card[aria-pressed=&quot;false&quot;] {
+    gap: 0;
+    padding: 0 9px;
+  }
+  .catalog-card:hover .cmp-btn--card[aria-pressed=&quot;false&quot;],
+  .cmp-btn--card[aria-pressed=&quot;false&quot;]:focus-visible {
+    gap: 6px;
+    padding: 0 12px;
+  }
+  .catalog-card:hover .cmp-btn--card[aria-pressed=&quot;false&quot;] .cmp-btn__off,
+  .cmp-btn--card[aria-pressed=&quot;false&quot;]:focus-visible .cmp-btn__off {
+    max-width: 120px;
+  }
+}
+.catalog-card:has(.cmp-btn--card[aria-pressed=&quot;true&quot;]) {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 1px var(--c-primary);
+}
+
+/* ----- Вариант 2: в карточке цены (на всю ширину) ----- */
+.cmp-btn--block {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 16px;
+  border: 1px dashed #b9c3d6;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--c-text);
+  font-size: 15px;
+}
+.cmp-btn--block:hover {
+  border-style: solid;
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.cmp-btn--block[aria-pressed=&quot;true&quot;] {
+  border: 1px solid #b8ccff;
+  background: #eef3ff;
+  color: var(--c-primary-dark);
+}
+.price-box .cmp-btn--block {
+  margin-top: 10px;
+}
+
+/* Ссылка «Перейти к сравнению (N)» */
+.cmp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-primary);
+}
+.cmp-link[hidden] {
+  display: none;
+}
+.cmp-link span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--c-primary);
+  color: #fff;
+  font-size: 12px;
+}
+.price-box .cmp-link {
+  display: flex;
+  justify-content: center;
+}
+.price-box .cmp-link[hidden] {
+  display: none;
+}
+
+/* ----- Вариант 3: в шапке курса, рядом с фактами ----- */
+.cmp-btn--inline {
+  margin-top: 16px;
+  height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--c-primary);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--c-primary);
+  font-size: 15px;
+}
+.cmp-btn--inline:hover {
+  background: #eef3ff;
+}
+.cmp-btn--inline[aria-pressed=&quot;true&quot;] {
+  background: var(--c-primary);
+  color: #fff;
+}
+
+/* ----- Вариант 4: иконка в липкой мобильной панели ----- */
+.cmp-btn--icon {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--c-text);
+}
+.cmp-btn--icon svg {
+  width: 20px;
+  height: 20px;
+}
+.cmp-btn--icon[aria-pressed=&quot;true&quot;] {
+  border-color: var(--c-primary);
+  background: #eef3ff;
+  color: var(--c-primary);
+}
+.sticky-cta__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ----- Счётчик в меню «Сравнения» ----- */
+.nav-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--c-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: 2px;
+}
+.nav-count[hidden] {
+  display: none;
+}
+
+/* ----- Плавающая панель сравнения ----- */
+.cmp-tray {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 120;
+  width: min(1080px, calc(100% - 24px));
+  transform: translateX(-50%);
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(20, 23, 28, 0.18);
+  animation: cmp-in 0.2s ease-out;
+}
+.cmp-tray[hidden] {
+  display: none;
+}
+@keyframes cmp-in {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+.cmp-tray__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 12px 12px 16px;
+}
+.cmp-tray__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--c-text);
+  text-align: left;
+  cursor: default;
+}
+.cmp-tray__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #eef3ff;
+  color: var(--c-primary);
+}
+.cmp-tray svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cmp-tray__title {
+  display: flex;
+  flex-direction: column;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.cmp-tray__count {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--c-muted);
+}
+.cmp-tray__chevron {
+  display: none;
+}
+.cmp-tray__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.cmp-tray__chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 48px;
+  padding: 0 6px 0 12px;
+  border-radius: 10px;
+  background: var(--c-bg-light);
+}
+.cmp-tray__chip--empty {
+  justify-content: center;
+  padding: 0;
+  border: 1px dashed var(--c-border);
+  background: none;
+  color: #9aa1ad;
+  font-size: 13px;
+}
+.cmp-tray__chip-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.25;
+}
+.cmp-tray__chip-name {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cmp-tray__chip-school {
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--c-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cmp-tray__remove {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--c-muted);
+  cursor: pointer;
+}
+.cmp-tray__remove:hover {
+  background: #fff;
+  color: #c23d58;
+}
+.cmp-tray__remove svg {
+  width: 16px;
+  height: 16px;
+}
+.cmp-tray__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cmp-tray__clear {
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--c-muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.cmp-tray__clear:hover {
+  color: var(--c-text);
+}
+.cmp-tray__go {
+  min-height: 46px;
+  padding: 0 20px;
+  white-space: nowrap;
+}
+.cmp-tray__go--disabled {
+  background: #e7eaf0;
+  color: #8a919e;
+  font-weight: 600;
+  cursor: default;
+}
+body.has-cmp-tray {
+  padding-bottom: 100px;
+}
+
+@media (max-width: 1023.98px) {
+  .cmp-tray {
+    bottom: 0;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    border-bottom: 0;
+  }
+  .cmp-tray--raised {
+    bottom: 66px;
+    border-radius: 16px 16px 0 0;
+  }
+  .cmp-tray__inner {
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  .cmp-tray__head {
+    cursor: pointer;
+  }
+  .cmp-tray__chevron {
+    display: block;
+    color: var(--c-muted);
+    transition: transform 0.2s;
+  }
+  .cmp-tray.is-collapsed .cmp-tray__chevron {
+    transform: rotate(180deg);
+  }
+  .cmp-tray__list {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cmp-tray.is-collapsed .cmp-tray__list {
+    display: none;
+  }
+  .cmp-tray__actions {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .cmp-tray__clear {
+    display: none;
+  }
+  .cmp-tray__go {
+    min-height: 42px;
+    padding: 0 14px;
+    font-size: 15px;
+  }
+  body.has-cmp-tray {
+    padding-bottom: 170px;
+  }
+}
+@media (max-width: 1023.98px) {
+  .cmp-tray__chip--empty {
+    display: none;
+  }
+}
+
+/* ----- Тост ----- */
+.cmp-toast {
+  position: fixed;
+  left: 50%;
+  top: calc(var(--header-h) + 12px);
+  z-index: 130;
+  max-width: calc(100% - 24px);
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--c-text);
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 8px 24px rgba(20, 23, 28, 0.25);
+  opacity: 0;
+  transform: translate(-50%, -8px);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.cmp-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+.cmp-toast a {
+  margin-left: 6px;
+  color: #9db9ff;
+  font-weight: 700;
+}</pre>
+          </div>
+        </details>
       </section>
 
       <section class="ins-step" id="step-9">

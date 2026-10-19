@@ -1,0 +1,2 @@
+{% comment %}Ссылка «Перейти к сравнению (N)» — показывается, когда выбран хотя бы 1 курс.{% endcomment %}
+<a href="{% url 'compare' %}{% if compare_ids %}?courses={{ compare_ids|join:',' }}{% endif %}" class="cmp-link" data-compare-link{% if not compare_ids %} hidden{% endif %}>Перейти к сравнению <span data-compare-count>{{ compare_ids|length }}</span></a>
