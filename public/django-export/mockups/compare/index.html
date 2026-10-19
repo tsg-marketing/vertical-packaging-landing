@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- DATA: title = «Сравнение курсов: <course1> vs <course2> vs <course3> — edukursy.ru» -->
   <title>Сравнение курсов Python-разработчика: цены, длительность, формат — edukursy.ru</title>
-  <meta name="description" content="Сравните курсы Python-разработчика трёх онлайн-школ: цена, рассрочка, длительность, наставник, проекты и документ об окончании.">
+  <meta name="description" content="Сравните курсы Python-разработчика онлайн-школ: цена, рассрочка, длительность, наставник, проекты и документ об окончании.">
   <!-- DATA: страницы с произвольным набором курсов — noindex; готовые подборки /compare/<slug>/ — index -->
   <meta name="robots" content="noindex, follow">
   <link rel="stylesheet" href="../style.css">
@@ -48,18 +48,19 @@
         </ol>
       </nav>
       <h1 class="page-head__title">Сравнение курсов</h1>
-      <p class="page-head__subtitle"><span class="results-count"><!-- DATA: compare.count -->3 курса</span> · <!-- DATA: compare.profession -->Python-разработчик · данные проверены <!-- DATA: compare.checked_at -->1 октября 2025</p>
+      <p class="page-head__subtitle"><span class="results-count"><!-- DATA: compare.count -->6 курсов</span> · <!-- DATA: compare.profession -->Python-разработчик · данные проверены <!-- DATA: compare.checked_at -->1 октября 2025</p>
 
       <!-- Набор курсов задаётся в URL: /compare/?courses=school-1/python-razrabotchik,school-2/python-backend,... -->
       <form class="cmp-add" method="get" action="/compare/">
-        <input type="hidden" name="courses" value="school-1/python-razrabotchik,school-2/python-backend,school-3/python-razrabotchik-pro"><!-- DATA: текущий список -->
+        <!-- Ограничения на число курсов нет. Курсы из сравнения в список «Добавить» не попадают. -->
+        <input type="hidden" name="courses" value="school-1/python-razrabotchik,school-2/python-backend,school-3/python-razrabotchik-pro,school-1/backend-na-python,school-2/golang-razrabotchik,school-3/java-razrabotchik"><!-- DATA: текущий список -->
         <label for="cmp-add" class="cmp-add__label">Добавить курс</label>
         <select id="cmp-add" name="add" class="sort__select cmp-add__select">
           <!-- DATA: курсы той же профессии, которых ещё нет в сравнении -->
           <option value="">Выберите курс той же профессии</option>
-          <option value="school-2/golang-razrabotchik">Go-разработчик — Школа 2</option>
-          <option value="school-3/java-razrabotchik">Java-разработчик с нуля — Школа 3</option>
-          <option value="school-1/backend-na-python">Бэкенд на Python: Django — Школа 1</option>
+          <option value="school-1/sql-dlya-nachinayushchih">SQL для начинающих — Школа 1</option>
+          <option value="school-2/frontend-razrabotchik">Фронтенд-разработчик — Школа 2</option>
+          <option value="school-3/javascript-prodvinutyj">JavaScript: продвинутый уровень — Школа 3</option>
         </select>
         <button type="submit" class="btn btn--outline">Добавить</button>
         <label class="cmp-add__diff"><input type="checkbox" name="diff" value="1"><span>Только различия</span></label>
@@ -100,8 +101,15 @@
       <h2 class="section__title" id="cmp-title">Подробное сравнение</h2>
       <p class="cmp-legend"><span class="cmp-best">Лучшее</span> — лучшее значение по параметру среди курсов в сравнении</p>
 
-      <!-- Широкая таблица прокручивается по горизонтали; первая колонка и шапка закреплены -->
-      <div class="cmp-scroll" tabindex="0" role="region" aria-labelledby="cmp-title">
+      <!-- Курсов может быть сколько угодно: колонки фиксированной ширины, таблица прокручивается по горизонтали.
+           Первая колонка закреплена. Стрелки над таблицей появляются, только если колонки не помещаются. -->
+      <div class="cmp-table-wrap">
+        <div class="cmp-nav" hidden>
+          <span class="cmp-nav__pos" data-cmp-scroll-pos aria-live="polite"></span>
+          <button type="button" class="cmp-nav__btn" data-cmp-scroll-btn="-1" aria-label="Предыдущие курсы"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+          <button type="button" class="cmp-nav__btn" data-cmp-scroll-btn="1" aria-label="Следующие курсы"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
+      <div class="cmp-scroll" tabindex="0" role="region" aria-labelledby="cmp-title" data-cmp-scroll>
         <table class="cmp-table">
           <caption class="visually-hidden">Сравнение курсов по цене, длительности, формату и гарантиям</caption>
           <thead>
@@ -109,16 +117,16 @@
               <td class="cmp-corner"><span>Параметр</span></td>
           <th scope="col" class="cmp-col" id="c1">
             <div class="cmp-head">
-              <a href="/compare/?remove=school-1/python-razrabotchik" class="cmp-head__remove" aria-label="Убрать из сравнения">×</a><!-- DATA: URL без этого курса в параметре courses -->
-              <a href="/courses/school-1/python-razrabotchik/" class="cmp-head__school"><img src="../img/school-1.jpg" alt="" width="24" height="24"><!-- DATA: course.school.name -->Школа 1 <span class="cmp-head__rating"><!-- DATA: course.school.rating -->4.78</span></a>
-              <a href="/courses/school-1/python-razrabotchik/" class="cmp-head__name"><!-- DATA: course.name -->Python-разработчик</a>
-              <p class="cmp-head__price"><!-- DATA: course.price -->98 000 ₽ <s><!-- DATA: course.old_price -->140 000 ₽</s></p>
-              <a href="https://example.com/python-razrabotchik/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><!-- DATA: course.partner_url -->
+              <a href="/main/compare/index.html?courses=school-2/python-backend,school-3/python-razrabotchik-pro,school-1/backend-na-python,school-2/golang-razrabotchik,school-3/java-razrabotchik" class="cmp-head__remove" aria-label="Убрать из сравнения: Python-разработчик">×</a><!-- DATA: URL без этого курса в параметре courses -->
+              <a href="/courses/school-1/python-razrabotchik/" class="cmp-head__school"><img src="../img/school-1.jpg" alt="" width="24" height="24">Школа 1 <span class="cmp-head__rating">4.78</span></a>
+              <a href="/courses/school-1/python-razrabotchik/" class="cmp-head__name">Python-разработчик</a>
+              <p class="cmp-head__price">98 000 ₽ <s>140 000 ₽</s></p>
+              <a href="https://example.com/python-razrabotchik/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a>
             </div>
           </th>
           <th scope="col" class="cmp-col" id="c2">
             <div class="cmp-head">
-              <a href="/compare/?remove=school-2/python-backend" class="cmp-head__remove" aria-label="Убрать из сравнения">×</a>
+              <a href="/main/compare/index.html?courses=school-1/python-razrabotchik,school-3/python-razrabotchik-pro,school-1/backend-na-python,school-2/golang-razrabotchik,school-3/java-razrabotchik" class="cmp-head__remove" aria-label="Убрать из сравнения: Python для бэкенда">×</a>
               <a href="/courses/school-2/python-backend/" class="cmp-head__school"><img src="../img/school-2.jpg" alt="" width="24" height="24">Школа 2 <span class="cmp-head__rating">4.72</span></a>
               <a href="/courses/school-2/python-backend/" class="cmp-head__name">Python для бэкенда</a>
               <p class="cmp-head__price">38 000 ₽ </p>
@@ -127,48 +135,76 @@
           </th>
           <th scope="col" class="cmp-col" id="c3">
             <div class="cmp-head">
-              <a href="/compare/?remove=school-3/python-razrabotchik-pro" class="cmp-head__remove" aria-label="Убрать из сравнения">×</a>
+              <a href="/main/compare/index.html?courses=school-1/python-razrabotchik,school-2/python-backend,school-1/backend-na-python,school-2/golang-razrabotchik,school-3/java-razrabotchik" class="cmp-head__remove" aria-label="Убрать из сравнения: Python-разработчик PRO">×</a>
               <a href="/courses/school-3/python-razrabotchik-pro/" class="cmp-head__school"><img src="../img/school-3.jpg" alt="" width="24" height="24">Школа 3 <span class="cmp-head__rating">4.65</span></a>
               <a href="/courses/school-3/python-razrabotchik-pro/" class="cmp-head__name">Python-разработчик PRO</a>
               <p class="cmp-head__price">112 000 ₽ <s>159 500 ₽</s></p>
               <a href="https://example.com/python-pro/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a>
             </div>
           </th>
+          <th scope="col" class="cmp-col" id="c4">
+            <div class="cmp-head">
+              <a href="/main/compare/index.html?courses=school-1/python-razrabotchik,school-2/python-backend,school-3/python-razrabotchik-pro,school-2/golang-razrabotchik,school-3/java-razrabotchik" class="cmp-head__remove" aria-label="Убрать из сравнения: Бэкенд на Python: Django">×</a>
+              <a href="/courses/school-1/backend-na-python/" class="cmp-head__school"><img src="../img/school-1.jpg" alt="" width="24" height="24">Школа 1 <span class="cmp-head__rating">4.78</span></a>
+              <a href="/courses/school-1/backend-na-python/" class="cmp-head__name">Бэкенд на Python: Django</a>
+              <p class="cmp-head__price">64 000 ₽ <s>91 000 ₽</s></p>
+              <a href="https://example.com/backend-na-python/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a>
+            </div>
+          </th>
+          <th scope="col" class="cmp-col" id="c5">
+            <div class="cmp-head">
+              <a href="/main/compare/index.html?courses=school-1/python-razrabotchik,school-2/python-backend,school-3/python-razrabotchik-pro,school-1/backend-na-python,school-3/java-razrabotchik" class="cmp-head__remove" aria-label="Убрать из сравнения: Go-разработчик">×</a>
+              <a href="/courses/school-2/golang-razrabotchik/" class="cmp-head__school"><img src="../img/school-2.jpg" alt="" width="24" height="24">Школа 2 <span class="cmp-head__rating">4.72</span></a>
+              <a href="/courses/school-2/golang-razrabotchik/" class="cmp-head__name">Go-разработчик</a>
+              <p class="cmp-head__price">49 000 ₽ </p>
+              <a href="https://example.com/golang/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a>
+            </div>
+          </th>
+          <th scope="col" class="cmp-col" id="c6">
+            <div class="cmp-head">
+              <a href="/main/compare/index.html?courses=school-1/python-razrabotchik,school-2/python-backend,school-3/python-razrabotchik-pro,school-1/backend-na-python,school-2/golang-razrabotchik" class="cmp-head__remove" aria-label="Убрать из сравнения: Java-разработчик с нуля">×</a>
+              <a href="/courses/school-3/java-razrabotchik/" class="cmp-head__school"><img src="../img/school-3.jpg" alt="" width="24" height="24">Школа 3 <span class="cmp-head__rating">4.65</span></a>
+              <a href="/courses/school-3/java-razrabotchik/" class="cmp-head__name">Java-разработчик с нуля</a>
+              <p class="cmp-head__price">87 000 ₽ <s>120 000 ₽</s></p>
+              <a href="https://example.com/java/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a>
+            </div>
+          </th>
             </tr>
           </thead>
         <tbody class="cmp-group">
-          <tr class="cmp-group__head"><th scope="rowgroup" colspan="4">Стоимость</th></tr>
-          <tr><th scope="row">Полная цена</th><td data-label="Школа 1"><!-- DATA: course.price --><strong>98 000 ₽</strong></td><td class="is-best" data-label="Школа 2"><strong>38 000 ₽</strong><span class="cmp-best">Лучшее</span></td><td data-label="Школа 3"><strong>112 000 ₽</strong></td></tr>
-          <tr><th scope="row">Цена без скидки</th><td data-label="Школа 1"><s>140 000 ₽</s></td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><s>159 500 ₽</s></td></tr>
-          <tr><th scope="row">Рассрочка</th><td data-label="Школа 1">4 900 ₽/мес<br><span class="cmp-sub">на 24 мес</span></td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3">5 600 ₽/мес<br><span class="cmp-sub">на 20 мес</span></td></tr>
-          <tr><th scope="row">Цена за месяц обучения</th><td data-label="Школа 1">12 250 ₽</td><td class="is-best" data-label="Школа 2">9 500 ₽<span class="cmp-best">Лучшее</span></td><td data-label="Школа 3">11 200 ₽</td></tr>
-          <tr><th scope="row">Налоговый вычет</th><td data-label="Школа 1"><span class="cmp-yes">✓</span> 13%</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> 13%</td></tr>
+          <tr class="cmp-group__head"><th scope="rowgroup" colspan="7">Стоимость</th></tr>
+          <tr><th scope="row">Полная цена</th><td data-label="Школа 1"><!-- DATA: значение параметра курса --><strong>98 000 ₽</strong></td><td class="is-best" data-label="Школа 2"><strong>38 000 ₽</strong><span class="cmp-best">Лучшее</span></td><td data-label="Школа 3"><strong>112 000 ₽</strong></td><td data-label="Школа 1"><strong>64 000 ₽</strong></td><td data-label="Школа 2"><strong>49 000 ₽</strong></td><td data-label="Школа 3"><strong>87 000 ₽</strong></td></tr>
+          <tr><th scope="row">Цена без скидки</th><td data-label="Школа 1"><s>140 000 ₽</s></td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><s>159 500 ₽</s></td><td data-label="Школа 1"><s>91 000 ₽</s></td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><s>120 000 ₽</s></td></tr>
+          <tr><th scope="row">Рассрочка</th><td data-label="Школа 1">4 900 ₽/мес<br><span class="cmp-sub">на 24 мес</span></td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3">5 600 ₽/мес<br><span class="cmp-sub">на 20 мес</span></td><td data-label="Школа 1">3 800 ₽/мес<br><span class="cmp-sub">на 18 мес</span></td><td data-label="Школа 2">4 100 ₽/мес<br><span class="cmp-sub">на 12 мес</span></td><td data-label="Школа 3">4 400 ₽/мес<br><span class="cmp-sub">на 20 мес</span></td></tr>
+          <tr><th scope="row">Цена за месяц обучения</th><td data-label="Школа 1">12 250 ₽</td><td data-label="Школа 2">9 500 ₽</td><td data-label="Школа 3">11 200 ₽</td><td data-label="Школа 1">10 667 ₽</td><td class="is-best" data-label="Школа 2">8 167 ₽<span class="cmp-best">Лучшее</span></td><td data-label="Школа 3">9 667 ₽</td></tr>
+          <tr><th scope="row">Налоговый вычет</th><td data-label="Школа 1"><span class="cmp-yes">✓</span> 13%</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> 13%</td><td data-label="Школа 1"><span class="cmp-yes">✓</span> 13%</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> 13%</td></tr>
         </tbody>
         <tbody class="cmp-group">
-          <tr class="cmp-group__head"><th scope="rowgroup" colspan="4">Длительность и формат</th></tr>
-          <tr><th scope="row">Длительность</th><td data-label="Школа 1">8 месяцев</td><td data-label="Школа 2">4 месяца</td><td data-label="Школа 3">10 месяцев</td></tr>
-          <tr><th scope="row">Нагрузка</th><td data-label="Школа 1">8–10 ч/нед</td><td data-label="Школа 2">6–8 ч/нед</td><td data-label="Школа 3">10–12 ч/нед</td></tr>
-          <tr><th scope="row">Формат</th><td data-label="Школа 1">Записи + вебинары</td><td data-label="Школа 2">Записи</td><td data-label="Школа 3">Вебинары + наставник</td></tr>
-          <tr><th scope="row">Старт</th><td data-label="Школа 1">20 октября</td><td data-label="Школа 2">В любой день</td><td data-label="Школа 3">3 ноября</td></tr>
-          <tr><th scope="row">Бесплатный вводный урок</th><td data-label="Школа 1"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> Есть</td></tr>
+          <tr class="cmp-group__head"><th scope="rowgroup" colspan="7">Длительность и формат</th></tr>
+          <tr><th scope="row">Длительность</th><td data-label="Школа 1">8 месяцев</td><td data-label="Школа 2">4 месяца</td><td data-label="Школа 3">10 месяцев</td><td data-label="Школа 1">6 месяцев</td><td data-label="Школа 2">6 месяцев</td><td data-label="Школа 3">9 месяцев</td></tr>
+          <tr><th scope="row">Нагрузка</th><td data-label="Школа 1">8–10 ч/нед</td><td data-label="Школа 2">6–8 ч/нед</td><td data-label="Школа 3">10–12 ч/нед</td><td data-label="Школа 1">8 ч/нед</td><td data-label="Школа 2">6–8 ч/нед</td><td data-label="Школа 3">10 ч/нед</td></tr>
+          <tr><th scope="row">Формат</th><td data-label="Школа 1">Записи + вебинары</td><td data-label="Школа 2">Записи</td><td data-label="Школа 3">Вебинары + наставник</td><td data-label="Школа 1">Записи + вебинары</td><td data-label="Школа 2">Записи + чат</td><td data-label="Школа 3">Вебинары</td></tr>
+          <tr><th scope="row">Старт</th><td data-label="Школа 1">20 октября</td><td data-label="Школа 2">В любой день</td><td data-label="Школа 3">3 ноября</td><td data-label="Школа 1">27 октября</td><td data-label="Школа 2">В любой день</td><td data-label="Школа 3">10 ноября</td></tr>
+          <tr><th scope="row">Бесплатный вводный урок</th><td data-label="Школа 1"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 1"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 2"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 3"><span class="cmp-no">—</span></td></tr>
         </tbody>
         <tbody class="cmp-group">
-          <tr class="cmp-group__head"><th scope="rowgroup" colspan="4">Обучение</th></tr>
-          <tr><th scope="row">Наставник</th><td data-label="Школа 1"><span class="cmp-yes">✓</span> Да, личный</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> Да, групповой</td></tr>
-          <tr><th scope="row">Проверка заданий</th><td data-label="Школа 1">Каждое задание</td><td data-label="Школа 2">Автопроверка + чат</td><td data-label="Школа 3">Каждое задание</td></tr>
-          <tr><th scope="row">Проектов в портфолио</th><td data-label="Школа 1"><strong>7</strong></td><td data-label="Школа 2"><strong>3</strong></td><td class="is-best" data-label="Школа 3"><strong>9</strong><span class="cmp-best">Лучшее</span></td></tr>
-          <tr><th scope="row">Дипломный проект</th><td data-label="Школа 1"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> Есть</td></tr>
+          <tr class="cmp-group__head"><th scope="rowgroup" colspan="7">Обучение</th></tr>
+          <tr><th scope="row">Наставник</th><td data-label="Школа 1"><span class="cmp-yes">✓</span> Да, личный</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> Да, групповой</td><td data-label="Школа 1"><span class="cmp-yes">✓</span> Да, личный</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> Да, групповой</td></tr>
+          <tr><th scope="row">Проверка заданий</th><td data-label="Школа 1">Каждое задание</td><td data-label="Школа 2">Автопроверка + чат</td><td data-label="Школа 3">Каждое задание</td><td data-label="Школа 1">Каждое задание</td><td data-label="Школа 2">Автопроверка + ревью</td><td data-label="Школа 3">Каждое задание</td></tr>
+          <tr><th scope="row">Проектов в портфолио</th><td data-label="Школа 1"><strong>7</strong></td><td data-label="Школа 2"><strong>3</strong></td><td class="is-best" data-label="Школа 3"><strong>9</strong><span class="cmp-best">Лучшее</span></td><td data-label="Школа 1"><strong>5</strong></td><td data-label="Школа 2"><strong>4</strong></td><td data-label="Школа 3"><strong>6</strong></td></tr>
+          <tr><th scope="row">Дипломный проект</th><td data-label="Школа 1"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 2"><span class="cmp-no">—</span></td><td data-label="Школа 3"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 1"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 2"><span class="cmp-yes">✓</span> Есть</td><td data-label="Школа 3"><span class="cmp-yes">✓</span> Есть</td></tr>
         </tbody>
         <tbody class="cmp-group">
-          <tr class="cmp-group__head"><th scope="rowgroup" colspan="4">Документ и гарантии</th></tr>
-          <tr><th scope="row">Документ об окончании</th><td data-label="Школа 1">Удостоверение о ПК</td><td data-label="Школа 2">Сертификат школы</td><td data-label="Школа 3">Удостоверение о ПК</td></tr>
-          <tr><th scope="row">Возврат денег</th><td data-label="Школа 1">За непройденную часть</td><td data-label="Школа 2">14 дней</td><td data-label="Школа 3">За непройденную часть</td></tr>
-          <tr><th scope="row">Рейтинг школы</th><td class="is-best" data-label="Школа 1"><span class="cmp-star">4.78</span><span class="cmp-best">Лучшее</span></td><td data-label="Школа 2"><span class="cmp-star">4.72</span></td><td data-label="Школа 3"><span class="cmp-star">4.65</span></td></tr>
+          <tr class="cmp-group__head"><th scope="rowgroup" colspan="7">Документ и гарантии</th></tr>
+          <tr><th scope="row">Документ об окончании</th><td data-label="Школа 1">Удостоверение о ПК</td><td data-label="Школа 2">Сертификат школы</td><td data-label="Школа 3">Удостоверение о ПК</td><td data-label="Школа 1">Удостоверение о ПК</td><td data-label="Школа 2">Сертификат школы</td><td data-label="Школа 3">Удостоверение о ПК</td></tr>
+          <tr><th scope="row">Возврат денег</th><td data-label="Школа 1">За непройденную часть</td><td data-label="Школа 2">14 дней</td><td data-label="Школа 3">За непройденную часть</td><td data-label="Школа 1">За непройденную часть</td><td data-label="Школа 2">14 дней</td><td data-label="Школа 3">За непройденную часть</td></tr>
+          <tr><th scope="row">Рейтинг школы</th><td class="is-best" data-label="Школа 1"><span class="cmp-star">4.78</span><span class="cmp-best">Лучшее</span></td><td data-label="Школа 2"><span class="cmp-star">4.72</span></td><td data-label="Школа 3"><span class="cmp-star">4.65</span></td><td class="is-best" data-label="Школа 1"><span class="cmp-star">4.78</span><span class="cmp-best">Лучшее</span></td><td data-label="Школа 2"><span class="cmp-star">4.72</span></td><td data-label="Школа 3"><span class="cmp-star">4.65</span></td></tr>
         </tbody>
           <tfoot>
-            <tr><th scope="row">Выбрать курс</th><td><a href="https://example.com/python-razrabotchik/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><a href="/courses/school-1/python-razrabotchik/" class="cmp-more">Подробнее о курсе</a></td><td><a href="https://example.com/python-backend/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><a href="/courses/school-2/python-backend/" class="cmp-more">Подробнее о курсе</a></td><td><a href="https://example.com/python-pro/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><a href="/courses/school-3/python-razrabotchik-pro/" class="cmp-more">Подробнее о курсе</a></td></tr>
+            <tr><th scope="row">Выбрать курс</th><td><a href="https://example.com/python-razrabotchik/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><a href="/courses/school-1/python-razrabotchik/" class="cmp-more">Подробнее о курсе</a></td><td><a href="https://example.com/python-backend/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><a href="/courses/school-2/python-backend/" class="cmp-more">Подробнее о курсе</a></td><td><a href="https://example.com/python-pro/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><a href="/courses/school-3/python-razrabotchik-pro/" class="cmp-more">Подробнее о курсе</a></td><td><a href="https://example.com/backend-na-python/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><a href="/courses/school-1/backend-na-python/" class="cmp-more">Подробнее о курсе</a></td><td><a href="https://example.com/golang/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><a href="/courses/school-2/golang-razrabotchik/" class="cmp-more">Подробнее о курсе</a></td><td><a href="https://example.com/java/" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a><a href="/courses/school-3/java-razrabotchik/" class="cmp-more">Подробнее о курсе</a></td></tr>
           </tfoot>
         </table>
+      </div>
       </div>
     </section>
 
@@ -209,6 +245,9 @@
           <li><a href="/courses/school-1/python-razrabotchik/">Python-разработчик — Школа 1</a></li>
           <li><a href="/courses/school-2/python-backend/">Python для бэкенда — Школа 2</a></li>
           <li><a href="/courses/school-3/python-razrabotchik-pro/">Python-разработчик PRO — Школа 3</a></li>
+          <li><a href="/courses/school-1/backend-na-python/">Бэкенд на Python: Django — Школа 1</a></li>
+          <li><a href="/courses/school-2/golang-razrabotchik/">Go-разработчик — Школа 2</a></li>
+          <li><a href="/courses/school-3/java-razrabotchik/">Java-разработчик с нуля — Школа 3</a></li>
         </ul>
       </div>
       <div class="link-columns__col">
@@ -240,7 +279,7 @@
         <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
           <h3 class="faq-item__q"><button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-3" id="faq-q-3"><span class="faq-item__icon" aria-hidden="true">➕</span><span itemprop="name">Сколько курсов можно сравнить?</span></button></h3>
           <div class="faq-item__a" id="faq-a-3" role="region" aria-labelledby="faq-q-3" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-            <div itemprop="text"><p>До четырёх курсов одной профессии. Добавляйте курсы через поле над таблицей или кнопкой «Сравнить» в каталоге.</p></div>
+            <div itemprop="text"><p>Без ограничений. Добавляйте курсы кнопкой «Сравнить» в каталоге или через поле над таблицей. Если курсов много, таблица прокручивается вбок, а колонка с параметрами остаётся на месте. Чтобы убрать курс, нажмите × в его колонке.</p></div>
           </div>
         </div>
         <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
@@ -254,7 +293,7 @@
 
   </main>
 
-  <!-- ===== Липкая панель на мобильном: три кнопки на сайты школ ===== -->
+  <!-- ===== Липкая панель на мобильном: по кнопке на каждый курс, прокручивается вбок ===== -->
   <div class="cmp-sticky">
         <div class="cmp-sticky__item">
           <p class="cmp-sticky__name">Python-разработчик</p>
@@ -270,6 +309,21 @@
           <p class="cmp-sticky__name">Python-разработчик PRO</p>
           <p class="cmp-sticky__price">112 000 ₽</p>
           <a href="https://example.com/python-pro/" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт</a>
+        </div>
+        <div class="cmp-sticky__item">
+          <p class="cmp-sticky__name">Бэкенд на Python: Django</p>
+          <p class="cmp-sticky__price">64 000 ₽</p>
+          <a href="https://example.com/backend-na-python/" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт</a>
+        </div>
+        <div class="cmp-sticky__item">
+          <p class="cmp-sticky__name">Go-разработчик</p>
+          <p class="cmp-sticky__price">49 000 ₽</p>
+          <a href="https://example.com/golang/" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт</a>
+        </div>
+        <div class="cmp-sticky__item">
+          <p class="cmp-sticky__name">Java-разработчик с нуля</p>
+          <p class="cmp-sticky__price">87 000 ₽</p>
+          <a href="https://example.com/java/" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт</a>
         </div>
   </div>
 

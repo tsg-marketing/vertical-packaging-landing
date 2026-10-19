@@ -1,15 +1,11 @@
 {% comment %}
 Кнопка «Сравнить».
   {% include "edukursy/partials/compare/button.html" with course=course variant="card" %}
-variant: card (на обложке карточки) | block (в карточке цены) | inline (в шапке курса) | icon (липкая мобильная панель)
+variant: card  — на обложке карточки курса (первым ребёнком <article>, НЕ внутри <a>)
+         block — в карточке цены на странице курса
+         inline — в шапке курса (если нет карточки цены)
+         icon  — в липкой мобильной панели
 label_off / label_on — необязательные подписи.
-Нужен контекст-процессор compare_ids (см. context_processors.py) — по нему ставится aria-pressed.
+aria-pressed ставится по compare_ids из context processor, поэтому кнопка сразу в нужном состоянии.
 {% endcomment %}
-{% load compare_tags %}
-{% with cid=course|compare_id %}
-{% if variant == "icon" %}
-<button type="button" class="cmp-btn cmp-btn--icon" data-compare-id="{{ cid }}" data-compare-name="{{ course.name }}" data-compare-school="{{ course.school.name }}" aria-pressed="{% if cid in compare_ids %}true{% else %}false{% endif %}" aria-label="Сравнить курс">{% include "edukursy/partials/compare/_icons.html" %}</button>
-{% else %}
-<button type="button" class="cmp-btn cmp-btn--{{ variant|default:'card' }}" data-compare-id="{{ cid }}" data-compare-name="{{ course.name }}" data-compare-school="{{ course.school.name }}" aria-pressed="{% if cid in compare_ids %}true{% else %}false{% endif %}">{% include "edukursy/partials/compare/_icons.html" %}<span class="cmp-btn__off">{{ label_off|default:"Сравнить" }}</span><span class="cmp-btn__on">{{ label_on|default:"В сравнении" }}</span></button>
-{% endif %}
-{% endwith %}
+{% load compare_tags %}{% with cid=course|compare_id %}{% if variant == "icon" %}<button type="button" class="cmp-btn cmp-btn--icon" data-compare-id="{{ cid }}" data-compare-name="{{ course.name }}" data-compare-school="{{ course.school.name }}" aria-pressed="{% if cid in compare_ids %}true{% else %}false{% endif %}" aria-label="Сравнить курс">{% include "edukursy/partials/compare/_icons.html" %}</button>{% else %}<button type="button" class="cmp-btn cmp-btn--{{ variant|default:'card' }}" data-compare-id="{{ cid }}" data-compare-name="{{ course.name }}" data-compare-school="{{ course.school.name }}" aria-pressed="{% if cid in compare_ids %}true{% else %}false{% endif %}">{% include "edukursy/partials/compare/_icons.html" %}<span class="cmp-btn__off">{{ label_off|default:"Сравнить" }}</span><span class="cmp-btn__on">{{ label_on|default:"В сравнении" }}</span></button>{% endif %}{% endwith %}

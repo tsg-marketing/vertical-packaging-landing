@@ -102,7 +102,7 @@ Cline сравнивает поля с существующими моделям
 
 | Поле | Тип | Где | В БД? | Примечание |
 |---|---|---|---|---|
-| compare.courses | список из GET `?courses=school/course,...` | таблица | конфиг | до 4 курсов, одна профессия |
+| compare.courses | список из GET `?courses=school/course,...` | таблица | конфиг | без ограничения, одна профессия |
 | compare.count | int | подзаголовок | вычисл. | |
 | compare.profession | str | подзаголовок | вычисл. | профессия первого курса |
 | compare.checked_at | date | подзаголовок | вычисл. | `min(course.checked_at)` |

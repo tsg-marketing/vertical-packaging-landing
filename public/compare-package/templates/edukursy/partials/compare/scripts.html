@@ -1,0 +1,8 @@
+{% comment %}
+В base.html перед </body>, ПОСЛЕ основного script.js:
+  {% include "edukursy/partials/compare/scripts.html" %}
+На /compare/ view передаёт compare_state — список в браузере синхронизируется с таблицей,
+плавающая панель на этой странице скрывается.
+{% endcomment %}
+{% load static %}{% if compare_state %}{{ compare_state|json_script:"compare-state" }}{% endif %}
+<script src="{% static 'edukursy/js/compare.js' %}" defer></script>

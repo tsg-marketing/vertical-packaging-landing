@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Курсы онлайн-школ: каталог программ с ценами — edukursy.ru</title>
+  <meta name="description" content="Каталог онлайн-курсов ведущих школ: фильтры по профессии, школе, цене и длительности. Сравните программы и цены в одном месте.">
+  <!-- DATA: canonical без параметров фильтров, кроме page -->
+  <link rel="canonical" href="https://edukursy.ru/courses/">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body data-compare-url="../compare/index.html">
+
+  <!-- ============ ШАПКА (общая с главной) ============ -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo">
+        <img src="../img/logo.png" alt="" class="logo__img" width="48" height="40">
+        <span class="logo__text">edukursy<span>.ru</span></span>
+      </a>
+
+      <button class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label="Основное меню">
+        <ul>
+          <li><a href="/professions/">Профессии</a></li>
+          <li><a href="/courses/" aria-current="page">Курсы</a></li>
+          <li><a href="/schools/">Школы</a></li>
+          <li><a href="/compare/">Сравнения</a></li>
+          <li><a href="/blog/">Блог</a></li>
+          <li><a href="/about/">О проекте</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ ХЛЕБНЫЕ КРОШКИ + ЗАГОЛОВОК ============ -->
+    <section class="page-head">
+      <nav class="breadcrumbs" aria-label="Хлебные крошки">
+        <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="/" itemprop="item"><span itemprop="name">Главная</span></a>
+            <meta itemprop="position" content="1">
+          </li>
+          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span itemprop="name" aria-current="page">Каталог курсов</span>
+            <meta itemprop="position" content="2">
+          </li>
+        </ol>
+      </nav>
+
+      <h1 class="page-head__title">Курсы онлайн-школ: каталог программ</h1>
+      <p class="page-head__subtitle"><span class="results-count"><!-- DATA: total_count -->993 курса</span> от <!-- DATA: schools_count -->3 школ</p>
+    </section>
+
+    <!-- ============ ДВУХКОЛОНОЧНАЯ ОБЛАСТЬ ============ -->
+    <div class="catalog">
+
+      <!-- ===== САЙДБАР С ФИЛЬТРАМИ ===== -->
+      <aside class="catalog-sidebar" id="filters" aria-label="Фильтры">
+        <div class="filters-head">
+          <p class="filters-head__title">Фильтры</p>
+          <a href="#" class="filters-close" aria-label="Закрыть фильтры">×</a>
+        </div>
+
+        <form class="filters" id="filters-form" method="get" action="/courses/">
+
+          <!-- DATA: показывать блок, только если есть активные фильтры. Ссылка «×» = текущий URL без этого параметра -->
+          <div class="active-filters">
+            <p class="active-filters__label">Активные:</p>
+            <ul class="active-filters__list">
+              <li><a href="/courses/?price_max=50000&amp;duration=3-6" class="filter-chip">Программист <span aria-hidden="true">×</span><span class="visually-hidden">— убрать фильтр</span></a></li>
+              <li><a href="/courses/?profession=programmist&amp;duration=3-6" class="filter-chip">до 50 000 ₽ <span aria-hidden="true">×</span><span class="visually-hidden">— убрать фильтр</span></a></li>
+              <li><a href="/courses/?profession=programmist&amp;price_max=50000" class="filter-chip">3–6 месяцев <span aria-hidden="true">×</span><span class="visually-hidden">— убрать фильтр</span></a></li>
+            </ul>
+          </div>
+
+          <!-- 1. ПРОФЕССИЯ -->
+          <details class="filter-group" open>
+            <summary class="filter-group__title">Профессия</summary>
+            <div class="filter-group__body filter-group__body--scroll">
+              <!-- DATA: цикл по профессиям, счётчик = число курсов; checked, если slug есть в request.GET.getlist('profession') -->
+              <label class="opt"><input type="checkbox" name="profession" value="programmist" checked><span class="opt__text">Программист</span> <span class="opt__count">215</span></label>
+              <label class="opt"><input type="checkbox" name="profession" value="dizajner"><span class="opt__text">Дизайнер</span> <span class="opt__count">177</span></label>
+              <label class="opt"><input type="checkbox" name="profession" value="marketolog"><span class="opt__text">Маркетолог</span> <span class="opt__count">41</span></label>
+              <label class="opt"><input type="checkbox" name="profession" value="analitik-dannyh"><span class="opt__text">Аналитик данных</span> <span class="opt__count">14</span></label>
+              <label class="opt"><input type="checkbox" name="profession" value="razrabotka-igr"><span class="opt__text">Разработка игр</span> <span class="opt__count">76</span></label>
+              <label class="opt"><input type="checkbox" name="profession" value="menedzher-proektov"><span class="opt__text">Менеджер проектов</span> <span class="opt__count">107</span></label>
+              <!-- DATA: профессии после 6-й — внутрь details. Работает без JS, скрытые чекбоксы тоже отправляются формой -->
+              <details class="filter-more">
+                <summary class="filter-more__toggle">ещё 2</summary>
+                <label class="opt"><input type="checkbox" name="profession" value="testirovshchik"><span class="opt__text">Тестировщик</span> <span class="opt__count">58</span></label>
+                <label class="opt"><input type="checkbox" name="profession" value="produktovyj-menedzher"><span class="opt__text">Продакт-менеджер</span> <span class="opt__count">33</span></label>
+              </details>
+            </div>
+          </details>
+
+          <!-- 2. ШКОЛА -->
+          <details class="filter-group" open>
+            <summary class="filter-group__title">Школа</summary>
+            <div class="filter-group__body">
+              <!-- DATA: цикл по школам, количество меняется -->
+              <label class="opt"><input type="checkbox" name="school" value="school-1"><span class="opt__text">Школа 1</span> <span class="opt__count">412</span></label>
+              <label class="opt"><input type="checkbox" name="school" value="school-2"><span class="opt__text">Школа 2</span> <span class="opt__count">338</span></label>
+              <label class="opt"><input type="checkbox" name="school" value="school-3"><span class="opt__text">Школа 3</span> <span class="opt__count">243</span></label>
+            </div>
+          </details>
+
+          <!-- 3. ЦЕНА -->
+          <details class="filter-group" open>
+            <summary class="filter-group__title">Цена, ₽</summary>
+            <div class="filter-group__body">
+              <div class="price-range">
+                <label class="price-range__field">
+                  <span class="price-range__label">от</span>
+                  <input type="number" name="price_min" inputmode="numeric" min="0" step="1000" placeholder="0" value=""><!-- DATA: request.GET.price_min -->
+                  <span class="price-range__unit">₽</span>
+                </label>
+                <label class="price-range__field">
+                  <span class="price-range__label">до</span>
+                  <input type="number" name="price_max" inputmode="numeric" min="0" step="1000" placeholder="300 000" value="50000"><!-- DATA: request.GET.price_max -->
+                  <span class="price-range__unit">₽</span>
+                </label>
+              </div>
+              <p class="filter-hint">Полная стоимость курса, без учёта рассрочки</p>
+            </div>
+          </details>
+
+          <!-- 4. ДЛИТЕЛЬНОСТЬ -->
+          <details class="filter-group" open>
+            <summary class="filter-group__title">Длительность</summary>
+            <div class="filter-group__body">
+              <label class="opt"><input type="radio" name="duration" value=""><span class="opt__text">Любая</span></label>
+              <label class="opt"><input type="radio" name="duration" value="0-3"><span class="opt__text">До 3 месяцев</span></label>
+              <label class="opt"><input type="radio" name="duration" value="3-6" checked><span class="opt__text">3–6 месяцев</span></label>
+              <label class="opt"><input type="radio" name="duration" value="6-12"><span class="opt__text">6–12 месяцев</span></label>
+              <label class="opt"><input type="radio" name="duration" value="12-plus"><span class="opt__text">Больше года</span></label>
+            </div>
+          </details>
+
+          <!-- 5. ФОРМАТ -->
+          <details class="filter-group" open>
+            <summary class="filter-group__title">Формат</summary>
+            <div class="filter-group__body">
+              <label class="opt"><input type="radio" name="kind" value="" checked><span class="opt__text">Любой</span></label>
+              <label class="opt"><input type="radio" name="kind" value="profession"><span class="opt__text">Профессия</span></label>
+              <label class="opt"><input type="radio" name="kind" value="course"><span class="opt__text">Отдельный курс</span></label>
+            </div>
+          </details>
+
+          <div class="filters-actions">
+            <button type="submit" class="btn btn--primary btn--block">Показать</button>
+            <a href="/courses/" class="filters-reset">Сбросить всё</a>
+          </div>
+        </form>
+
+        <!-- ===== РЕКЛАМНЫЙ БЛОК 2 — сайдбар (на мобильном скрыт) ===== -->
+        <div class="ad-wrap ad-wrap--sidebar">
+          <aside class="ad-slot ad-slot--sidebar" aria-label="Реклама">
+            <span class="ad-label">Реклама</span>
+            <!-- AD SLOT: 2, 300×250. Сюда вставляется <a href="..." rel="sponsored noopener" target="_blank"><img ...></a> -->
+            <div class="ad-placeholder">Рекламный блок 300×250</div>
+          </aside>
+          <a href="/privacy" class="ad-more">Подробнее о рекламе</a>
+        </div>
+      </aside>
+
+      <!-- ===== СПИСОК ===== -->
+      <section class="catalog-main" aria-label="Список курсов">
+
+        <div class="toolbar">
+          <p class="toolbar__count">Найдено <span class="results-count"><!-- DATA: results_count -->212 курсов</span></p>
+
+          <!-- Только мобильный: открывает панель фильтров. Без JS работает через якорь #filters -->
+          <a href="#filters" class="btn btn--outline filters-open">Фильтры <span class="filters-open__badge"><!-- DATA: active_filters_count -->3</span></a>
+
+          <div class="sort">
+            <label for="sort" class="sort__label">Сортировка</label>
+            <!-- параметр sort уходит в URL: select привязан к форме фильтров атрибутом form -->
+            <select id="sort" name="sort" form="filters-form" class="sort__select">
+              <option value="price_asc" selected>Сначала дешёвые</option>
+              <option value="price_desc">Сначала дорогие</option>
+              <option value="popular">Популярные</option>
+              <option value="new">Новые</option>
+            </select>
+            <noscript><button type="submit" form="filters-form" class="btn btn--outline sort__apply">ОК</button></noscript>
+          </div>
+        </div>
+
+        <div class="catalog-grid">
+          <!-- DATA: цикл по курсам, 9 образцов. Блок-образец: article.catalog-card.
+               Если course.image_url есть — img.card-thumb, иначе div.card-thumb.card-thumb--empty.card-thumb--tone-N (N = school.id % 6 + 1) с первой буквой названия школы -->
+
+          <!-- Карточка: СОСТОЯНИЕ 1 — картинка есть -->
+          <article class="catalog-card">
+            <!-- COMPARE: data-compare-id = "<school_slug>/<course_slug>"; aria-pressed="true", если курс уже в сравнении (сессия) -->
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-1/python-razrabotchik" data-compare-name="Python-разработчик с нуля" data-compare-school="Школа 1" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
+            <a href="/courses/school-1/python-razrabotchik/" class="catalog-card__link"><!-- DATA: /courses/<school-slug>/<course-slug>/ -->
+              <img src="../img/course-preview.svg" alt="Python-разработчик с нуля" class="card-thumb" width="640" height="360" loading="lazy"><!-- DATA: course.image_url, alt = course.name -->
+              <div class="catalog-card__body">
+                <h2 class="catalog-card__title"><!-- DATA: course.name -->Python-разработчик с нуля</h2>
+                <p class="catalog-card__school"><!-- DATA: course.school.name -->Школа 1</p>
+                <p class="catalog-card__duration"><!-- DATA: course.duration -->4 месяца</p>
+                <p class="catalog-card__price"><!-- DATA: course.price -->48 000 ₽</p>
+              </div>
+            </a>
+          </article>
+
+          <!-- Карточка: СОСТОЯНИЕ 2 — картинки нет -->
+          <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-2/frontend-razrabotchik" data-compare-name="Фронтенд-разработчик: HTML, CSS и JavaScript для начинающих" data-compare-school="Школа 2" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
+            <a href="/courses/school-2/frontend-razrabotchik/" class="catalog-card__link">
+              <div class="card-thumb card-thumb--empty card-thumb--tone-2" aria-hidden="true"><!-- DATA: course.school.name|first -->Ш</div>
+              <div class="catalog-card__body">
+                <h2 class="catalog-card__title"><!-- DATA: course.name -->Фронтенд-разработчик: HTML, CSS и JavaScript для начинающих</h2>
+                <p class="catalog-card__school"><!-- DATA: course.school.name -->Школа 2</p>
+                <p class="catalog-card__duration"><!-- DATA: course.duration -->5 месяцев</p>
+                <p class="catalog-card__price"><!-- DATA: course.price -->39 900 ₽</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-3/java-osnovy" data-compare-name="Java: основы программирования" data-compare-school="Школа 3" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
+            <a href="/courses/school-3/java-osnovy/" class="catalog-card__link">
+              <img src="../img/course-preview.svg" alt="Java: основы программирования" class="card-thumb" width="640" height="360" loading="lazy">
+              <div class="catalog-card__body">
+                <h2 class="catalog-card__title">Java: основы программирования</h2>
+                <p class="catalog-card__school">Школа 3</p>
+                <p class="catalog-card__duration">3 месяца</p>
+                <p class="catalog-card__price">29 500 ₽</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-1/sql-dlya-nachinayushchih" data-compare-name="SQL для начинающих" data-compare-school="Школа 1" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
+            <a href="/courses/school-1/sql-dlya-nachinayushchih/" class="catalog-card__link">
+              <div class="card-thumb card-thumb--empty card-thumb--tone-1" aria-hidden="true">Ш</div>
+              <div class="catalog-card__body">
+                <h2 class="catalog-card__title">SQL для начинающих</h2>
+                <p class="catalog-card__school">Школа 1</p>
+                <p class="catalog-card__duration">4 месяца</p>
+                <p class="catalog-card__price">24 000 ₽</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-2/golang-razrabotchik" data-compare-name="Go-разработчик" data-compare-school="Школа 2" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
+            <a href="/courses/school-2/golang-razrabotchik/" class="catalog-card__link">
+              <img src="../img/course-preview.svg" alt="Go-разработчик" class="card-thumb" width="640" height="360" loading="lazy">
+              <div class="catalog-card__body">
+                <h2 class="catalog-card__title">Go-разработчик</h2>
+                <p class="catalog-card__school">Школа 2</p>
+                <p class="catalog-card__duration">6 месяцев</p>
+                <p class="catalog-card__price">49 000 ₽</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-3/git-i-komandnaya-razrabotka" data-compare-name="Git и командная разработка" data-compare-school="Школа 3" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
+            <a href="/courses/school-3/git-i-komandnaya-razrabotka/" class="catalog-card__link">
+              <div class="card-thumb card-thumb--empty card-thumb--tone-3" aria-hidden="true">Ш</div>
+              <div class="catalog-card__body">
+                <h2 class="catalog-card__title">Git и командная разработка</h2>
+                <p class="catalog-card__school">Школа 3</p>
+                <p class="catalog-card__duration">3 месяца</p>
+                <p class="catalog-card__price">14 900 ₽</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-1/backend-na-python" data-compare-name="Бэкенд на Python: Django и базы данных" data-compare-school="Школа 1" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
+            <a href="/courses/school-1/backend-na-python/" class="catalog-card__link">
+              <img src="../img/course-preview.svg" alt="Бэкенд на Python: Django и базы данных" class="card-thumb" width="640" height="360" loading="lazy">
+              <div class="catalog-card__body">
+                <h2 class="catalog-card__title">Бэкенд на Python: Django и базы данных</h2>
+                <p class="catalog-card__school">Школа 1</p>
+                <p class="catalog-card__duration">6 месяцев</p>
+                <p class="catalog-card__price">46 800 ₽</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-2/algoritmy-i-struktury-dannyh" data-compare-name="Алгоритмы и структуры данных для подготовки к собеседованиям" data-compare-school="Школа 2" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
+            <a href="/courses/school-2/algoritmy-i-struktury-dannyh/" class="catalog-card__link">
+              <div class="card-thumb card-thumb--empty card-thumb--tone-4" aria-hidden="true">Ш</div>
+              <div class="catalog-card__body">
+                <h2 class="catalog-card__title">Алгоритмы и структуры данных для подготовки к собеседованиям</h2>
+                <p class="catalog-card__school">Школа 2</p>
+                <p class="catalog-card__duration">4 месяца</p>
+                <p class="catalog-card__price">32 000 ₽</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="catalog-card">
+            <button type="button" class="cmp-btn cmp-btn--card" data-compare-id="school-3/javascript-prodvinutyj" data-compare-name="JavaScript: продвинутый уровень" data-compare-school="Школа 3" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Сравнить</span><span class="cmp-btn__on">В сравнении</span></button>
+            <a href="/courses/school-3/javascript-prodvinutyj/" class="catalog-card__link">
+              <img src="../img/course-preview.svg" alt="JavaScript: продвинутый уровень" class="card-thumb" width="640" height="360" loading="lazy">
+              <div class="catalog-card__body">
+                <h2 class="catalog-card__title">JavaScript: продвинутый уровень</h2>
+                <p class="catalog-card__school">Школа 3</p>
+                <p class="catalog-card__duration">5 месяцев</p>
+                <p class="catalog-card__price">41 500 ₽</p>
+              </div>
+            </a>
+          </article>
+          <!-- /DATA: конец цикла по курсам -->
+
+          <!-- ===== РЕКЛАМНЫЙ БЛОК 1 — нативный, одна ячейка сетки, после 9-й карточки ===== -->
+          <div class="ad-wrap ad-wrap--card">
+            <aside class="ad-slot ad-slot--card" aria-label="Реклама">
+              <span class="ad-label">Реклама</span>
+              <!-- AD SLOT: 1, нативная карточка 16:9 + текст, одна ячейка сетки. Ссылки с rel="sponsored noopener" -->
+              <div class="card-thumb card-thumb--ad">Изображение рекламодателя</div>
+              <div class="catalog-card__body">
+                <p class="catalog-card__title">Нативная реклама</p>
+                <p class="catalog-card__school">Короткое описание партнёрского материала</p>
+                <p class="ad-card__advertiser">Рекламодатель: <!-- AD: advertiser.name -->название, ИНН</p>
+              </div>
+            </aside>
+            <a href="/privacy" class="ad-more">Подробнее о рекламе</a>
+          </div>
+        </div>
+
+        <!-- ===== ПАГИНАЦИЯ (серверная; в href сохранять текущие параметры фильтров) ===== -->
+        <nav class="pagination" aria-label="Страницы каталога">
+          <!-- DATA: на первой странице «Назад» = span.pagination__link--disabled -->
+          <span class="pagination__link pagination__link--nav pagination__link--disabled" aria-disabled="true">← Назад</span>
+          <ul class="pagination__list">
+            <li><a href="/courses/?profession=programmist&amp;price_max=50000&amp;duration=3-6" class="pagination__link is-current" aria-current="page">1</a></li>
+            <li><a href="/courses/?profession=programmist&amp;price_max=50000&amp;duration=3-6&amp;page=2" class="pagination__link">2</a></li>
+            <li><a href="/courses/?profession=programmist&amp;price_max=50000&amp;duration=3-6&amp;page=3" class="pagination__link">3</a></li>
+            <li><span class="pagination__gap">…</span></li>
+            <li><a href="/courses/?profession=programmist&amp;price_max=50000&amp;duration=3-6&amp;page=12" class="pagination__link">12</a></li>
+          </ul>
+          <a href="/courses/?profession=programmist&amp;price_max=50000&amp;duration=3-6&amp;page=2" class="pagination__link pagination__link--nav" rel="next">Вперёд →</a>
+        </nav>
+      </section>
+    </div>
+
+    <!-- ============ ПЕРЕЛИНКОВКА: колонки ссылок ============ -->
+    <section class="link-columns" aria-label="Подборки курсов">
+      <!-- DATA: 4 колонки, в каждой до 8 ссылок + «Все». Колонки и ссылки — из базы -->
+      <div class="link-columns__col">
+        <h2 class="link-columns__title">По профессиям</h2>
+        <ul class="link-columns__list">
+          <li><a href="/courses/?profession=programmist">Программист</a></li>
+          <li><a href="/courses/?profession=dizajner">Дизайнер</a></li>
+          <li><a href="/courses/?profession=marketolog">Маркетолог</a></li>
+          <li><a href="/courses/?profession=analitik-dannyh">Аналитик данных</a></li>
+          <li><a href="/courses/?profession=razrabotka-igr">Разработчик игр</a></li>
+          <li><a href="/courses/?profession=menedzher-proektov">Менеджер проектов</a></li>
+          <li><a href="/courses/?profession=testirovshchik">Тестировщик</a></li>
+          <li><a href="/courses/?profession=produktovyj-menedzher">Продакт-менеджер</a></li>
+        </ul>
+        <a href="/professions/" class="link-columns__all">Все</a>
+      </div>
+
+      <div class="link-columns__col">
+        <h2 class="link-columns__title">Популярные курсы</h2>
+        <ul class="link-columns__list">
+          <li><a href="/courses/school-1/python-razrabotchik/">Python-разработчик</a></li>
+          <li><a href="/courses/school-2/frontend-razrabotchik/">Фронтенд-разработчик</a></li>
+          <li><a href="/courses/school-3/java-osnovy/">Java-разработчик</a></li>
+          <li><a href="/courses/school-1/sql-dlya-nachinayushchih/">SQL для начинающих</a></li>
+          <li><a href="/courses/school-2/uxui-dizajner/">UX/UI-дизайнер</a></li>
+          <li><a href="/courses/school-3/internet-marketolog/">Интернет-маркетолог</a></li>
+          <li><a href="/courses/school-1/qa-inzhener/">QA-инженер</a></li>
+          <li><a href="/courses/school-2/golang-razrabotchik/">Go-разработчик</a></li>
+        </ul>
+        <a href="/courses/?sort=popular" class="link-columns__all">Все</a>
+      </div>
+
+      <div class="link-columns__col">
+        <h2 class="link-columns__title">По цене и длительности</h2>
+        <ul class="link-columns__list">
+          <li><a href="/courses/?price_max=20000">Курсы до 20 000 ₽</a></li>
+          <li><a href="/courses/?price_max=50000">Курсы до 50 000 ₽</a></li>
+          <li><a href="/courses/?price_max=100000">Курсы до 100 000 ₽</a></li>
+          <li><a href="/courses/?duration=0-3">Короткие курсы до 3 месяцев</a></li>
+          <li><a href="/courses/?duration=3-6">Курсы на 3–6 месяцев</a></li>
+          <li><a href="/courses/?duration=6-12">Курсы на 6–12 месяцев</a></li>
+          <li><a href="/courses/?kind=profession">Программы «Профессия»</a></li>
+          <li><a href="/courses/?kind=course">Отдельные курсы</a></li>
+        </ul>
+        <a href="/courses/" class="link-columns__all">Все</a>
+      </div>
+
+      <div class="link-columns__col">
+        <h2 class="link-columns__title">Школы в каталоге</h2>
+        <ul class="link-columns__list">
+          <li><a href="/schools/school-1/">Школа 1</a></li>
+          <li><a href="/schools/school-2/">Школа 2</a></li>
+          <li><a href="/schools/school-3/">Школа 3</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ SEO-ТЕКСТ ============ -->
+    <section class="section section--light">
+      <h2 class="section__title">Как выбирать курс в каталоге</h2>
+      <div class="prose prose--wide">
+        <p>В каталоге собраны программы ведущих онлайн-школ: от коротких курсов по одному инструменту до длинных программ для смены профессии. Чтобы не утонуть в списке, начните с профессии — так останутся только курсы нужного направления, и их можно сравнивать между собой.</p>
+        <p>Дальше определитесь с форматом. «Профессия» — это длинная программа, которая ведёт с нуля до уровня, достаточного для первых рабочих задач. Обычно она длится от полугода и включает несколько проектов в портфолио. «Отдельный курс» подходит, если вы уже работаете и хотите освоить конкретный навык: новый язык, инструмент аналитики или раздел дизайна.</p>
+        <p>Фильтр по цене показывает полную стоимость обучения. Многие школы предлагают рассрочку, и ежемесячный платёж выглядит небольшим, но сравнивать честнее итоговые суммы. Полезно также поделить цену на длительность: так видно, сколько стоит месяц обучения в каждой программе.</p>
+        <p>Длительность влияет не только на цену, но и на нагрузку. Если вы учитесь параллельно с работой, заложите 8–10 часов в неделю и выбирайте программу, которую реально пройти в таком темпе. Слишком короткий курс по сложной профессии — повод внимательно посмотреть программу: что именно в него входит.</p>
+        <p>Когда список сузился до трёх-четырёх вариантов, откройте страницы курсов и сравните программы по модулям, формат проверки домашних заданий и условия возврата денег. Окончательную цену и условия всегда уточняйте на сайте школы: школы меняют стоимость и запускают акции, а мы обновляем данные регулярно, но не мгновенно.</p>
+      </div>
+    </section>
+
+    <!-- ============ FAQ (schema.org FAQPage) ============ -->
+    <section class="section faq-section" itemscope itemtype="https://schema.org/FAQPage">
+      <h2 class="section__title">Часто задаваемые вопросы</h2>
+      <div class="faq faq--wide">
+        <!-- DATA: цикл по вопросам. Иконка — эмодзи из базы или пусто -->
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-1" id="faq-q-1"><span class="faq-item__icon" aria-hidden="true">🎓</span><span itemprop="name">Как выбрать онлайн-курс в каталоге?</span></button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-1" role="region" aria-labelledby="faq-q-1" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Выберите профессию в фильтрах слева, задайте бюджет и длительность. Затем сравните 3–4 подходящие программы по составу модулей, формату проверки заданий и итоговой цене.</p></div>
+          </div>
+        </div>
+
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-2" id="faq-q-2"><span class="faq-item__icon" aria-hidden="true">💳</span><span itemprop="name">Сколько стоит онлайн-курс?</span></button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-2" role="region" aria-labelledby="faq-q-2" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Короткие курсы по одному навыку стоят от нескольких тысяч рублей, полные программы для смены профессии — от нескольких десятков тысяч. В каталоге указана полная стоимость; окончательную цену уточняйте на сайте школы.</p></div>
+          </div>
+        </div>
+
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-3" id="faq-q-3"><span class="faq-item__icon" aria-hidden="true">⏱️</span><span itemprop="name">Сколько длится обучение?</span></button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-3" role="region" aria-labelledby="faq-q-3" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Отдельные курсы обычно занимают 1–4 месяца, программы «Профессия» — от полугода до полутора лет. При занятиях параллельно с работой закладывайте 8–10 часов в неделю.</p></div>
+          </div>
+        </div>
+
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-4" id="faq-q-4"><span class="faq-item__icon" aria-hidden="true">✍️</span><span itemprop="name">Выдают ли документ об окончании курса?</span></button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-4" role="region" aria-labelledby="faq-q-4" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Многие школы выдают сертификат или удостоверение о повышении квалификации, если у них есть образовательная лицензия. Условия указаны на странице курса и в договоре со школой.</p></div>
+          </div>
+        </div>
+
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-5" id="faq-q-5"><span class="faq-item__icon" aria-hidden="true">↩️</span><span itemprop="name">Можно ли вернуть деньги, если курс не подошёл?</span></button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-5" role="region" aria-labelledby="faq-q-5" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Обычно да: школы возвращают деньги за непройденную часть программы. Сроки и порядок возврата прописаны в договоре — прочитайте его до оплаты.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ ПОДВАЛ (общий с главной) ============ -->
+  <footer class="site-footer">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a href="/" class="logo logo--light">
+          <img src="../img/logo.png" alt="" class="logo__img" width="48" height="40">
+          <span class="logo__text">edukursy<span>.ru</span></span>
+        </a>
+        <p>Сравнение онлайн-курсов ведущих школ: программы, цены и длительность в одном месте.</p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Информация">
+        <h2 class="site-footer__heading">Проект</h2>
+        <ul>
+          <li><a href="/about">О проекте</a></li>
+          <li><a href="/contacts">Контакты</a></li>
+        </ul>
+      </nav>
+
+      <nav class="site-footer__nav" aria-label="Документы">
+        <h2 class="site-footer__heading">Документы</h2>
+        <ul>
+          <li><a href="/privacy">Политика конфиденциальности</a></li>
+          <li><a href="/terms">Пользовательское соглашение</a></li>
+        </ul>
+      </nav>
+
+      <nav class="site-footer__nav" aria-label="Каталог">
+        <h2 class="site-footer__heading">Каталог</h2>
+        <ul>
+          <li><a href="/professions/">Профессии</a></li>
+          <li><a href="/courses/">Курсы</a></li>
+          <li><a href="/schools/">Школы</a></li>
+          <li><a href="/compare/">Сравнения</a></li>
+          <li><a href="/blog/">Блог</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <p class="site-footer__disclosure">Мы можем получать вознаграждение от школ за переходы по ссылкам. На цену для вас это не влияет.</p>
+    <p class="site-footer__copy">© <!-- DATA: current_year -->2025 edukursy.ru</p>
+  </footer>
+
+  <script src="../script.js"></script>
+  <!-- COMPARE: скрипт кнопки «Сравнить» и плавающей панели -->
+  <script src="../compare.js"></script>
+</body>
+</html>

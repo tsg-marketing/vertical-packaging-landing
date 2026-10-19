@@ -1,0 +1,125 @@
+{% extends "edukursy/base.html" %}
+{% load static compare_tags %}
+{% comment %}
+Страница /compare/ — любое число курсов. Разметка 1:1 с mockups/compare/index.html.
+Контекст из views_compare.compare_view: courses, groups, picks, add_options, diff, colspan,
+compare_ids_current, compare_state.
+{% endcomment %}
+
+{% block title %}Сравнение курсов{% if courses %}: {% for c in courses|slice:":3" %}{{ c.name }}{% if not forloop.last %} vs {% endif %}{% endfor %}{% if courses|length > 3 %} и ещё {{ courses|length|add:"-3" }}{% endif %}{% endif %} — edukursy.ru{% endblock %}
+{% block robots %}<meta name="robots" content="noindex, follow">{% endblock %}
+{% block body_attrs %} data-compare-url="{% url 'compare' %}" data-compare-hide-tray{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  {% include "edukursy/partials/breadcrumbs.html" with items=breadcrumbs %}
+  <h1 class="page-head__title">Сравнение курсов</h1>
+  {% if courses %}
+  <p class="page-head__subtitle"><span class="results-count">{{ courses|length }} {{ courses|length|ru_plural:"курс,курса,курсов" }}</span>{% if courses.0.profession %} · {{ courses.0.profession.name }}{% endif %}</p>
+  <form class="cmp-add" method="get" action="{% url 'compare' %}">
+    <input type="hidden" name="courses" value="{{ compare_ids_current|join:',' }}">
+    {% if add_options %}
+    <label for="cmp-add" class="cmp-add__label">Добавить курс</label>
+    <select id="cmp-add" name="add" class="sort__select cmp-add__select">
+      <option value="">Выберите курс той же профессии</option>
+      {% for c in add_options %}<option value="{{ c|compare_id }}">{{ c.name }} — {{ c.school.name }}</option>{% endfor %}
+    </select>
+    <button type="submit" class="btn btn--outline">Добавить</button>
+    {% endif %}
+    {% if courses|length > 1 %}
+    <label class="cmp-add__diff"><input type="checkbox" name="diff" value="1"{% if diff %} checked{% endif %} onchange="this.form.submit()"><span>Только различия</span></label>
+    {% endif %}
+  </form>
+  {% endif %}
+</section>
+
+{% if not courses %}
+<section class="section">
+  <div class="cmp-empty">
+    <h2 class="section__title">Добавьте курсы для сравнения</h2>
+    <p>Нажмите «Сравнить» на карточке курса в каталоге или на странице курса. Курсов можно выбрать сколько угодно.</p>
+    <a href="{% url 'courses' %}" class="btn btn--primary">Перейти в каталог</a>
+  </div>
+</section>
+{% else %}
+
+{% if picks %}
+<section class="section cmp-summary">
+  <h2 class="section__title">Коротко: какой курс выбрать</h2>
+  <div class="cmp-picks">
+    {% for p in picks %}
+    <article class="cmp-pick">
+      <p class="cmp-pick__tag"><span aria-hidden="true">{{ p.icon }}</span> {{ p.label }}</p>
+      <h3 class="cmp-pick__name">{{ p.course.name }}</h3>
+      <p class="cmp-pick__school">{{ p.course.school.name }}</p>
+      {% with url=p.course.partner_url|default:p.course.school.partner_url|default:p.course.school.website %}{% if url %}
+      <a href="{{ url }}" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">Перейти на сайт школы</a>
+      {% endif %}{% endwith %}
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section section--light cmp-section" aria-labelledby="cmp-title">
+  <h2 class="section__title" id="cmp-title">Подробное сравнение</h2>
+  {% if courses|length > 1 %}<p class="cmp-legend"><span class="cmp-best">Лучшее</span> — лучшее значение по параметру среди курсов в сравнении</p>{% endif %}
+
+  <div class="cmp-table-wrap">
+    <div class="cmp-nav" hidden>
+      <span class="cmp-nav__pos" data-cmp-scroll-pos aria-live="polite"></span>
+      <button type="button" class="cmp-nav__btn" data-cmp-scroll-btn="-1" aria-label="Предыдущие курсы"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button type="button" class="cmp-nav__btn" data-cmp-scroll-btn="1" aria-label="Следующие курсы"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+    <div class="cmp-scroll" tabindex="0" role="region" aria-labelledby="cmp-title" data-cmp-scroll>
+      <table class="cmp-table">
+        <caption class="visually-hidden">Сравнение курсов по цене, длительности, формату и гарантиям</caption>
+        <thead>
+          <tr>
+            <td class="cmp-corner"><span>Параметр</span></td>
+            {% for c in courses %}
+            <th scope="col" class="cmp-col">
+              <div class="cmp-head">
+                <a href="{% compare_url_without c %}{% if diff %}&amp;diff=1{% endif %}" class="cmp-head__remove" aria-label="Убрать из сравнения: {{ c.name }}">×</a>
+                <a href="{{ c.get_absolute_url }}" class="cmp-head__school">{% if c.school.logo %}<img src="{{ c.school.logo.url }}" alt="" width="24" height="24">{% endif %}{{ c.school.name }}{% if c.school.rating %} <span class="cmp-head__rating">{{ c.school.rating }}</span>{% endif %}</a>
+                <a href="{{ c.get_absolute_url }}" class="cmp-head__name">{{ c.name }}</a>
+                {% if c.price %}<p class="cmp-head__price">{{ c.price|floatformat:"0g" }} ₽{% if c.old_price %} <s>{{ c.old_price|floatformat:"0g" }} ₽</s>{% endif %}</p>{% endif %}
+                {% with url=c.partner_url|default:c.school.partner_url|default:c.school.website %}{% if url %}<a href="{{ url }}" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a>{% endif %}{% endwith %}
+              </div>
+            </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        {% for g in groups %}
+        <tbody class="cmp-group">
+          <tr class="cmp-group__head"><th scope="rowgroup" colspan="{{ colspan }}">{{ g.title }}</th></tr>
+          {% for r in g.rows %}
+          <tr><th scope="row">{{ r.label }}</th>{% for cell in r.cells %}<td{% if cell.best %} class="is-best"{% endif %}>{% if cell.text is None %}<span class="cmp-no">—</span>{% else %}{{ cell.text }}{% endif %}{% if cell.best %}<span class="cmp-best">Лучшее</span>{% endif %}</td>{% endfor %}</tr>
+          {% endfor %}
+        </tbody>
+        {% endfor %}
+        <tfoot>
+          <tr><th scope="row">Выбрать курс</th>{% for c in courses %}<td>{% with url=c.partner_url|default:c.school.partner_url|default:c.school.website %}{% if url %}<a href="{{ url }}" class="btn btn--primary btn--block" rel="sponsored noopener" target="_blank">На сайт школы</a>{% endif %}{% endwith %}<a href="{{ c.get_absolute_url }}" class="cmp-more">Подробнее о курсе</a></td>{% endfor %}</tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+
+{% include "edukursy/partials/ad_slot.html" with key="compare_inline" variant="inline" %}
+{% endif %}
+{% endblock %}
+
+{% block after_main %}
+{% if courses %}
+<div class="cmp-sticky">
+  {% for c in courses %}
+  <div class="cmp-sticky__item">
+    <p class="cmp-sticky__name">{{ c.name }}</p>
+    {% if c.price %}<p class="cmp-sticky__price">{{ c.price|floatformat:"0g" }} ₽</p>{% endif %}
+    {% with url=c.partner_url|default:c.school.partner_url|default:c.school.website %}{% if url %}<a href="{{ url }}" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт</a>{% endif %}{% endwith %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

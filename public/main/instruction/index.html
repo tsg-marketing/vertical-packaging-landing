@@ -64,7 +64,7 @@
             <li><a href="#step-6">Шаг 6. Каталог курсов и страница курса</a></li>
             <li><a href="#step-7">Шаг 7. Школы: список и страница школы</a></li>
             <li><a href="#step-8">Шаг 8. Сравнение курсов</a></li>
-            <li><a href="#step-compare-btn">Шаг 8.5. Кнопка «Сравнить»</a></li>
+            <li><a href="#step-compare-btn">Шаг 8.5. Сравнение без ограничений</a></li>
             <li><a href="#step-9">Шаг 9. Блог: лента и статья</a></li>
             <li><a href="#step-home">Шаг 9.5. Главная страница</a></li>
             <li><a href="#step-10">Шаг 10. Карта сайта, редиректы, финальная проверка</a></li>
@@ -278,7 +278,7 @@
           <div class="prompt__bar"><span>Промпт для Cline</span><button type="button" class="copy-btn" data-target="p8">Копировать</button></div>
           <pre class="prompt__code" id="p8">Сделай /compare/ по макету _design/mockups/compare/index.html.
 
-- Набор курсов: GET ?courses=school-slug/course-slug,school-slug/course-slug (до 4). Параметр add добавляет курс, ссылка × убирает (формирует URL без этого курса). Если курсов 0 — пустое состояние: текст «Добавьте курсы для сравнения» и ссылка в каталог.
+- Набор курсов: GET ?courses=school-slug/course-slug,school-slug/course-slug (без ограничения по количеству). Параметр add добавляет курс, ссылка × убирает (формирует URL без этого курса). Если курсов 0 — пустое состояние: текст «Добавьте курсы для сравнения» и ссылка в каталог.
 - Список «Добавить курс»: курсы той же профессии, которых нет в сравнении (до 30, по популярности).
 - Таблица: группы строк как в макете. Для каждой строки собери значения; если значения нет — «—» (span.cmp-no). Булевы: «✓ Есть» (span.cmp-yes).
 - Подсветка лучшего (td.is-best + span.cmp-best): мин. цена, мин. цена за месяц обучения, макс. проектов, макс. рейтинг школы. Если значения равны у всех — не подсвечивать.
@@ -291,120 +291,348 @@
       </section>
 
       <section class="ins-step" id="step-compare-btn">
-        <h2 class="ins-step__title">Шаг 8.5. Кнопка «Сравнить» в листинге и на странице курса</h2>
-        <p>Посетитель отмечает до 4 курсов в каталоге или на странице курса, внизу появляется панель с выбранными курсами и кнопкой «Сравнить». Выбор хранится в браузере и в cookie — без регистрации и без новых таблиц в базе.</p>
-        <p>Как это выглядит: <a href="/main/courses/index.html" target="_blank">каталог курсов</a> (кнопка на обложке карточки) и <a href="/main/courses/python-razrabotchik/index.html" target="_blank">страница курса</a> (кнопка в блоке цены и иконка в мобильной панели). В макетах все места помечены <code>&lt;!-- COMPARE: --&gt;</code>.</p>
-
-        <div class="ins-cards">
-          <div class="ins-card"><p class="ins-card__tag">card</p><p>На обложке карточки. На компьютере — круглая иконка, при наведении раскрывается подпись «Сравнить». Выбранная — синяя «✓ В сравнении», рамка карточки подсвечена.</p></div>
-          <div class="ins-card"><p class="ins-card__tag">block</p><p>В карточке цены под «Бесплатным уроком». Пунктирная → голубая «✓ Добавлен к сравнению» + ссылка «Перейти к сравнению 2».</p></div>
-          <div class="ins-card"><p class="ins-card__tag">icon</p><p>В липкой мобильной панели рядом с «На сайт школы». Не занимает места под цену.</p></div>
-          <div class="ins-card"><p class="ins-card__tag">inline</p><p>Замена вашей текущей «Сравнить курс» в шапке. Используйте только если нет карточки цены — чтобы не было двух кнопок.</p></div>
-        </div>
+        <h2 class="ins-step__title">Шаг 8.5. Сравнение курсов без ограничений</h2>
+        <p>Посетитель отмечает сколько угодно курсов кнопкой «Сравнить» в каталоге или на странице курса. Внизу появляется панель с выбранными курсами, а на странице сравнения — широкая таблица, которая прокручивается вбок. Выбор хранится в браузере и в cookie — без регистрации и без новых таблиц в базе.</p>
+        <p>Как это выглядит: <a href="/main/courses/index.html" target="_blank">каталог</a>, <a href="/main/courses/python-razrabotchik/index.html" target="_blank">страница курса</a>, <a href="/main/compare/index.html" target="_blank">сравнение 6 курсов</a>.</p>
 
         <div class="ins-download">
-          <a href="/django-compare-button.zip" class="btn btn--primary" download>Скачать файлы кнопки (ZIP, 11 КБ)</a>
-          <p>В проекте: <code>public/django-export/compare_addon/</code> · также входит в общий пакет</p>
+          <a href="/compare-package.zip" class="btn btn--primary btn--lg" download>Скачать пакет сравнения (ZIP, 100 КБ)</a>
+          <p>Отдельный архив — только сравнение. В проекте: <code>public/compare-package/</code></p>
         </div>
+
+        <div class="ins-cards">
+          <div class="ins-card"><p class="ins-card__tag ins-card__tag--ok">без лимита</p><p>Можно добавить любое количество курсов. Сообщения «не больше 4» больше нет.</p></div>
+          <div class="ins-card"><p class="ins-card__tag">панель</p><p>Курсы в одну строку с прокруткой и стрелками. На телефоне — свайп, панель сворачивается.</p></div>
+          <div class="ins-card"><p class="ins-card__tag">таблица</p><p>Колонки фиксированной ширины, «Параметр» закреплён, над таблицей «1–5 из 12» и стрелки.</p></div>
+          <div class="ins-card"><p class="ins-card__tag ins-card__tag--new">быстро</p><p>Все курсы загружаются одним запросом к базе — скорость не зависит от их числа.</p></div>
+        </div>
+
+        <h3 class="ins-sub">Перед запуском</h3>
+        <ol class="ins-list">
+          <li>Сделайте коммит в git.</li>
+          <li>Распакуйте архив, папку <code>compare-package/</code> положите в корень Django-проекта как <code>_design/compare-package/</code>.</li>
+          <li>Откройте в Cline новую задачу, режим <strong>Plan</strong>, вставьте промпт. Проверьте план → <strong>Act</strong>.</li>
+        </ol>
+        <p class="ins-note">Если вы уже внедрили прошлую версию с лимитом 4 курса — промпт сам найдёт старые файлы и заменит их.</p>
 
         <h3 class="ins-sub">Промпт для Cline</h3>
         <div class="prompt">
           <div class="prompt__bar"><span>Промпт для Cline</span><button type="button" class="copy-btn" data-target="p-cmpbtn">Копировать</button></div>
-          <pre class="prompt__code" id="p-cmpbtn">Добавь возможность выбирать курсы для сравнения из каталога и со страницы курса. Готовые файлы лежат в _design/compare_addon/ — используй их, не пиши с нуля. Эталон вида: _design/mockups/courses/index.html и _design/mockups/courses/python-razrabotchik/index.html (поиск по &quot;COMPARE:&quot;).
+          <pre class="prompt__code" id="p-cmpbtn">Внедри сравнение курсов без ограничения по количеству. Готовые файлы — в _design/compare-package/ (прочитай README.md). Используй их, не пиши с нуля. Эталон вида: _design/compare-package/mockups/ (поиск по &quot;COMPARE:&quot; и классам cmp-).
 
-1. Скопируй файлы (см. _design/compare_addon/README.md):
-   - static/edukursy/js/compare.js → в статику;
-   - templates/edukursy/partials/compare/*.html → в шаблоны;
-   - templatetags/compare_tags.py → в templatetags приложения каталога (если папки нет — создай с __init__.py);
-   - context_processors.py → в приложение и добавь &quot;&lt;app&gt;.context_processors.compare&quot; в settings.TEMPLATES[0][&quot;OPTIONS&quot;][&quot;context_processors&quot;].
-   - Стили: если style.css из пакета уже подключён — в нём есть блок «КНОПКА «СРАВНИТЬ»». Если у меня свой CSS — подключи static/edukursy/css/compare.css отдельно.
-2. Проверь фильтр compare_id: он строит &quot;&lt;school.slug&gt;/&lt;course.slug&gt;&quot;. Если у моих моделей поля называются иначе — поправь фильтр и parse_compare_ids, но формат идентификатора оставь «школа/курс».
-3. base.html:
-   - &lt;body data-compare-url=&quot;{% url &#x27;compare&#x27; %}&quot;&gt; (имя URL сравнения — как у меня в urls.py);
-   - перед &lt;/body&gt;, после script.js: {% include &quot;edukursy/partials/compare/scripts.html&quot; %}.
-4. Карточка курса (во ВСЕХ местах: каталог, страница профессии, страница школы, «Похожие курсы», главная):
-   - кнопка ставится ПЕРВЫМ ребёнком &lt;article class=&quot;catalog-card&quot;&gt;, ДО ссылки &lt;a class=&quot;catalog-card__link&quot;&gt; (кнопка не должна быть внутри &lt;a&gt; — это невалидный HTML и клик уводил бы на курс);
-   - {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;card&quot; %}
-   - если у меня свой шаблон карточки — добавь в его корневой элемент position: relative.
-5. Страница курса:
-   - в карточке цены (aside.price-box), сразу после кнопки «Бесплатный вводный урок»:
+ВАЖНО: на сайте уже может быть сравнение с лимитом 4 курса (старый compare.js с MAX = 4, MAX_COMPARE в context_processors.py, &quot;до 4&quot; в шаблонах). Найди всё это (grep -rn &quot;MAX_COMPARE\|var MAX\|до 4\|из 4\|repeat(4&quot; .) и замени на новые файлы. Старые файлы удали, только если они полностью заменены.
+
+1. Изучи проект: где модели Course и School, есть ли slug у обоих, FK course.school, имя URL страницы сравнения и каталога в urls.py, есть ли base.html с блоками title/robots/content, как подключается статика. Покажи кратко.
+
+2. Статика:
+   - static/edukursy/js/compare.js → в статику (заменить старый, если есть).
+   - Стили: если на сайте подключён полный style.css из основного пакета edukursy — найди в нём блок «КНОПКА «СРАВНИТЬ»» и раздел «СРАВНЕНИЕ КУРСОВ /compare/» и замени их на содержимое compare.css (без :root в начале). Если CSS у сайта свой — подключи compare.css отдельным &lt;link&gt; в base.html и переменные из :root сверь с цветами сайта.
+
+3. Python (в приложение каталога, назову его &lt;app&gt;):
+   - app/compare_utils.py → &lt;app&gt;/compare_utils.py
+   - app/context_processors.py → &lt;app&gt;/context_processors.py, добавь &quot;&lt;app&gt;.context_processors.compare&quot; в settings.TEMPLATES[0][&quot;OPTIONS&quot;][&quot;context_processors&quot;]
+   - app/templatetags/compare_tags.py → &lt;app&gt;/templatetags/ (создай __init__.py, если нет)
+   - app/views_compare.py → логику перенеси в существующий view сравнения или подключи как новый. URL: path(&quot;compare/&quot;, compare_view, name=&quot;compare&quot;) — имя &quot;compare&quot; используется в шаблонах; если у меня другое имя — поправь шаблоны.
+   - Проверь ROW_SPECS во views_compare.py: имена полей (duration_months, price_month, projects_count, mentor, homework_review, free_lesson, final_project, tax_deduction, certificate, refund, rating) сверь с моими моделями и поправь лямбды. Поля, которых нет, НЕ добавляй в модели — getattr(..., None) вернёт None, и строка сама не выведется.
+   - Если у Course нет get_absolute_url — добавь.
+   - app/tests/test_compare_utils.py → &lt;app&gt;/tests/ и запусти: python manage.py test &lt;app&gt;.tests.test_compare_utils
+
+4. Шаблоны:
+   - templates/edukursy/partials/compare/*.html → в мои шаблоны.
+   - templates/edukursy/compare/compare.html → страница /compare/. Если base.html у меня с другими блоками: body_attrs (атрибуты &lt;body&gt;), robots, after_main (после &lt;/main&gt;, для липкой мобильной панели) — добавь эти блоки в base.html, ничего в нём не ломая.
+   - base.html: &lt;body{% block body_attrs %} data-compare-url=&quot;{% url &#x27;compare&#x27; %}&quot;{% endblock %}&gt; и перед &lt;/body&gt; после основного script.js: {% include &quot;edukursy/partials/compare/scripts.html&quot; %}.
+   - Если в шаблоне используются partials/breadcrumbs.html и partials/ad_slot.html, а у меня их нет — замени на мою разметку крошек или убери.
+
+5. Кнопка «Сравнить»:
+   - Во ВСЕХ карточках курса (каталог, страница профессии, страница школы, «Похожие курсы», главная) — первым ребёнком &lt;article class=&quot;catalog-card&quot;&gt;, ДО ссылки &lt;a class=&quot;catalog-card__link&quot;&gt; (не внутри &lt;a&gt;):
+     {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;card&quot; %}
+   - Страница курса, карточка цены, после «Бесплатного вводного урока»:
      {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;block&quot; label_off=&quot;Добавить к сравнению&quot; label_on=&quot;Добавлен к сравнению&quot; %}
      {% include &quot;edukursy/partials/compare/link.html&quot; %}
-   - в липкой мобильной панели .sticky-cta оберни кнопку «На сайт школы» в &lt;div class=&quot;sticky-cta__actions&quot;&gt; и поставь перед ней variant=&quot;icon&quot;.
-   - вариант variant=&quot;inline&quot; (в шапке под фактами) — НЕ добавляй, если у меня уже есть кнопка «Сравнить курс» в шапке: замени её на этот include, чтобы не было двух кнопок рядом. На десктопе должно остаться: кнопка в price-box. Кнопку в шапке оставь только если price-box на странице нет.
-6. Страница /compare/: возьми логику из compare_addon/compare_view_snippet.py:
-   - курсы берутся из ?courses=..., а если параметра нет — из cookie edukursy_compare (сделай redirect на URL с ?courses=, чтобы ссылкой можно было поделиться);
-   - в контекст передай compare_state — тогда плавающая панель на этой странице скрыта, а выбор в браузере совпадёт с таблицей;
-   - крестик «убрать курс» в таблице должен вести на URL без этого курса (так уже сделано в шаге 8) — compare.js подхватит новый список сам. Когда убирается последний курс, ссылка должна быть /compare/?courses= (с пустым параметром), иначе редирект по cookie вернёт курс обратно.
-7. Кэш: если страницы каталога кэшируются целиком (cache_page / nginx), состояние кнопок всё равно восстановит JS при загрузке. Ничего не ломается, но в кэшированных страницах aria-pressed будет &quot;false&quot; до запуска скрипта — это нормально. Заголовок Vary: Cookie добавлять НЕ нужно.
-8. Проверь руками:
-   - добавь курс в каталоге → кнопка «✓ В сравнении», рамка карточки синяя, снизу появилась панель «Сравнение 1 из 4», в меню у «Сравнения» счётчик 1;
-   - добавь 2-й → в панели активна кнопка «Сравнить 2 курса», она ведёт на /compare/?courses=a/b,c/d;
-   - 5-й курс не добавляется, появляется подсказка;
-   - перезагрузи страницу → состояние сохранилось, кнопки сразу нажаты (без мигания — это работа context processor);
-   - открой страницу курса → в price-box «Добавлен к сравнению» и ссылка «Перейти к сравнению 2»;
-   - мобильная ширина 390px: панель снизу сворачивается по тапу на заголовок, над липкой кнопкой «На сайт школы», не перекрывает её;
-   - работа с клавиатуры: Tab до кнопки, Enter переключает, aria-pressed меняется.
-Покажи мне diff шаблонов перед сохранением.</pre>
+   - Липкая мобильная панель .sticky-cta: оберни «На сайт школы» в &lt;div class=&quot;sticky-cta__actions&quot;&gt; и поставь перед ней variant=&quot;icon&quot;.
+   - Если в шапке курса уже есть старая кнопка «Сравнить курс» — удали её (кнопка в карточке цены её заменяет), иначе будет две кнопки.
+
+6. Проверь руками (и покажи мне результат):
+   - добавь 7+ курсов из каталога: все добавляются, сообщения о лимите НЕТ; в панели снизу курсы в одну строку, справа стрелка прокрутки; кнопка «Сравнить 7 курсов»;
+   - счётчик в меню «Сравнения» = 7;
+   - /compare/: 7 колонок, таблица прокручивается вбок, колонка «Параметр» закреплена, над таблицей «1–4 из 7» и стрелки; «Лучшее» подсвечено по всем 7 курсам;
+   - × у колонки убирает курс, URL обновляется; убери все — пустое состояние «Добавьте курсы для сравнения»;
+   - «Только различия» скрывает строки с одинаковыми значениями;
+   - перезагрузка каталога — кнопки сразу нажаты (без мигания);
+   - ширина 390 px: панель сворачивается по тапу, не перекрывает «На сайт школы»; липкая панель на /compare/ прокручивается вбок;
+   - на /compare/ число SQL-запросов не зависит от числа курсов (один запрос на курсы + один на список «Добавить»).
+
+Покажи diff шаблонов и base.html перед сохранением.</pre>
         </div>
+
+        <h3 class="ins-sub">Если что-то пошло не так</h3>
+        <ul class="ins-list ins-list--dots">
+          <li><strong>Кнопка внутри ссылки, клик уводит на курс</strong> — «Перенеси include кнопки из &lt;a class=&quot;catalog-card__link&quot;&gt; на уровень выше, первым ребёнком &lt;article&gt;.»</li>
+          <li><strong>Кнопки мигают при загрузке</strong> — «Проверь, что context processor compare подключён в settings и compare_ids есть в контексте шаблона карточки.»</li>
+          <li><strong>Таблица не прокручивается / колонки сжаты</strong> — «Сверь классы таблицы с _design/compare-package/mockups/compare/index.html: обёртка .cmp-table-wrap &gt; .cmp-scroll[data-cmp-scroll] &gt; table.cmp-table, у th колонок класс cmp-col. CSS не меняй.»</li>
+          <li><strong>Курс добавлен, но на /compare/ его нет</strong> — «Проверь формат id: должно быть &quot;&lt;school.slug&gt;/&lt;course.slug&gt;&quot; и в фильтре compare_id, и в resolve_courses.»</li>
+        </ul>
 
         <h3 class="ins-sub">Код файлов</h3>
         <details class="ins-file">
-          <summary><code>templates/edukursy/partials/compare/button.html</code><span>Шаблон кнопки (4 варианта)</span></summary>
+          <summary><code>app/compare_utils.py</code><span>Логика: разбор списка, один SQL-запрос, строки, «лучшее», итоги</span></summary>
           <div class="prompt">
-            <div class="prompt__bar"><span>button.html</span><button type="button" class="copy-btn" data-target="cf0">Копировать</button></div>
-            <pre class="prompt__code" id="cf0">{% comment %}
-Кнопка «Сравнить».
-  {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;card&quot; %}
-variant: card (на обложке карточки) | block (в карточке цены) | inline (в шапке курса) | icon (липкая мобильная панель)
-label_off / label_on — необязательные подписи.
-Нужен контекст-процессор compare_ids (см. context_processors.py) — по нему ставится aria-pressed.
-{% endcomment %}
-{% load compare_tags %}
-{% with cid=course|compare_id %}
-{% if variant == &quot;icon&quot; %}
-&lt;button type=&quot;button&quot; class=&quot;cmp-btn cmp-btn--icon&quot; data-compare-id=&quot;{{ cid }}&quot; data-compare-name=&quot;{{ course.name }}&quot; data-compare-school=&quot;{{ course.school.name }}&quot; aria-pressed=&quot;{% if cid in compare_ids %}true{% else %}false{% endif %}&quot; aria-label=&quot;Сравнить курс&quot;&gt;{% include &quot;edukursy/partials/compare/_icons.html&quot; %}&lt;/button&gt;
-{% else %}
-&lt;button type=&quot;button&quot; class=&quot;cmp-btn cmp-btn--{{ variant|default:&#x27;card&#x27; }}&quot; data-compare-id=&quot;{{ cid }}&quot; data-compare-name=&quot;{{ course.name }}&quot; data-compare-school=&quot;{{ course.school.name }}&quot; aria-pressed=&quot;{% if cid in compare_ids %}true{% else %}false{% endif %}&quot;&gt;{% include &quot;edukursy/partials/compare/_icons.html&quot; %}&lt;span class=&quot;cmp-btn__off&quot;&gt;{{ label_off|default:&quot;Сравнить&quot; }}&lt;/span&gt;&lt;span class=&quot;cmp-btn__on&quot;&gt;{{ label_on|default:&quot;В сравнении&quot; }}&lt;/span&gt;&lt;/button&gt;
-{% endif %}
-{% endwith %}</pre>
+            <div class="prompt__bar"><span>compare_utils.py</span><button type="button" class="copy-btn" data-target="cf1">Копировать</button></div>
+            <pre class="prompt__code" id="cf1">&quot;&quot;&quot;
+Сравнение курсов без ограничения по количеству.
+
+Идентификатор курса: &quot;&lt;school_slug&gt;/&lt;course_slug&gt;&quot;.
+Список приходит из GET ?courses=a/b,c/d или из cookie edukursy_compare.
+&quot;&quot;&quot;
+from urllib.parse import unquote
+
+COOKIE = &quot;edukursy_compare&quot;
+URL_SOFT_LIMIT = 1800
+
+
+def parse_compare_ids(raw):
+    &quot;&quot;&quot;&#x27;a/b,c/d,a/b&#x27; -&gt; [&#x27;a/b&#x27;, &#x27;c/d&#x27;]: без дублей, порядок сохраняется, без ограничения по количеству.&quot;&quot;&quot;
+    result = []
+    seen = set()
+    for part in unquote(raw or &quot;&quot;).split(&quot;,&quot;):
+        part = part.strip().strip(&quot;/&quot;)
+        if part.count(&quot;/&quot;) != 1 or part in seen:
+            continue
+        seen.add(part)
+        result.append(part)
+    return result
+
+
+def ids_to_param(ids):
+    return &quot;,&quot;.join(ids)
+
+
+def url_without(base_url, ids, remove_id):
+    rest = [i for i in ids if i != remove_id]
+    return f&quot;{base_url}?courses={ids_to_param(rest)}&quot;
+
+
+def url_with(base_url, ids, add_id):
+    if add_id in ids:
+        return f&quot;{base_url}?courses={ids_to_param(ids)}&quot;
+    return f&quot;{base_url}?courses={ids_to_param(ids + [add_id])}&quot;
+
+
+def course_id(course):
+    return f&quot;{course.school.slug}/{course.slug}&quot;
+
+
+def resolve_courses(Course, ids):
+    &quot;&quot;&quot;Один SQL-запрос на любое количество курсов. Порядок — как в ids. Несуществующие пропускаются.&quot;&quot;&quot;
+    if not ids:
+        return []
+    by_school = {}
+    for cid in ids:
+        school_slug, course_slug = cid.split(&quot;/&quot;)
+        by_school.setdefault(school_slug, []).append(course_slug)
+    from django.db.models import Q
+
+    q = Q()
+    for school_slug, slugs in by_school.items():
+        q |= Q(school__slug=school_slug, slug__in=slugs)
+    found = {course_id(c): c for c in Course.objects.filter(q).select_related(&quot;school&quot;)}
+    return [found[cid] for cid in ids if cid in found]
+
+
+def compare_state(courses):
+    return [{&quot;id&quot;: course_id(c), &quot;name&quot;: c.name, &quot;school&quot;: c.school.name} for c in courses]
+
+
+def _empty(v):
+    return v is None or v is False or v == &quot;&quot;
+
+
+def _best(values, mode):
+    present = [v for v in values if not _empty(v)]
+    if len(present) &lt; 2 or len(set(present)) == 1:
+        return set()
+    target = min(present) if mode == &quot;min&quot; else max(present)
+    return {i for i, v in enumerate(values) if v == target}
+
+
+def build_rows(courses, row_specs):
+    &quot;&quot;&quot;
+    row_specs: список групп
+      [{&quot;title&quot;: &quot;Стоимость&quot;, &quot;rows&quot;: [
+          {&quot;label&quot;: &quot;Полная цена&quot;, &quot;get&quot;: lambda c: c.price, &quot;fmt&quot;: rub, &quot;best&quot;: &quot;min&quot;}, ...]}]
+    Возвращает группы со строками; у каждой строки: label, cells [{value, text, best}], same (все значения одинаковые).
+    Работает для любого числа курсов.
+    &quot;&quot;&quot;
+    groups = []
+    for group in row_specs:
+        rows = []
+        for spec in group[&quot;rows&quot;]:
+            raw = [spec[&quot;get&quot;](c) for c in courses]
+            best = _best(raw, spec[&quot;best&quot;]) if spec.get(&quot;best&quot;) else set()
+            fmt = spec.get(&quot;fmt&quot;) or (lambda v: v)
+            cells = [{&quot;value&quot;: v, &quot;text&quot;: (None if _empty(v) else fmt(v)), &quot;best&quot;: i in best} for i, v in enumerate(raw)]
+            if all(cell[&quot;text&quot;] is None for cell in cells):
+                continue
+            rows.append({&quot;label&quot;: spec[&quot;label&quot;], &quot;cells&quot;: cells, &quot;same&quot;: len({str(v) for v in raw}) &lt;= 1})
+        if rows:
+            groups.append({&quot;title&quot;: group[&quot;title&quot;], &quot;rows&quot;: rows})
+    return groups
+
+
+def build_picks(courses, price, price_per_month, projects, rating):
+    &quot;&quot;&quot;
+    Итоговые карточки «Коротко: какой курс выбрать». Каждая — только если есть данные и есть разница.
+    price / price_per_month / projects / rating — функции course -&gt; число или None.
+    &quot;&quot;&quot;
+    if len(courses) &lt; 2:
+        return []
+    picks = []
+    specs = [
+        (&quot;💰&quot;, &quot;Дешевле всего&quot;, price, &quot;min&quot;),
+        (&quot;🎓&quot;, &quot;Больше всего практики&quot;, projects, &quot;max&quot;),
+        (&quot;⭐&quot;, &quot;Выше рейтинг школы&quot;, rating, &quot;max&quot;),
+    ]
+    for icon, label, getter, mode in specs:
+        values = [getter(c) for c in courses]
+        best = _best(values, mode)
+        if len(best) == 1:
+            picks.append({&quot;icon&quot;: icon, &quot;label&quot;: label, &quot;course&quot;: courses[next(iter(best))]})
+    return picks</pre>
           </div>
         </details>
         <details class="ins-file">
-          <summary><code>templates/edukursy/partials/compare/link.html</code><span>Ссылка «Перейти к сравнению (N)»</span></summary>
+          <summary><code>app/views_compare.py</code><span>View /compare/ и набор строк таблицы</span></summary>
           <div class="prompt">
-            <div class="prompt__bar"><span>link.html</span><button type="button" class="copy-btn" data-target="cf1">Копировать</button></div>
-            <pre class="prompt__code" id="cf1">{% comment %}Ссылка «Перейти к сравнению (N)» — показывается, когда выбран хотя бы 1 курс.{% endcomment %}
-&lt;a href=&quot;{% url &#x27;compare&#x27; %}{% if compare_ids %}?courses={{ compare_ids|join:&#x27;,&#x27; }}{% endif %}&quot; class=&quot;cmp-link&quot; data-compare-link{% if not compare_ids %} hidden{% endif %}&gt;Перейти к сравнению &lt;span data-compare-count&gt;{{ compare_ids|length }}&lt;/span&gt;&lt;/a&gt;</pre>
+            <div class="prompt__bar"><span>views_compare.py</span><button type="button" class="copy-btn" data-target="cf2">Копировать</button></div>
+            <pre class="prompt__code" id="cf2">&quot;&quot;&quot;
+View страницы /compare/. Встроить в своё приложение (или взять логику в существующий view).
+Модели Course / School — ваши; проверьте имена полей в ROW_SPECS.
+&quot;&quot;&quot;
+from django.shortcuts import redirect, render
+from django.urls import reverse
+
+from .compare_utils import (
+    COOKIE,
+    build_picks,
+    build_rows,
+    compare_state,
+    ids_to_param,
+    parse_compare_ids,
+    resolve_courses,
+    url_with,
+)
+from .models import Course
+
+
+def rub(v):
+    return f&quot;{int(v):,}&quot;.replace(&quot;,&quot;, &quot;\u00a0&quot;) + &quot;\u00a0₽&quot;
+
+
+def per_month(c):
+    months = getattr(c, &quot;duration_months&quot;, None)
+    return round(c.price / months) if c.price and months else None
+
+
+ROW_SPECS = [
+    {&quot;title&quot;: &quot;Стоимость&quot;, &quot;rows&quot;: [
+        {&quot;label&quot;: &quot;Полная цена&quot;, &quot;get&quot;: lambda c: c.price, &quot;fmt&quot;: rub, &quot;best&quot;: &quot;min&quot;},
+        {&quot;label&quot;: &quot;Цена без скидки&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;old_price&quot;, None), &quot;fmt&quot;: rub},
+        {&quot;label&quot;: &quot;Рассрочка&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;price_month&quot;, None), &quot;fmt&quot;: lambda v: rub(v) + &quot;/мес&quot;},
+        {&quot;label&quot;: &quot;Цена за месяц обучения&quot;, &quot;get&quot;: per_month, &quot;fmt&quot;: rub, &quot;best&quot;: &quot;min&quot;},
+        {&quot;label&quot;: &quot;Налоговый вычет&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;tax_deduction&quot;, None) or getattr(c.school, &quot;tax_deduction&quot;, None), &quot;fmt&quot;: lambda v: &quot;✓ 13%&quot;},
+    ]},
+    {&quot;title&quot;: &quot;Длительность и формат&quot;, &quot;rows&quot;: [
+        {&quot;label&quot;: &quot;Длительность&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;duration_months&quot;, None), &quot;fmt&quot;: lambda v: f&quot;{v} мес&quot;},
+        {&quot;label&quot;: &quot;Нагрузка&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;hours_per_week&quot;, None)},
+        {&quot;label&quot;: &quot;Формат&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;format&quot;, None)},
+        {&quot;label&quot;: &quot;Старт&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;start_date&quot;, None)},
+        {&quot;label&quot;: &quot;Бесплатный вводный урок&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;free_lesson&quot;, None), &quot;fmt&quot;: lambda v: &quot;✓ Есть&quot;},
+    ]},
+    {&quot;title&quot;: &quot;Обучение&quot;, &quot;rows&quot;: [
+        {&quot;label&quot;: &quot;Наставник&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;mentor&quot;, None)},
+        {&quot;label&quot;: &quot;Проверка заданий&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;homework_review&quot;, None)},
+        {&quot;label&quot;: &quot;Проектов в портфолио&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;projects_count&quot;, None), &quot;best&quot;: &quot;max&quot;},
+        {&quot;label&quot;: &quot;Дипломный проект&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;final_project&quot;, None), &quot;fmt&quot;: lambda v: &quot;✓ Есть&quot;},
+    ]},
+    {&quot;title&quot;: &quot;Документ и гарантии&quot;, &quot;rows&quot;: [
+        {&quot;label&quot;: &quot;Документ об окончании&quot;, &quot;get&quot;: lambda c: getattr(c, &quot;certificate&quot;, None) or getattr(c.school, &quot;certificate&quot;, None)},
+        {&quot;label&quot;: &quot;Возврат денег&quot;, &quot;get&quot;: lambda c: getattr(c.school, &quot;refund&quot;, None)},
+        {&quot;label&quot;: &quot;Рейтинг школы&quot;, &quot;get&quot;: lambda c: getattr(c.school, &quot;rating&quot;, None), &quot;best&quot;: &quot;max&quot;},
+    ]},
+]
+
+
+def compare_view(request):
+    base = reverse(&quot;compare&quot;)
+    raw = request.GET.get(&quot;courses&quot;)
+
+    if raw is None:
+        ids = parse_compare_ids(request.COOKIES.get(COOKIE, &quot;&quot;))
+        if ids:
+            return redirect(f&quot;{base}?courses={ids_to_param(ids)}&quot;)
+
+    ids = parse_compare_ids(raw)
+
+    add = request.GET.get(&quot;add&quot;)
+    if add:
+        return redirect(url_with(base, ids, add.strip().strip(&quot;/&quot;)))
+
+    courses = resolve_courses(Course, ids)
+    ids = [f&quot;{c.school.slug}/{c.slug}&quot; for c in courses]
+
+    groups = build_rows(courses, ROW_SPECS)
+    if request.GET.get(&quot;diff&quot;) == &quot;1&quot; and len(courses) &gt; 1:
+        for g in groups:
+            g[&quot;rows&quot;] = [r for r in g[&quot;rows&quot;] if not r[&quot;same&quot;]]
+        groups = [g for g in groups if g[&quot;rows&quot;]]
+
+    add_options = []
+    if courses:
+        add_options = (
+            Course.objects.filter(profession=courses[0].profession)
+            .exclude(pk__in=[c.pk for c in courses])
+            .select_related(&quot;school&quot;)
+            .order_by(&quot;-id&quot;)[:50]
+        )
+
+    context = {
+        &quot;courses&quot;: courses,
+        &quot;compare_ids_current&quot;: ids,
+        &quot;compare_state&quot;: compare_state(courses),
+        &quot;groups&quot;: groups,
+        &quot;picks&quot;: build_picks(
+            courses,
+            price=lambda c: c.price,
+            price_per_month=per_month,
+            projects=lambda c: getattr(c, &quot;projects_count&quot;, None),
+            rating=lambda c: getattr(c.school, &quot;rating&quot;, None),
+        ),
+        &quot;add_options&quot;: add_options,
+        &quot;diff&quot;: request.GET.get(&quot;diff&quot;) == &quot;1&quot;,
+        &quot;colspan&quot;: len(courses) + 1,
+    }
+    return render(request, &quot;edukursy/compare/compare.html&quot;, context)</pre>
           </div>
         </details>
         <details class="ins-file">
-          <summary><code>templates/edukursy/partials/compare/scripts.html</code><span>Подключение скрипта в base.html</span></summary>
+          <summary><code>app/context_processors.py</code><span>Состояние кнопок из cookie</span></summary>
           <div class="prompt">
-            <div class="prompt__bar"><span>scripts.html</span><button type="button" class="copy-btn" data-target="cf2">Копировать</button></div>
-            <pre class="prompt__code" id="cf2">{% comment %}
-Подключить в base.html перед &lt;/body&gt;, ПОСЛЕ script.js:
-  {% include &quot;edukursy/partials/compare/scripts.html&quot; %}
-На странице /compare/ передайте в контекст compare_state (список словарей id/name/school) —
-тогда список в браузере синхронизируется с тем, что открыто в таблице, а плавающая панель скрывается.
-{% endcomment %}
-{% load static %}
-{% if compare_state %}{{ compare_state|json_script:&quot;compare-state&quot; }}{% endif %}
-&lt;script src=&quot;{% static &#x27;edukursy/js/compare.js&#x27; %}&quot; defer&gt;&lt;/script&gt;</pre>
+            <div class="prompt__bar"><span>context_processors.py</span><button type="button" class="copy-btn" data-target="cf3">Копировать</button></div>
+            <pre class="prompt__code" id="cf3">from .compare_utils import COOKIE, parse_compare_ids
+
+
+def compare(request):
+    &quot;&quot;&quot;Выбранные для сравнения курсы из cookie: кнопки «Сравнить» сразу рендерятся в нужном состоянии.&quot;&quot;&quot;
+    return {&quot;compare_ids&quot;: parse_compare_ids(request.COOKIES.get(COOKIE, &quot;&quot;))}</pre>
           </div>
         </details>
         <details class="ins-file">
-          <summary><code>templates/edukursy/partials/compare/_icons.html</code><span>Иконки</span></summary>
-          <div class="prompt">
-            <div class="prompt__bar"><span>_icons.html</span><button type="button" class="copy-btn" data-target="cf3">Копировать</button></div>
-            <pre class="prompt__code" id="cf3">&lt;svg class=&quot;cmp-btn__icon-off&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M8 3 4 7l4 4&quot;/&gt;&lt;path d=&quot;M4 7h16&quot;/&gt;&lt;path d=&quot;m16 21 4-4-4-4&quot;/&gt;&lt;path d=&quot;M20 17H4&quot;/&gt;&lt;/svg&gt;&lt;svg class=&quot;cmp-btn__icon-on&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/svg&gt;</pre>
-          </div>
-        </details>
-        <details class="ins-file">
-          <summary><code>templatetags/compare_tags.py</code><span>Фильтр compare_id</span></summary>
+          <summary><code>app/templatetags/compare_tags.py</code><span>Фильтры и тег</span></summary>
           <div class="prompt">
             <div class="prompt__bar"><span>compare_tags.py</span><button type="button" class="copy-btn" data-target="cf4">Копировать</button></div>
             <pre class="prompt__code" id="cf4">from django import template
+
+from ..compare_utils import course_id
 
 register = template.Library()
 
@@ -412,102 +640,296 @@ register = template.Library()
 @register.filter
 def compare_id(course):
     &quot;&quot;&quot;Идентификатор курса для сравнения: &quot;&lt;school_slug&gt;/&lt;course_slug&gt;&quot;.&quot;&quot;&quot;
-    return f&quot;{course.school.slug}/{course.slug}&quot;</pre>
+    return course_id(course)
+
+
+@register.simple_tag(takes_context=True)
+def compare_url_without(context, course):
+    &quot;&quot;&quot;URL страницы сравнения без указанного курса (для крестика в шапке колонки).&quot;&quot;&quot;
+    from django.urls import reverse
+
+    from ..compare_utils import url_without
+
+    ids = context.get(&quot;compare_ids_current&quot;) or []
+    return url_without(reverse(&quot;compare&quot;), ids, course_id(course))
+
+
+@register.filter
+def ru_plural(n, forms):
+    &quot;&quot;&quot;{{ 5|ru_plural:&quot;курс,курса,курсов&quot; }} -&gt; &quot;курсов&quot;.&quot;&quot;&quot;
+    one, few, many = forms.split(&quot;,&quot;)
+    n = abs(int(n))
+    if n % 10 == 1 and n % 100 != 11:
+        return one
+    if 2 &lt;= n % 10 &lt;= 4 and not 12 &lt;= n % 100 &lt;= 14:
+        return few
+    return many</pre>
           </div>
         </details>
         <details class="ins-file">
-          <summary><code>context_processors.py</code><span>Context processor — состояние кнопок с сервера</span></summary>
+          <summary><code>app/tests/test_compare_utils.py</code><span>Тесты</span></summary>
           <div class="prompt">
-            <div class="prompt__bar"><span>context_processors.py</span><button type="button" class="copy-btn" data-target="cf5">Копировать</button></div>
-            <pre class="prompt__code" id="cf5">from urllib.parse import unquote
+            <div class="prompt__bar"><span>test_compare_utils.py</span><button type="button" class="copy-btn" data-target="cf5">Копировать</button></div>
+            <pre class="prompt__code" id="cf5">from types import SimpleNamespace as NS
 
-COOKIE = &quot;edukursy_compare&quot;
-MAX_COMPARE = 4
+from django.test import SimpleTestCase
 
-
-def parse_compare_ids(raw):
-    &quot;&quot;&quot;&#x27;a/b,c/d&#x27; -&gt; [&#x27;a/b&#x27;, &#x27;c/d&#x27;] без дублей, не больше MAX_COMPARE.&quot;&quot;&quot;
-    result = []
-    for part in unquote(raw or &quot;&quot;).split(&quot;,&quot;):
-        part = part.strip().strip(&quot;/&quot;)
-        if part.count(&quot;/&quot;) == 1 and part not in result:
-            result.append(part)
-    return result[:MAX_COMPARE]
+from ..compare_utils import build_picks, build_rows, parse_compare_ids, url_with, url_without
 
 
-def compare(request):
-    &quot;&quot;&quot;Выбранные для сравнения курсы из cookie — чтобы кнопки рендерились сразу в нужном состоянии.&quot;&quot;&quot;
-    return {&quot;compare_ids&quot;: parse_compare_ids(request.COOKIES.get(COOKIE, &quot;&quot;)), &quot;compare_max&quot;: MAX_COMPARE}</pre>
+def course(i, price, projects=None, rating=None):
+    return NS(name=f&quot;Курс {i}&quot;, slug=f&quot;c{i}&quot;, price=price, projects_count=projects, school=NS(slug=f&quot;s{i}&quot;, name=f&quot;Школа {i}&quot;, rating=rating))
+
+
+class ParseTests(SimpleTestCase):
+    def test_no_limit(self):
+        raw = &quot;,&quot;.join(f&quot;s{i}/c{i}&quot; for i in range(25))
+        self.assertEqual(len(parse_compare_ids(raw)), 25)
+
+    def test_dedup_and_garbage(self):
+        self.assertEqual(parse_compare_ids(&quot;a/b, a/b ,bad,,x/y/z,%2Fc%2Fd%2F&quot;), [&quot;a/b&quot;, &quot;c/d&quot;])
+
+    def test_urls(self):
+        self.assertEqual(url_without(&quot;/compare/&quot;, [&quot;a/b&quot;, &quot;c/d&quot;], &quot;a/b&quot;), &quot;/compare/?courses=c/d&quot;)
+        self.assertEqual(url_without(&quot;/compare/&quot;, [&quot;a/b&quot;], &quot;a/b&quot;), &quot;/compare/?courses=&quot;)
+        self.assertEqual(url_with(&quot;/compare/&quot;, [&quot;a/b&quot;], &quot;c/d&quot;), &quot;/compare/?courses=a/b,c/d&quot;)
+
+
+class RowsTests(SimpleTestCase):
+    specs = [{&quot;title&quot;: &quot;Цена&quot;, &quot;rows&quot;: [
+        {&quot;label&quot;: &quot;Цена&quot;, &quot;get&quot;: lambda c: c.price, &quot;best&quot;: &quot;min&quot;},
+        {&quot;label&quot;: &quot;Проекты&quot;, &quot;get&quot;: lambda c: c.projects_count, &quot;best&quot;: &quot;max&quot;},
+    ]}]
+
+    def test_many_courses_best(self):
+        cs = [course(i, 1000 + i * 10, projects=i) for i in range(10)]
+        rows = build_rows(cs, self.specs)[0][&quot;rows&quot;]
+        self.assertEqual([c[&quot;best&quot;] for c in rows[0][&quot;cells&quot;]].index(True), 0)
+        self.assertEqual([c[&quot;best&quot;] for c in rows[1][&quot;cells&quot;]].index(True), 9)
+        self.assertEqual(len(rows[0][&quot;cells&quot;]), 10)
+
+    def test_equal_values_no_best(self):
+        cs = [course(i, 500) for i in range(3)]
+        cells = build_rows(cs, self.specs)[0][&quot;rows&quot;][0][&quot;cells&quot;]
+        self.assertFalse(any(c[&quot;best&quot;] for c in cells))
+
+    def test_empty_row_hidden(self):
+        cs = [course(i, 500) for i in range(3)]
+        labels = [r[&quot;label&quot;] for r in build_rows(cs, self.specs)[0][&quot;rows&quot;]]
+        self.assertNotIn(&quot;Проекты&quot;, labels)
+
+    def test_picks(self):
+        cs = [course(1, 100, 3, 4.5), course(2, 200, 9, 4.9)]
+        picks = build_picks(cs, price=lambda c: c.price, price_per_month=None, projects=lambda c: c.projects_count, rating=lambda c: c.school.rating)
+        self.assertEqual([p[&quot;course&quot;].name for p in picks], [&quot;Курс 1&quot;, &quot;Курс 2&quot;, &quot;Курс 2&quot;])
+        self.assertEqual(build_picks(cs[:1], lambda c: 1, None, lambda c: 1, lambda c: 1), [])</pre>
           </div>
         </details>
         <details class="ins-file">
-          <summary><code>compare_view_snippet.py</code><span>Фрагмент для view /compare/</span></summary>
+          <summary><code>templates/edukursy/compare/compare.html</code><span>Шаблон страницы /compare/</span></summary>
           <div class="prompt">
-            <div class="prompt__bar"><span>compare_view_snippet.py</span><button type="button" class="copy-btn" data-target="cf6">Копировать</button></div>
-            <pre class="prompt__code" id="cf6">&quot;&quot;&quot;
-Фрагмент для view страницы /compare/. Встроить в существующий CompareView.
+            <div class="prompt__bar"><span>compare.html</span><button type="button" class="copy-btn" data-target="cf6">Копировать</button></div>
+            <pre class="prompt__code" id="cf6">{% extends &quot;edukursy/base.html&quot; %}
+{% load static compare_tags %}
+{% comment %}
+Страница /compare/ — любое число курсов. Разметка 1:1 с mockups/compare/index.html.
+Контекст из views_compare.compare_view: courses, groups, picks, add_options, diff, colspan,
+compare_ids_current, compare_state.
+{% endcomment %}
 
-Источник списка курсов (по приоритету):
-1) GET ?courses=school/course,school/course — ссылка, которой можно поделиться;
-2) cookie edukursy_compare — если параметра нет (пользователь нажал «Сравнения» в меню).
-&quot;&quot;&quot;
-from django.db.models import Q
-from django.shortcuts import redirect
+{% block title %}Сравнение курсов{% if courses %}: {% for c in courses|slice:&quot;:3&quot; %}{{ c.name }}{% if not forloop.last %} vs {% endif %}{% endfor %}{% if courses|length &gt; 3 %} и ещё {{ courses|length|add:&quot;-3&quot; }}{% endif %}{% endif %} — edukursy.ru{% endblock %}
+{% block robots %}&lt;meta name=&quot;robots&quot; content=&quot;noindex, follow&quot;&gt;{% endblock %}
+{% block body_attrs %} data-compare-url=&quot;{% url &#x27;compare&#x27; %}&quot; data-compare-hide-tray{% endblock %}
 
-from .context_processors import COOKIE, parse_compare_ids
+{% block content %}
+&lt;section class=&quot;page-head&quot;&gt;
+  {% include &quot;edukursy/partials/breadcrumbs.html&quot; with items=breadcrumbs %}
+  &lt;h1 class=&quot;page-head__title&quot;&gt;Сравнение курсов&lt;/h1&gt;
+  {% if courses %}
+  &lt;p class=&quot;page-head__subtitle&quot;&gt;&lt;span class=&quot;results-count&quot;&gt;{{ courses|length }} {{ courses|length|ru_plural:&quot;курс,курса,курсов&quot; }}&lt;/span&gt;{% if courses.0.profession %} · {{ courses.0.profession.name }}{% endif %}&lt;/p&gt;
+  &lt;form class=&quot;cmp-add&quot; method=&quot;get&quot; action=&quot;{% url &#x27;compare&#x27; %}&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;courses&quot; value=&quot;{{ compare_ids_current|join:&#x27;,&#x27; }}&quot;&gt;
+    {% if add_options %}
+    &lt;label for=&quot;cmp-add&quot; class=&quot;cmp-add__label&quot;&gt;Добавить курс&lt;/label&gt;
+    &lt;select id=&quot;cmp-add&quot; name=&quot;add&quot; class=&quot;sort__select cmp-add__select&quot;&gt;
+      &lt;option value=&quot;&quot;&gt;Выберите курс той же профессии&lt;/option&gt;
+      {% for c in add_options %}&lt;option value=&quot;{{ c|compare_id }}&quot;&gt;{{ c.name }} — {{ c.school.name }}&lt;/option&gt;{% endfor %}
+    &lt;/select&gt;
+    &lt;button type=&quot;submit&quot; class=&quot;btn btn--outline&quot;&gt;Добавить&lt;/button&gt;
+    {% endif %}
+    {% if courses|length &gt; 1 %}
+    &lt;label class=&quot;cmp-add__diff&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;diff&quot; value=&quot;1&quot;{% if diff %} checked{% endif %} onchange=&quot;this.form.submit()&quot;&gt;&lt;span&gt;Только различия&lt;/span&gt;&lt;/label&gt;
+    {% endif %}
+  &lt;/form&gt;
+  {% endif %}
+&lt;/section&gt;
 
+{% if not courses %}
+&lt;section class=&quot;section&quot;&gt;
+  &lt;div class=&quot;cmp-empty&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;Добавьте курсы для сравнения&lt;/h2&gt;
+    &lt;p&gt;Нажмите «Сравнить» на карточке курса в каталоге или на странице курса. Курсов можно выбрать сколько угодно.&lt;/p&gt;
+    &lt;a href=&quot;{% url &#x27;courses&#x27; %}&quot; class=&quot;btn btn--primary&quot;&gt;Перейти в каталог&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+{% else %}
 
-def resolve_compare_courses(request, Course):
-    raw = request.GET.get(&quot;courses&quot;)
-    ids = parse_compare_ids(raw if raw is not None else request.COOKIES.get(COOKIE, &quot;&quot;))
-    if not ids:
-        return [], []
-    q = Q()
-    for cid in ids:
-        school_slug, course_slug = cid.split(&quot;/&quot;)
-        q |= Q(school__slug=school_slug, slug=course_slug)
-    found = {f&quot;{c.school.slug}/{c.slug}&quot;: c for c in Course.objects.filter(q).select_related(&quot;school&quot;)}
-    courses = [found[cid] for cid in ids if cid in found]
-    state = [{&quot;id&quot;: f&quot;{c.school.slug}/{c.slug}&quot;, &quot;name&quot;: c.name, &quot;school&quot;: c.school.name} for c in courses]
-    return courses, state
+{% if picks %}
+&lt;section class=&quot;section cmp-summary&quot;&gt;
+  &lt;h2 class=&quot;section__title&quot;&gt;Коротко: какой курс выбрать&lt;/h2&gt;
+  &lt;div class=&quot;cmp-picks&quot;&gt;
+    {% for p in picks %}
+    &lt;article class=&quot;cmp-pick&quot;&gt;
+      &lt;p class=&quot;cmp-pick__tag&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;{{ p.icon }}&lt;/span&gt; {{ p.label }}&lt;/p&gt;
+      &lt;h3 class=&quot;cmp-pick__name&quot;&gt;{{ p.course.name }}&lt;/h3&gt;
+      &lt;p class=&quot;cmp-pick__school&quot;&gt;{{ p.course.school.name }}&lt;/p&gt;
+      {% with url=p.course.partner_url|default:p.course.school.partner_url|default:p.course.school.website %}{% if url %}
+      &lt;a href=&quot;{{ url }}&quot; class=&quot;btn btn--primary btn--block&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot;&gt;Перейти на сайт школы&lt;/a&gt;
+      {% endif %}{% endwith %}
+    &lt;/article&gt;
+    {% endfor %}
+  &lt;/div&gt;
+&lt;/section&gt;
+{% endif %}
 
+&lt;section class=&quot;section section--light cmp-section&quot; aria-labelledby=&quot;cmp-title&quot;&gt;
+  &lt;h2 class=&quot;section__title&quot; id=&quot;cmp-title&quot;&gt;Подробное сравнение&lt;/h2&gt;
+  {% if courses|length &gt; 1 %}&lt;p class=&quot;cmp-legend&quot;&gt;&lt;span class=&quot;cmp-best&quot;&gt;Лучшее&lt;/span&gt; — лучшее значение по параметру среди курсов в сравнении&lt;/p&gt;{% endif %}
 
-# Пример внутри view:
-#
-# def compare_view(request):
-#     if &quot;courses&quot; not in request.GET and request.COOKIES.get(COOKIE):
-#         ids = parse_compare_ids(request.COOKIES[COOKIE])
-#         if ids:
-#             return redirect(f&quot;{request.path}?courses={&#x27;,&#x27;.join(ids)}&quot;)
-#     courses, state = resolve_compare_courses(request, Course)
-#     context = {&quot;courses&quot;: courses, &quot;compare_state&quot;: state, ...}</pre>
+  &lt;div class=&quot;cmp-table-wrap&quot;&gt;
+    &lt;div class=&quot;cmp-nav&quot; hidden&gt;
+      &lt;span class=&quot;cmp-nav__pos&quot; data-cmp-scroll-pos aria-live=&quot;polite&quot;&gt;&lt;/span&gt;
+      &lt;button type=&quot;button&quot; class=&quot;cmp-nav__btn&quot; data-cmp-scroll-btn=&quot;-1&quot; aria-label=&quot;Предыдущие курсы&quot;&gt;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m15 18-6-6 6-6&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+      &lt;button type=&quot;button&quot; class=&quot;cmp-nav__btn&quot; data-cmp-scroll-btn=&quot;1&quot; aria-label=&quot;Следующие курсы&quot;&gt;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m9 18 6-6-6-6&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;cmp-scroll&quot; tabindex=&quot;0&quot; role=&quot;region&quot; aria-labelledby=&quot;cmp-title&quot; data-cmp-scroll&gt;
+      &lt;table class=&quot;cmp-table&quot;&gt;
+        &lt;caption class=&quot;visually-hidden&quot;&gt;Сравнение курсов по цене, длительности, формату и гарантиям&lt;/caption&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;td class=&quot;cmp-corner&quot;&gt;&lt;span&gt;Параметр&lt;/span&gt;&lt;/td&gt;
+            {% for c in courses %}
+            &lt;th scope=&quot;col&quot; class=&quot;cmp-col&quot;&gt;
+              &lt;div class=&quot;cmp-head&quot;&gt;
+                &lt;a href=&quot;{% compare_url_without c %}{% if diff %}&amp;amp;diff=1{% endif %}&quot; class=&quot;cmp-head__remove&quot; aria-label=&quot;Убрать из сравнения: {{ c.name }}&quot;&gt;×&lt;/a&gt;
+                &lt;a href=&quot;{{ c.get_absolute_url }}&quot; class=&quot;cmp-head__school&quot;&gt;{% if c.school.logo %}&lt;img src=&quot;{{ c.school.logo.url }}&quot; alt=&quot;&quot; width=&quot;24&quot; height=&quot;24&quot;&gt;{% endif %}{{ c.school.name }}{% if c.school.rating %} &lt;span class=&quot;cmp-head__rating&quot;&gt;{{ c.school.rating }}&lt;/span&gt;{% endif %}&lt;/a&gt;
+                &lt;a href=&quot;{{ c.get_absolute_url }}&quot; class=&quot;cmp-head__name&quot;&gt;{{ c.name }}&lt;/a&gt;
+                {% if c.price %}&lt;p class=&quot;cmp-head__price&quot;&gt;{{ c.price|floatformat:&quot;0g&quot; }} ₽{% if c.old_price %} &lt;s&gt;{{ c.old_price|floatformat:&quot;0g&quot; }} ₽&lt;/s&gt;{% endif %}&lt;/p&gt;{% endif %}
+                {% with url=c.partner_url|default:c.school.partner_url|default:c.school.website %}{% if url %}&lt;a href=&quot;{{ url }}&quot; class=&quot;btn btn--primary btn--block&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot;&gt;На сайт школы&lt;/a&gt;{% endif %}{% endwith %}
+              &lt;/div&gt;
+            &lt;/th&gt;
+            {% endfor %}
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        {% for g in groups %}
+        &lt;tbody class=&quot;cmp-group&quot;&gt;
+          &lt;tr class=&quot;cmp-group__head&quot;&gt;&lt;th scope=&quot;rowgroup&quot; colspan=&quot;{{ colspan }}&quot;&gt;{{ g.title }}&lt;/th&gt;&lt;/tr&gt;
+          {% for r in g.rows %}
+          &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;{{ r.label }}&lt;/th&gt;{% for cell in r.cells %}&lt;td{% if cell.best %} class=&quot;is-best&quot;{% endif %}&gt;{% if cell.text is None %}&lt;span class=&quot;cmp-no&quot;&gt;—&lt;/span&gt;{% else %}{{ cell.text }}{% endif %}{% if cell.best %}&lt;span class=&quot;cmp-best&quot;&gt;Лучшее&lt;/span&gt;{% endif %}&lt;/td&gt;{% endfor %}&lt;/tr&gt;
+          {% endfor %}
+        &lt;/tbody&gt;
+        {% endfor %}
+        &lt;tfoot&gt;
+          &lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;Выбрать курс&lt;/th&gt;{% for c in courses %}&lt;td&gt;{% with url=c.partner_url|default:c.school.partner_url|default:c.school.website %}{% if url %}&lt;a href=&quot;{{ url }}&quot; class=&quot;btn btn--primary btn--block&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot;&gt;На сайт школы&lt;/a&gt;{% endif %}{% endwith %}&lt;a href=&quot;{{ c.get_absolute_url }}&quot; class=&quot;cmp-more&quot;&gt;Подробнее о курсе&lt;/a&gt;&lt;/td&gt;{% endfor %}&lt;/tr&gt;
+        &lt;/tfoot&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+{% include &quot;edukursy/partials/ad_slot.html&quot; with key=&quot;compare_inline&quot; variant=&quot;inline&quot; %}
+{% endif %}
+{% endblock %}
+
+{% block after_main %}
+{% if courses %}
+&lt;div class=&quot;cmp-sticky&quot;&gt;
+  {% for c in courses %}
+  &lt;div class=&quot;cmp-sticky__item&quot;&gt;
+    &lt;p class=&quot;cmp-sticky__name&quot;&gt;{{ c.name }}&lt;/p&gt;
+    {% if c.price %}&lt;p class=&quot;cmp-sticky__price&quot;&gt;{{ c.price|floatformat:&quot;0g&quot; }} ₽&lt;/p&gt;{% endif %}
+    {% with url=c.partner_url|default:c.school.partner_url|default:c.school.website %}{% if url %}&lt;a href=&quot;{{ url }}&quot; class=&quot;btn btn--primary&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot;&gt;На сайт&lt;/a&gt;{% endif %}{% endwith %}
+  &lt;/div&gt;
+  {% endfor %}
+&lt;/div&gt;
+{% endif %}
+{% endblock %}</pre>
           </div>
         </details>
         <details class="ins-file">
-          <summary><code>static/edukursy/js/compare.js</code><span>Скрипт: кнопки, панель, счётчик, тост</span></summary>
+          <summary><code>templates/edukursy/partials/compare/button.html</code><span>Кнопка (4 варианта)</span></summary>
           <div class="prompt">
-            <div class="prompt__bar"><span>compare.js</span><button type="button" class="copy-btn" data-target="cf7">Копировать</button></div>
-            <pre class="prompt__code" id="cf7">(function () {
+            <div class="prompt__bar"><span>button.html</span><button type="button" class="copy-btn" data-target="cf7">Копировать</button></div>
+            <pre class="prompt__code" id="cf7">{% comment %}
+Кнопка «Сравнить».
+  {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;card&quot; %}
+variant: card  — на обложке карточки курса (первым ребёнком &lt;article&gt;, НЕ внутри &lt;a&gt;)
+         block — в карточке цены на странице курса
+         inline — в шапке курса (если нет карточки цены)
+         icon  — в липкой мобильной панели
+label_off / label_on — необязательные подписи.
+aria-pressed ставится по compare_ids из context processor, поэтому кнопка сразу в нужном состоянии.
+{% endcomment %}
+{% load compare_tags %}{% with cid=course|compare_id %}{% if variant == &quot;icon&quot; %}&lt;button type=&quot;button&quot; class=&quot;cmp-btn cmp-btn--icon&quot; data-compare-id=&quot;{{ cid }}&quot; data-compare-name=&quot;{{ course.name }}&quot; data-compare-school=&quot;{{ course.school.name }}&quot; aria-pressed=&quot;{% if cid in compare_ids %}true{% else %}false{% endif %}&quot; aria-label=&quot;Сравнить курс&quot;&gt;{% include &quot;edukursy/partials/compare/_icons.html&quot; %}&lt;/button&gt;{% else %}&lt;button type=&quot;button&quot; class=&quot;cmp-btn cmp-btn--{{ variant|default:&#x27;card&#x27; }}&quot; data-compare-id=&quot;{{ cid }}&quot; data-compare-name=&quot;{{ course.name }}&quot; data-compare-school=&quot;{{ course.school.name }}&quot; aria-pressed=&quot;{% if cid in compare_ids %}true{% else %}false{% endif %}&quot;&gt;{% include &quot;edukursy/partials/compare/_icons.html&quot; %}&lt;span class=&quot;cmp-btn__off&quot;&gt;{{ label_off|default:&quot;Сравнить&quot; }}&lt;/span&gt;&lt;span class=&quot;cmp-btn__on&quot;&gt;{{ label_on|default:&quot;В сравнении&quot; }}&lt;/span&gt;&lt;/button&gt;{% endif %}{% endwith %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/partials/compare/link.html</code><span>Ссылка «Перейти к сравнению»</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>link.html</span><button type="button" class="copy-btn" data-target="cf8">Копировать</button></div>
+            <pre class="prompt__code" id="cf8">{% comment %}Ссылка «Перейти к сравнению (N)» — видна, когда выбран хотя бы 1 курс.{% endcomment %}
+&lt;a href=&quot;{% url &#x27;compare&#x27; %}{% if compare_ids %}?courses={{ compare_ids|join:&#x27;,&#x27; }}{% endif %}&quot; class=&quot;cmp-link&quot; data-compare-link{% if not compare_ids %} hidden{% endif %}&gt;Перейти к сравнению &lt;span data-compare-count&gt;{{ compare_ids|length }}&lt;/span&gt;&lt;/a&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/partials/compare/scripts.html</code><span>Подключение JS</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>scripts.html</span><button type="button" class="copy-btn" data-target="cf9">Копировать</button></div>
+            <pre class="prompt__code" id="cf9">{% comment %}
+В base.html перед &lt;/body&gt;, ПОСЛЕ основного script.js:
+  {% include &quot;edukursy/partials/compare/scripts.html&quot; %}
+На /compare/ view передаёт compare_state — список в браузере синхронизируется с таблицей,
+плавающая панель на этой странице скрывается.
+{% endcomment %}
+{% load static %}{% if compare_state %}{{ compare_state|json_script:&quot;compare-state&quot; }}{% endif %}
+&lt;script src=&quot;{% static &#x27;edukursy/js/compare.js&#x27; %}&quot; defer&gt;&lt;/script&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/edukursy/js/compare.js</code><span>Скрипт</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>compare.js</span><button type="button" class="copy-btn" data-target="cf10">Копировать</button></div>
+            <pre class="prompt__code" id="cf10">(function () {
   var KEY = &#x27;edukursy_compare&#x27;;
-  var MAX = 4;
+  var COOKIE_LIMIT = 3800;
   var body = document.body;
   var compareUrl = body.getAttribute(&#x27;data-compare-url&#x27;) || &#x27;/compare/&#x27;;
 
   var ICON_SWAP = &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M8 3 4 7l4 4&quot;/&gt;&lt;path d=&quot;M4 7h16&quot;/&gt;&lt;path d=&quot;m16 21 4-4-4-4&quot;/&gt;&lt;path d=&quot;M20 17H4&quot;/&gt;&lt;/svg&gt;&#x27;;
   var ICON_X = &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M18 6 6 18&quot;/&gt;&lt;path d=&quot;m6 6 12 12&quot;/&gt;&lt;/svg&gt;&#x27;;
   var ICON_UP = &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m18 15-6-6-6 6&quot;/&gt;&lt;/svg&gt;&#x27;;
+  var ICON_LEFT = &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m15 18-6-6 6-6&quot;/&gt;&lt;/svg&gt;&#x27;;
+  var ICON_RIGHT = &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m9 18 6-6-6-6&quot;/&gt;&lt;/svg&gt;&#x27;;
 
   function read() {
     try {
       var v = JSON.parse(localStorage.getItem(KEY) || &#x27;[]&#x27;);
-      return Array.isArray(v) ? v.slice(0, MAX) : [];
+      return Array.isArray(v) ? v : [];
     } catch (e) {
       return [];
     }
   }
   function syncCookie(list) {
-    var ids = list.map(function (c) { return c.id; }).join(&#x27;,&#x27;);
-    document.cookie = KEY + &#x27;=&#x27; + encodeURIComponent(ids) + &#x27;;path=/;max-age=&#x27; + (ids ? 2592000 : 0) + &#x27;;SameSite=Lax&#x27;;
+    var ids = [];
+    var len = 0;
+    for (var i = 0; i &lt; list.length; i++) {
+      var part = encodeURIComponent(list[i].id);
+      if (len + part.length + 3 &gt; COOKIE_LIMIT) break;
+      ids.push(list[i].id);
+      len += part.length + 3;
+    }
+    var value = encodeURIComponent(ids.join(&#x27;,&#x27;));
+    document.cookie = KEY + &#x27;=&#x27; + value + &#x27;;path=/;max-age=&#x27; + (value ? 2592000 : 0) + &#x27;;SameSite=Lax&#x27;;
   }
   function write(list) {
     try {
@@ -539,12 +961,12 @@ def resolve_compare_courses(request, Course):
   if (state) {
     try {
       var fromServer = JSON.parse(state.textContent);
-      if (Array.isArray(fromServer)) localStorage.setItem(KEY, JSON.stringify(fromServer.slice(0, MAX)));
+      if (Array.isArray(fromServer)) localStorage.setItem(KEY, JSON.stringify(fromServer));
     } catch (e) {}
   }
 
   var toastEl, toastTimer;
-  function toast(text, linkText) {
+  function toast(text) {
     if (!toastEl) {
       toastEl = document.createElement(&#x27;div&#x27;);
       toastEl.className = &#x27;cmp-toast&#x27;;
@@ -552,7 +974,7 @@ def resolve_compare_courses(request, Course):
       toastEl.setAttribute(&#x27;aria-live&#x27;, &#x27;polite&#x27;);
       body.appendChild(toastEl);
     }
-    toastEl.innerHTML = esc(text) + (linkText ? &#x27; &lt;a href=&quot;&#x27; + esc(urlFor(read())) + &#x27;&quot;&gt;&#x27; + esc(linkText) + &#x27;&lt;/a&gt;&#x27; : &#x27;&#x27;);
+    toastEl.textContent = text;
     toastEl.classList.add(&#x27;is-visible&#x27;);
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.classList.remove(&#x27;is-visible&#x27;); }, 3200);
@@ -579,6 +1001,12 @@ def resolve_compare_courses(request, Course):
         write([]);
         return;
       }
+      var nav = e.target.closest(&#x27;[data-tray-scroll]&#x27;);
+      if (nav) {
+        var listEl = tray.querySelector(&#x27;.cmp-tray__list&#x27;);
+        listEl.scrollBy({ left: Number(nav.getAttribute(&#x27;data-tray-scroll&#x27;)) * listEl.clientWidth * 0.8, behavior: &#x27;smooth&#x27; });
+        return;
+      }
       if (e.target.closest(&#x27;[data-compare-collapse]&#x27;)) {
         collapsed = !collapsed;
         render();
@@ -586,7 +1014,16 @@ def resolve_compare_courses(request, Course):
     });
   }
 
-  function renderTray(list) {
+  function updateTrayArrows() {
+    if (!tray) return;
+    var listEl = tray.querySelector(&#x27;.cmp-tray__list&#x27;);
+    if (!listEl) return;
+    var max = listEl.scrollWidth - listEl.clientWidth;
+    tray.classList.toggle(&#x27;can-left&#x27;, listEl.scrollLeft &gt; 4);
+    tray.classList.toggle(&#x27;can-right&#x27;, listEl.scrollLeft &lt; max - 4);
+  }
+
+  function renderTray(list, scrollToEnd) {
     if (hideTray) return;
     if (!tray) buildTray();
     var n = list.length;
@@ -595,22 +1032,29 @@ def resolve_compare_courses(request, Course):
     tray.classList.toggle(&#x27;is-collapsed&#x27;, collapsed);
     if (!n) return;
 
+    var prevList = tray.querySelector(&#x27;.cmp-tray__list&#x27;);
+    var prevScroll = prevList ? prevList.scrollLeft : 0;
+
     var chips = &#x27;&#x27;;
-    for (var i = 0; i &lt; MAX; i++) {
+    for (var i = 0; i &lt; n; i++) {
       var c = list[i];
-      chips += c
-        ? &#x27;&lt;li class=&quot;cmp-tray__chip&quot;&gt;&lt;span class=&quot;cmp-tray__chip-text&quot;&gt;&lt;span class=&quot;cmp-tray__chip-name&quot;&gt;&#x27; + esc(c.name) + &#x27;&lt;/span&gt;&lt;span class=&quot;cmp-tray__chip-school&quot;&gt;&#x27; + esc(c.school) + &#x27;&lt;/span&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;cmp-tray__remove&quot; data-compare-remove=&quot;&#x27; + esc(c.id) + &#x27;&quot; aria-label=&quot;Убрать из сравнения: &#x27; + esc(c.name) + &#x27;&quot;&gt;&#x27; + ICON_X + &#x27;&lt;/button&gt;&lt;/li&gt;&#x27;
-        : &#x27;&lt;li class=&quot;cmp-tray__chip cmp-tray__chip--empty&quot; aria-hidden=&quot;true&quot;&gt;+ курс&lt;/li&gt;&#x27;;
+      chips += &#x27;&lt;li class=&quot;cmp-tray__chip&quot;&gt;&lt;span class=&quot;cmp-tray__chip-text&quot;&gt;&lt;span class=&quot;cmp-tray__chip-name&quot;&gt;&#x27; + esc(c.name) + &#x27;&lt;/span&gt;&lt;span class=&quot;cmp-tray__chip-school&quot;&gt;&#x27; + esc(c.school) + &#x27;&lt;/span&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;cmp-tray__remove&quot; data-compare-remove=&quot;&#x27; + esc(c.id) + &#x27;&quot; aria-label=&quot;Убрать из сравнения: &#x27; + esc(c.name) + &#x27;&quot;&gt;&#x27; + ICON_X + &#x27;&lt;/button&gt;&lt;/li&gt;&#x27;;
     }
+    if (n &lt; 2) chips += &#x27;&lt;li class=&quot;cmp-tray__chip cmp-tray__chip--empty&quot; aria-hidden=&quot;true&quot;&gt;+ ещё курс&lt;/li&gt;&#x27;;
+
     var ready = n &gt;= 2;
     tray.innerHTML =
       &#x27;&lt;div class=&quot;cmp-tray__inner&quot;&gt;&#x27; +
         &#x27;&lt;button type=&quot;button&quot; class=&quot;cmp-tray__head&quot; data-compare-collapse aria-expanded=&quot;&#x27; + String(!collapsed) + &#x27;&quot;&gt;&#x27; +
           &#x27;&lt;span class=&quot;cmp-tray__icon&quot;&gt;&#x27; + ICON_SWAP + &#x27;&lt;/span&gt;&#x27; +
-          &#x27;&lt;span class=&quot;cmp-tray__title&quot;&gt;Сравнение &lt;span class=&quot;cmp-tray__count&quot;&gt;&#x27; + n + &#x27; из &#x27; + MAX + &#x27;&lt;/span&gt;&lt;/span&gt;&#x27; +
+          &#x27;&lt;span class=&quot;cmp-tray__title&quot;&gt;Сравнение &lt;span class=&quot;cmp-tray__count&quot;&gt;&#x27; + n + &#x27; &#x27; + plural(n) + &#x27;&lt;/span&gt;&lt;/span&gt;&#x27; +
           &#x27;&lt;span class=&quot;cmp-tray__chevron&quot;&gt;&#x27; + ICON_UP + &#x27;&lt;/span&gt;&#x27; +
         &#x27;&lt;/button&gt;&#x27; +
-        &#x27;&lt;ul class=&quot;cmp-tray__list&quot;&gt;&#x27; + chips + &#x27;&lt;/ul&gt;&#x27; +
+        &#x27;&lt;div class=&quot;cmp-tray__rail&quot;&gt;&#x27; +
+          &#x27;&lt;button type=&quot;button&quot; class=&quot;cmp-tray__nav cmp-tray__nav--prev&quot; data-tray-scroll=&quot;-1&quot; aria-label=&quot;Прокрутить влево&quot;&gt;&#x27; + ICON_LEFT + &#x27;&lt;/button&gt;&#x27; +
+          &#x27;&lt;ul class=&quot;cmp-tray__list&quot;&gt;&#x27; + chips + &#x27;&lt;/ul&gt;&#x27; +
+          &#x27;&lt;button type=&quot;button&quot; class=&quot;cmp-tray__nav cmp-tray__nav--next&quot; data-tray-scroll=&quot;1&quot; aria-label=&quot;Прокрутить вправо&quot;&gt;&#x27; + ICON_RIGHT + &#x27;&lt;/button&gt;&#x27; +
+        &#x27;&lt;/div&gt;&#x27; +
         &#x27;&lt;div class=&quot;cmp-tray__actions&quot;&gt;&#x27; +
           &#x27;&lt;button type=&quot;button&quot; class=&quot;cmp-tray__clear&quot; data-compare-clear&gt;Очистить&lt;/button&gt;&#x27; +
           (ready
@@ -618,6 +1062,11 @@ def resolve_compare_courses(request, Course):
             : &#x27;&lt;span class=&quot;btn cmp-tray__go cmp-tray__go--disabled&quot; aria-disabled=&quot;true&quot;&gt;Добавьте ещё 1 курс&lt;/span&gt;&#x27;) +
         &#x27;&lt;/div&gt;&#x27; +
       &#x27;&lt;/div&gt;&#x27;;
+
+    var listEl = tray.querySelector(&#x27;.cmp-tray__list&#x27;);
+    listEl.scrollLeft = scrollToEnd ? listEl.scrollWidth : prevScroll;
+    listEl.addEventListener(&#x27;scroll&#x27;, updateTrayArrows, { passive: true });
+    updateTrayArrows();
   }
 
   function renderNav(n) {
@@ -629,13 +1078,13 @@ def resolve_compare_courses(request, Course):
         badge.className = &#x27;nav-count&#x27;;
         links[i].appendChild(badge);
       }
-      badge.textContent = n;
+      badge.textContent = n &gt; 99 ? &#x27;99+&#x27; : n;
       badge.hidden = n === 0;
       badge.setAttribute(&#x27;aria-label&#x27;, &#x27;выбрано: &#x27; + n);
     }
   }
 
-  function render() {
+  function render(scrollToEnd) {
     var list = read();
     var btns = document.querySelectorAll(&#x27;[data-compare-id]&#x27;);
     for (var i = 0; i &lt; btns.length; i++) {
@@ -651,7 +1100,7 @@ def resolve_compare_courses(request, Course):
       if (cnt) cnt.textContent = list.length;
     }
     renderNav(list.length);
-    renderTray(list);
+    renderTray(list, scrollToEnd === true);
   }
 
   document.addEventListener(&#x27;click&#x27;, function (e) {
@@ -664,35 +1113,403 @@ def resolve_compare_courses(request, Course):
       write(list.filter(function (c) { return c.id !== id; }));
       return;
     }
-    if (list.length &gt;= MAX) {
-      toast(&#x27;Можно сравнить не больше &#x27; + MAX + &#x27; курсов. Уберите один из списка.&#x27;, &#x27;Открыть сравнение&#x27;);
-      return;
-    }
     list.push({
       id: id,
       name: btn.getAttribute(&#x27;data-compare-name&#x27;) || id,
       school: btn.getAttribute(&#x27;data-compare-school&#x27;) || &#x27;&#x27;
     });
     collapsed = false;
-    write(list);
+    try {
+      localStorage.setItem(KEY, JSON.stringify(list));
+    } catch (err) {}
+    syncCookie(list);
+    render(true);
     if (list.length === 1) toast(&#x27;Курс добавлен. Выберите ещё хотя бы один для сравнения.&#x27;);
   });
+
+  /* Страница сравнения: прокрутка широкой таблицы стрелками */
+  var scrollBox = document.querySelector(&#x27;[data-cmp-scroll]&#x27;);
+  if (scrollBox) {
+    var prev = document.querySelector(&#x27;[data-cmp-scroll-btn=&quot;-1&quot;]&#x27;);
+    var next = document.querySelector(&#x27;[data-cmp-scroll-btn=&quot;1&quot;]&#x27;);
+    var pos = document.querySelector(&#x27;[data-cmp-scroll-pos]&#x27;);
+    var cols = scrollBox.querySelectorAll(&#x27;thead .cmp-col&#x27;);
+    var update = function () {
+      var max = scrollBox.scrollWidth - scrollBox.clientWidth;
+      var nav = scrollBox.parentNode.querySelector(&#x27;.cmp-nav&#x27;);
+      if (nav) nav.hidden = max &lt;= 4;
+      if (prev) prev.disabled = scrollBox.scrollLeft &lt;= 4;
+      if (next) next.disabled = scrollBox.scrollLeft &gt;= max - 4;
+      if (pos &amp;&amp; cols.length) {
+        var box = scrollBox.getBoundingClientRect();
+        var corner = scrollBox.querySelector(&#x27;.cmp-corner&#x27;);
+        var stickyRight = corner ? corner.getBoundingClientRect().right : box.left;
+        var first = 0, last = 0;
+        for (var i = 0; i &lt; cols.length; i++) {
+          var r = cols[i].getBoundingClientRect();
+          var visible = r.left &gt;= stickyRight - 2 &amp;&amp; r.right &lt;= box.right + 2;
+          if (visible) {
+            if (!first) first = i + 1;
+            last = i + 1;
+          }
+        }
+        pos.textContent = first ? first + (last &gt; first ? &#x27;–&#x27; + last : &#x27;&#x27;) + &#x27; из &#x27; + cols.length : &#x27;&#x27;;
+      }
+    };
+    var step = function (dir) {
+      var colW = cols.length ? cols[0].getBoundingClientRect().width : 240;
+      scrollBox.scrollBy({ left: dir * colW, behavior: &#x27;smooth&#x27; });
+    };
+    if (prev) prev.addEventListener(&#x27;click&#x27;, function () { step(-1); });
+    if (next) next.addEventListener(&#x27;click&#x27;, function () { step(1); });
+    scrollBox.addEventListener(&#x27;scroll&#x27;, update, { passive: true });
+    window.addEventListener(&#x27;resize&#x27;, update);
+    update();
+  }
 
   syncCookie(read());
 
   window.addEventListener(&#x27;storage&#x27;, function (e) {
     if (e.key === KEY) render();
   });
+  window.addEventListener(&#x27;resize&#x27;, updateTrayArrows);
 
   render();
 })();</pre>
           </div>
         </details>
         <details class="ins-file">
-          <summary><code>static/edukursy/css/compare.css</code><span>Стили (уже есть в style.css)</span></summary>
+          <summary><code>static/edukursy/css/compare.css</code><span>Стили</span></summary>
           <div class="prompt">
-            <div class="prompt__bar"><span>compare.css</span><button type="button" class="copy-btn" data-target="cf8">Копировать</button></div>
-            <pre class="prompt__code" id="cf8">/* Если style.css уже подключён целиком — этот файл не нужен: в style.css этот блок уже есть. */
+            <div class="prompt__bar"><span>compare.css</span><button type="button" class="copy-btn" data-target="cf11">Копировать</button></div>
+            <pre class="prompt__code" id="cf11">/*
+  edukursy — сравнение курсов: кнопка «Сравнить», плавающая панель, страница /compare/.
+  Если на сайте уже подключён полный style.css из основного пакета — этот файл НЕ нужен.
+  Подключайте compare.css, только если у сайта свой CSS.
+  Нужны CSS-переменные ниже (если на сайте свои — замените значения), а также
+  классы .btn, .btn--primary, .btn--outline, .btn--block, .visually-hidden — они есть в style.css.
+*/
+:root {
+  --c-text: #1a1d23;
+  --c-muted: #5b6270;
+  --c-bg-light: #f4f6f9;
+  --c-border: #dde1e8;
+  --c-primary: #1f5eff;
+  --c-primary-dark: #1546c4;
+  --c-accent: #0f9d6b;
+  --header-h: 64px;
+  --gutter: 16px;
+}
+
+/* ============================================================
+   СРАВНЕНИЕ КУРСОВ /compare/
+   ============================================================ */
+
+.cmp-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  margin-top: 20px;
+}
+.cmp-add__label {
+  font-weight: 600;
+}
+.cmp-add__select {
+  flex: 1 1 260px;
+  max-width: 420px;
+}
+.cmp-add .btn--outline {
+  padding: 10px 18px;
+}
+.cmp-add__diff {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  cursor: pointer;
+}
+.cmp-add__diff input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--c-primary);
+}
+
+/* ===== Итоги ===== */
+.cmp-picks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.cmp-pick {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  background: #fff;
+}
+.cmp-pick__tag {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #e2f5ec;
+  color: #1f8a5b;
+  font-size: 14px;
+  font-weight: 700;
+}
+.cmp-pick__name {
+  margin-top: 14px;
+  font-size: 20px;
+  font-weight: 800;
+}
+.cmp-pick__school {
+  font-size: 14px;
+  color: var(--c-muted);
+}
+.cmp-pick__text {
+  margin: 10px 0 18px;
+  color: var(--c-muted);
+}
+.cmp-pick .btn {
+  margin-top: auto;
+  padding: 12px 18px;
+}
+
+/* ===== Таблица ===== */
+.cmp-legend {
+  margin: -12px 0 20px;
+  font-size: 14px;
+  color: var(--c-muted);
+}
+.cmp-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  background: #fff;
+}
+.cmp-scroll:focus-visible {
+  outline: 3px solid var(--c-primary);
+}
+.cmp-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 15px;
+}
+.cmp-table th,
+.cmp-table td {
+  padding: 14px 18px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--c-border);
+}
+.cmp-table tbody th[scope=&quot;row&quot;],
+.cmp-table tfoot th,
+.cmp-corner {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: 220px;
+  min-width: 160px;
+  background: #fff;
+  color: var(--c-muted);
+  font-weight: 500;
+  box-shadow: 1px 0 0 var(--c-border);
+}
+.cmp-corner {
+  z-index: 3;
+  vertical-align: bottom;
+  font-size: 14px;
+}
+.cmp-col {
+  min-width: 220px;
+  font-weight: 400;
+}
+.cmp-table td + td,
+.cmp-table th + td,
+.cmp-col + .cmp-col {
+  border-left: 1px solid var(--c-border);
+}
+
+.cmp-head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cmp-head__remove {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #8a909b;
+  font-size: 22px;
+  text-decoration: none;
+}
+.cmp-head__remove:hover {
+  background: var(--c-bg-light);
+  color: var(--c-text);
+}
+.cmp-head__school {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 28px;
+  font-size: 14px;
+  color: var(--c-muted);
+  text-decoration: none;
+}
+.cmp-head__school img {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+.cmp-head__rating::before {
+  content: &quot;★ &quot;;
+  color: #f5a524;
+}
+.cmp-head__name {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--c-text);
+  text-decoration: none;
+}
+.cmp-head__name:hover {
+  color: var(--c-primary);
+}
+.cmp-head__price {
+  margin-bottom: 6px;
+  font-size: 20px;
+  font-weight: 800;
+}
+.cmp-head__price s,
+.cmp-table s {
+  font-size: 14px;
+  font-weight: 400;
+  color: #9aa1ad;
+}
+.cmp-head .btn {
+  padding: 11px 16px;
+}
+
+.cmp-group__head th {
+  padding-top: 22px;
+  background: var(--c-bg-light);
+  color: var(--c-text);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.cmp-group__head th[scope=&quot;rowgroup&quot;] {
+  position: sticky;
+  left: 0;
+}
+.cmp-sub {
+  font-size: 13px;
+  color: var(--c-muted);
+}
+.cmp-yes {
+  color: var(--c-accent);
+  font-weight: 800;
+}
+.cmp-no {
+  color: #b9bfca;
+}
+.cmp-star::before {
+  content: &quot;★ &quot;;
+  color: #f5a524;
+}
+.cmp-table td.is-best {
+  background: #f0faf5;
+}
+.cmp-best {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 6px;
+  background: #e2f5ec;
+  color: #1f8a5b;
+  font-size: 12px;
+  font-weight: 700;
+  vertical-align: 1px;
+}
+.cmp-legend .cmp-best {
+  margin-left: 0;
+}
+.cmp-table tfoot th,
+.cmp-table tfoot td {
+  border-bottom: 0;
+  vertical-align: middle;
+}
+.cmp-table tfoot .btn {
+  padding: 12px 16px;
+}
+.cmp-more {
+  display: block;
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ===== Липкая панель на мобильном ===== */
+.cmp-sticky {
+  display: none;
+}
+@media (max-width: 767.98px) {
+  .cmp-sticky {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    position: sticky;
+    bottom: 0;
+    z-index: 90;
+    padding: 8px var(--gutter);
+    background: #fff;
+    border-top: 1px solid var(--c-border);
+    box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.06);
+  }
+  .cmp-sticky__item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .cmp-sticky__name {
+    font-size: 12px;
+    color: var(--c-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cmp-sticky__price {
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .cmp-sticky .btn {
+    margin-top: 4px;
+    padding: 8px 6px;
+    font-size: 14px;
+  }
+  .cmp-add__diff {
+    margin-left: 0;
+  }
+  .cmp-table tbody th[scope=&quot;row&quot;],
+  .cmp-table tfoot th,
+  .cmp-corner {
+    width: 130px;
+    min-width: 130px;
+    font-size: 14px;
+  }
+}
+
 
 /* ============================================================
    КНОПКА «СРАВНИТЬ» + ПАНЕЛЬ СРАВНЕНИЯ (compare.js)
@@ -986,10 +1803,66 @@ def resolve_compare_courses(request, Course):
 .cmp-tray__chevron {
   display: none;
 }
+.cmp-tray__rail {
+  position: relative;
+  min-width: 0;
+}
 .cmp-tray__list {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: flex;
   gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.cmp-tray__list::-webkit-scrollbar {
+  display: none;
+}
+.cmp-tray__list &gt; li {
+  flex: 0 0 200px;
+  scroll-snap-align: start;
+}
+.cmp-tray__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--c-border);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--c-text);
+  box-shadow: 0 2px 8px rgba(20, 23, 28, 0.15);
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.cmp-tray__nav:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.cmp-tray__nav--prev {
+  left: -10px;
+}
+.cmp-tray__nav--next {
+  right: -10px;
+}
+.cmp-tray.can-left .cmp-tray__nav--prev,
+.cmp-tray.can-right .cmp-tray__nav--next {
+  display: grid;
+}
+.cmp-tray.can-left .cmp-tray__list {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 40px);
+  mask-image: linear-gradient(90deg, transparent 0, #000 40px);
+}
+.cmp-tray.can-right .cmp-tray__list {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent);
+  mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent);
+}
+.cmp-tray.can-left.can-right .cmp-tray__list {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 40px), transparent);
+  mask-image: linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 40px), transparent);
 }
 .cmp-tray__chip {
   display: flex;
@@ -1111,12 +1984,18 @@ body.has-cmp-tray {
   .cmp-tray.is-collapsed .cmp-tray__chevron {
     transform: rotate(180deg);
   }
-  .cmp-tray__list {
+  .cmp-tray__rail {
     grid-column: 1 / -1;
     grid-row: 2;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .cmp-tray.is-collapsed .cmp-tray__list {
+  .cmp-tray__list &gt; li {
+    flex-basis: 70%;
+    max-width: 240px;
+  }
+  .cmp-tray__nav {
+    display: none !important;
+  }
+  .cmp-tray.is-collapsed .cmp-tray__rail {
     display: none;
   }
   .cmp-tray__actions {
@@ -1132,13 +2011,16 @@ body.has-cmp-tray {
     font-size: 15px;
   }
   body.has-cmp-tray {
-    padding-bottom: 170px;
+    padding-bottom: 130px;
   }
 }
 @media (max-width: 1023.98px) {
   .cmp-tray__chip--empty {
     display: none;
   }
+}
+.cmp-tray__chip--empty {
+  flex-basis: 140px !important;
 }
 
 /* ----- Тост ----- */
@@ -1168,6 +2050,105 @@ body.has-cmp-tray {
   margin-left: 6px;
   color: #9db9ff;
   font-weight: 700;
+}
+
+/* ----- Страница сравнения: навигация по широкой таблице (любое число курсов) ----- */
+.cmp-table-wrap {
+  position: relative;
+}
+.cmp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: -8px 0 12px;
+}
+.cmp-nav[hidden] {
+  display: none;
+}
+.cmp-nav__pos {
+  margin-right: 4px;
+  font-size: 14px;
+  color: var(--c-muted);
+}
+.cmp-nav__btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--c-text);
+  cursor: pointer;
+}
+.cmp-nav__btn:hover:not(:disabled) {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.cmp-nav__btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.cmp-nav__btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cmp-scroll {
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 220px;
+}
+.cmp-table {
+  width: max-content;
+  min-width: 100%;
+}
+.cmp-col {
+  width: 240px;
+  min-width: 240px;
+  max-width: 280px;
+  scroll-snap-align: start;
+}
+@media (max-width: 767.98px) {
+  .cmp-scroll {
+    scroll-padding-left: 130px;
+  }
+  .cmp-col {
+    width: 200px;
+    min-width: 200px;
+  }
+  .cmp-sticky {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+  }
+  .cmp-sticky__item {
+    flex: 0 0 calc((100% - 12px) / 3);
+    scroll-snap-align: start;
+  }
+}
+
+
+/* ----- Пустое состояние /compare/ ----- */
+.cmp-empty {
+  max-width: 560px;
+  padding: 40px 24px;
+  border: 1px dashed var(--c-border);
+  border-radius: 16px;
+  text-align: center;
+  margin: 0 auto;
+}
+.cmp-empty p {
+  margin: 12px 0 20px;
+  color: var(--c-muted);
+}
+.cmp-empty .btn {
+  padding: 12px 22px;
 }</pre>
           </div>
         </details>
