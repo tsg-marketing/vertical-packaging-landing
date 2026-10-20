@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Онлайн-курсы: сравнение цен и программ онлайн-школ — edukursy.ru</title>
+  <meta name="description" content="Программы, цены и длительность онлайн-курсов ведущих школ в одном месте. Сравните курсы без звонков менеджеров и навязчивых заявок.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============ 1. ШАПКА ============ -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo">
+        <img src="img/logo.png" alt="" class="logo__img" width="48" height="40">
+        <span class="logo__text">edukursy<span>.ru</span></span>
+      </a>
+
+      <button class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label="Основное меню">
+        <ul>
+          <li><a href="/professions/">Профессии</a></li>
+          <li><a href="/courses/">Курсы</a></li>
+          <li><a href="/schools/">Школы</a></li>
+          <li><a href="/compare/">Сравнения</a></li>
+          <li><a href="/blog/">Блог</a></li>
+          <li><a href="/about/">О проекте</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ СТРОКА ПОИСКА ПОД МЕНЮ ============ -->
+  <!-- SEARCH: поиск по названию курса и профессии с подсказками.
+       data-suggest-url — JSON-эндпоинт подсказок (Django: {% url 'search_suggest' %}).
+       data-suggest-demo — ТОЛЬКО для макета: ищет по встроенному <script id="search-demo"> в браузере. На сайте этот атрибут удалить.
+       data-suggest-popular — «Часто ищут», показывается при пустом поле (из настроек или из БД). -->
+  <div class="site-search" data-suggest data-suggest-url="/search/suggest/" data-suggest-demo="search-demo" data-suggest-min="2" data-suggest-popular='["Python","Дизайнер","Аналитик данных","Figma","Маркетолог","SQL"]'>
+    <form class="site-search__form" action="/search/" method="get" role="search" autocomplete="off">
+      <label for="site-search-input" class="visually-hidden">Поиск курса или профессии</label>
+      <div class="site-search__field">
+        <svg class="site-search__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="site-search-input" name="q" class="site-search__input" placeholder="Найти курс или профессию, например «Python»" data-suggest-input
+               role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="site-search-panel" maxlength="100" enterkeyhint="search">
+        <button type="button" class="site-search__clear" data-suggest-clear aria-label="Очистить поиск"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+        <kbd class="site-search__kbd" aria-hidden="true">/</kbd>
+        <button type="submit" class="site-search__btn">Найти</button>
+      </div>
+      <div class="suggest" id="site-search-panel" role="listbox" aria-label="Подсказки поиска" data-suggest-panel hidden></div>
+      <p class="visually-hidden" aria-live="polite" data-suggest-live></p>
+    </form>
+  </div>
+
+  <main>
+
+    <!-- ============ 2. ПЕРВЫЙ ЭКРАН ============ -->
+    <section class="hero section">
+      <div class="hero__content">
+        <h1 class="hero__title">Онлайн-курсы: сравните цены разных школ в одном месте</h1>
+        <p class="hero__subtitle">Программы, цены и длительность ведущих онлайн-школ рядом. Без звонков менеджеров и навязчивых заявок.</p>
+
+        <div class="hero__actions">
+          <a href="/professions/" class="btn btn--primary btn--lg">Выбрать профессию</a>
+          <form class="search" action="/search/" method="get" role="search">
+            <label for="hero-search" class="visually-hidden">Поиск курса</label>
+            <input type="search" id="hero-search" name="q" class="search__input" placeholder="Что хотите освоить?">
+            <button type="submit" class="search__btn">Найти</button>
+          </form>
+        </div>
+
+        <ul class="hero__stats">
+          <li><strong><!-- DATA: stats.courses_total -->1 240</strong> курсов</li>
+          <li><strong><!-- DATA: stats.schools_total -->3</strong> школы</li>
+          <li><strong><!-- DATA: stats.professions_total -->48</strong> профессий</li>
+        </ul>
+      </div>
+
+      <div class="hero__media">
+        <img src="img/hero.jpg" alt="Девушка проходит онлайн-курс за ноутбуком" class="hero__img" width="900" height="900">
+      </div>
+    </section>
+
+    <!-- ============ ВИДЖЕТ ПОДБОРА КУРСА ============ -->
+    <section class="section section--picker" id="picker">
+      <div class="picker">
+        <div class="picker__head">
+          <h2 class="picker__title">Подберите курс за минуту</h2>
+          <p class="picker__subtitle">Отметьте, что важно, — покажем подходящие программы всех школ каталога.</p>
+        </div>
+
+        <form class="picker__form" action="/courses/" method="get">
+          <!-- DATA: варианты направлений из базы -->
+          <div class="picker__field">
+            <label for="pk-direction" class="picker__label">Направление</label>
+            <select id="pk-direction" name="profession" class="picker__select">
+              <option value="">Любое</option>
+              <option value="programmist">Программирование</option>
+              <option value="dizajner">Дизайн</option>
+              <option value="marketolog">Маркетинг</option>
+              <option value="analitik-dannyh">Аналитика данных</option>
+              <option value="menedzher-proektov">Управление проектами</option>
+              <option value="testirovshchik">Тестирование</option>
+            </select>
+          </div>
+
+          <fieldset class="picker__field">
+            <legend class="picker__label">Ваш уровень</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="level" value="zero" checked><span>С нуля</span></label>
+              <label class="chip"><input type="radio" name="level" value="base"><span>Есть база</span></label>
+              <label class="chip"><input type="radio" name="level" value="pro"><span>Опытный</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="picker__field">
+            <legend class="picker__label">Длительность</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="duration" value="short"><span>До 3 мес</span></label>
+              <label class="chip"><input type="radio" name="duration" value="mid" checked><span>3–9 мес</span></label>
+              <label class="chip"><input type="radio" name="duration" value="long"><span>Больше 9 мес</span></label>
+            </div>
+          </fieldset>
+
+          <div class="picker__field">
+            <label for="pk-budget" class="picker__label">Бюджет до <output id="pk-budget-out" for="pk-budget">150 000 ₽</output></label>
+            <input type="range" id="pk-budget" name="price_max" class="picker__range" min="10000" max="300000" step="5000" value="150000">
+            <div class="picker__range-scale"><span>10 000 ₽</span><span>300 000 ₽</span></div>
+          </div>
+
+          <div class="picker__field picker__field--checks">
+            <label class="check"><input type="checkbox" name="installment" value="1" checked><span>Есть рассрочка</span></label>
+            <label class="check"><input type="checkbox" name="mentor" value="1"><span>С наставником</span></label>
+            <label class="check"><input type="checkbox" name="certificate" value="1"><span>Диплом или сертификат</span></label>
+          </div>
+
+          <div class="picker__submit">
+            <button type="submit" class="btn btn--primary btn--lg btn--block">Показать курсы</button>
+            <p class="picker__note">Найдено <strong><!-- DATA: picker.found_count -->86</strong> курсов</p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ 4. ПОПУЛЯРНЫЕ ПРОФЕССИИ ============ -->
+    <section class="section section--light" id="professions">
+      <h2 class="section__title">Популярные профессии</h2>
+
+      <div class="grid profession-grid">
+        <!-- DATA: цикл по профессиям, 8-12 штук. Блок-образец: article.profession-card -->
+        <article class="profession-card">
+          <img src="img/prof-dev.jpg" alt="" class="profession-card__img" width="640" height="360" loading="lazy"><!-- DATA: profession.image -->
+          <div class="profession-card__body">
+            <h3 class="profession-card__name"><!-- DATA: profession.name -->Программист</h3>
+            <p class="profession-card__count"><!-- DATA: profession.courses_count -->212 курсов · 3 школы</p>
+            <p class="profession-card__price">от <!-- DATA: profession.min_price_month -->2 900 ₽/мес</p>
+            <p class="profession-card__total">или от <!-- DATA: profession.min_price -->69 000 ₽</p>
+            <a href="/professions/programmist/" class="btn btn--outline btn--block profession-card__btn">Смотреть курсы</a><!-- DATA: profession.url -->
+          </div>
+        </article>
+
+        <article class="profession-card">
+          <img src="img/prof-design.jpg" alt="" class="profession-card__img" width="640" height="360" loading="lazy">
+          <div class="profession-card__body">
+            <h3 class="profession-card__name"><!-- DATA: profession.name -->Дизайнер</h3>
+            <p class="profession-card__count"><!-- DATA: profession.courses_count -->164 курса · 3 школы</p>
+            <p class="profession-card__price">от <!-- DATA: profession.min_price_month -->2 500 ₽/мес</p>
+            <p class="profession-card__total">или от <!-- DATA: profession.min_price -->54 000 ₽</p>
+            <a href="/professions/dizajner/" class="btn btn--outline btn--block profession-card__btn">Смотреть курсы</a>
+          </div>
+        </article>
+
+        <article class="profession-card">
+          <img src="img/prof-marketing.jpg" alt="" class="profession-card__img" width="640" height="360" loading="lazy">
+          <div class="profession-card__body">
+            <h3 class="profession-card__name"><!-- DATA: profession.name -->Маркетолог</h3>
+            <p class="profession-card__count"><!-- DATA: profession.courses_count -->138 курсов · 3 школы</p>
+            <p class="profession-card__price">от <!-- DATA: profession.min_price_month -->1 900 ₽/мес</p>
+            <p class="profession-card__total">или от <!-- DATA: profession.min_price -->42 000 ₽</p>
+            <a href="/professions/marketolog/" class="btn btn--outline btn--block profession-card__btn">Смотреть курсы</a>
+          </div>
+        </article>
+
+        <article class="profession-card">
+          <img src="img/prof-analyst.jpg" alt="" class="profession-card__img" width="640" height="360" loading="lazy">
+          <div class="profession-card__body">
+            <h3 class="profession-card__name"><!-- DATA: profession.name -->Аналитик данных</h3>
+            <p class="profession-card__count"><!-- DATA: profession.courses_count -->97 курсов · 3 школы</p>
+            <p class="profession-card__price">от <!-- DATA: profession.min_price_month -->3 400 ₽/мес</p>
+            <p class="profession-card__total">или от <!-- DATA: profession.min_price -->81 000 ₽</p>
+            <a href="/professions/analitik-dannyh/" class="btn btn--outline btn--block profession-card__btn">Смотреть курсы</a>
+          </div>
+        </article>
+
+        <article class="profession-card">
+          <img src="img/prof-pm.jpg" alt="" class="profession-card__img" width="640" height="360" loading="lazy">
+          <div class="profession-card__body">
+            <h3 class="profession-card__name"><!-- DATA: profession.name -->Менеджер проектов</h3>
+            <p class="profession-card__count"><!-- DATA: profession.courses_count -->74 курса · 2 школы</p>
+            <p class="profession-card__price">от <!-- DATA: profession.min_price_month -->2 700 ₽/мес</p>
+            <p class="profession-card__total">или от <!-- DATA: profession.min_price -->58 000 ₽</p>
+            <a href="/professions/menedzher-proektov/" class="btn btn--outline btn--block profession-card__btn">Смотреть курсы</a>
+          </div>
+        </article>
+
+        <article class="profession-card">
+          <img src="img/prof-qa.jpg" alt="" class="profession-card__img" width="640" height="360" loading="lazy">
+          <div class="profession-card__body">
+            <h3 class="profession-card__name"><!-- DATA: profession.name -->Тестировщик</h3>
+            <p class="profession-card__count"><!-- DATA: profession.courses_count -->58 курсов · 3 школы</p>
+            <p class="profession-card__price">от <!-- DATA: profession.min_price_month -->2 200 ₽/мес</p>
+            <p class="profession-card__total">или от <!-- DATA: profession.min_price -->47 000 ₽</p>
+            <a href="/professions/testirovshchik/" class="btn btn--outline btn--block profession-card__btn">Смотреть курсы</a>
+          </div>
+        </article>
+        <!-- /DATA: конец цикла по профессиям -->
+      </div>
+
+      <p class="section__more"><a href="/professions/" class="link-arrow">Все профессии →</a></p>
+    </section>
+
+    <!-- ============ РЕКЛАМНЫЙ СЛОТ 2 — адаптивный ============ -->
+    <div class="ad-wrap ad-wrap--inline">
+      <aside class="ad-slot ad-slot--inline" aria-label="Реклама">
+        <span class="ad-label">Реклама</span>
+        <!-- AD SLOT: after_professions | адаптивный баннер. Сюда вставляется <a href="..." rel="sponsored noopener" target="_blank"><img ...></a> -->
+        <div class="ad-placeholder">Рекламный блок, адаптивный</div>
+      </aside>
+      <a href="/privacy" class="ad-more">Подробнее о рекламе</a>
+    </div>
+
+    <!-- ============ ПОПУЛЯРНЫЕ КУРСЫ ============ -->
+    <section class="section" id="courses">
+      <h2 class="section__title">Популярные курсы</h2>
+
+      <div class="grid course-grid">
+        <!-- DATA: цикл по курсам, 6-12 штук. Блок-образец: article.course-card -->
+        <article class="course-card">
+          <img src="img/prof-dev.jpg" alt="" class="course-card__img" width="640" height="360" loading="lazy"><!-- DATA: course.image -->
+          <div class="course-card__body">
+            <div class="course-card__school">
+              <img src="img/school-1.jpg" alt="" class="course-card__logo" width="24" height="24"><!-- DATA: course.school.logo -->
+              <span><!-- DATA: course.school.name -->Школа 1</span>
+            </div>
+            <p class="course-card__rating"><span class="course-card__stars"><!-- DATA: course.rating -->4.81</span> <span class="course-card__reviews"><!-- DATA: course.reviews_count -->640 отзывов</span></p>
+            <h3 class="course-card__title"><!-- DATA: course.name -->Специалист по информационной безопасности</h3>
+            <p class="course-card__meta"><!-- DATA: course.duration -->12 мес · <!-- DATA: course.format -->с наставником</p>
+            <div class="course-card__prices">
+              <p class="course-card__month"><!-- DATA: course.price_month -->4 181 ₽/мес <s><!-- DATA: course.old_price_month -->6 972 ₽/мес</s></p>
+              <p class="course-card__total"><!-- DATA: course.price -->128 000 ₽ <s><!-- DATA: course.old_price -->251 000 ₽</s></p>
+            </div>
+            <a href="/courses/infobez-school-1/" class="btn btn--outline btn--block">Смотреть курс</a><!-- DATA: course.url -->
+          </div>
+        </article>
+
+        <article class="course-card">
+          <img src="img/prof-dev.jpg" alt="" class="course-card__img" width="640" height="360" loading="lazy">
+          <div class="course-card__body">
+            <div class="course-card__school">
+              <img src="img/school-2.jpg" alt="" class="course-card__logo" width="24" height="24">
+              <span><!-- DATA: course.school.name -->Школа 2</span>
+            </div>
+            <p class="course-card__rating"><span class="course-card__stars">4.80</span> <span class="course-card__reviews">213 отзывов</span></p>
+            <h3 class="course-card__title"><!-- DATA: course.name -->Java-разработчик с нуля</h3>
+            <p class="course-card__meta">10 мес · с наставником</p>
+            <div class="course-card__prices">
+              <p class="course-card__month">5 773 ₽/мес <s>7 933 ₽/мес</s></p>
+              <p class="course-card__total">101 150 ₽ <s>139 000 ₽</s></p>
+            </div>
+            <a href="/courses/java-school-2/" class="btn btn--outline btn--block">Смотреть курс</a>
+          </div>
+        </article>
+
+        <article class="course-card">
+          <img src="img/prof-qa.jpg" alt="" class="course-card__img" width="640" height="360" loading="lazy">
+          <div class="course-card__body">
+            <div class="course-card__school">
+              <img src="img/school-3.jpg" alt="" class="course-card__logo" width="24" height="24">
+              <span><!-- DATA: course.school.name -->Школа 3</span>
+            </div>
+            <p class="course-card__rating"><span class="course-card__stars">4.65</span> <span class="course-card__reviews">800 отзывов</span></p>
+            <h3 class="course-card__title"><!-- DATA: course.name -->QA-инженер: первый уровень бесплатно</h3>
+            <p class="course-card__meta">8 мес · записи + ревью</p>
+            <div class="course-card__prices">
+              <p class="course-card__month course-card__month--none">Рассрочки нет</p>
+              <p class="course-card__total">159 500 ₽</p>
+            </div>
+            <a href="/courses/qa-school-3/" class="btn btn--outline btn--block">Смотреть курс</a>
+          </div>
+        </article>
+
+        <article class="course-card">
+          <img src="img/prof-design.jpg" alt="" class="course-card__img" width="640" height="360" loading="lazy">
+          <div class="course-card__body">
+            <div class="course-card__school">
+              <img src="img/school-1.jpg" alt="" class="course-card__logo" width="24" height="24">
+              <span><!-- DATA: course.school.name -->Школа 1</span>
+            </div>
+            <p class="course-card__rating"><span class="course-card__stars">4.74</span> <span class="course-card__reviews">412 отзывов</span></p>
+            <h3 class="course-card__title"><!-- DATA: course.name -->UX/UI-дизайнер с нуля до портфолио</h3>
+            <p class="course-card__meta">9 мес · с наставником</p>
+            <div class="course-card__prices">
+              <p class="course-card__month">3 950 ₽/мес <s>5 640 ₽/мес</s></p>
+              <p class="course-card__total">94 800 ₽ <s>135 400 ₽</s></p>
+            </div>
+            <a href="/courses/uxui-school-1/" class="btn btn--outline btn--block">Смотреть курс</a>
+          </div>
+        </article>
+
+        <article class="course-card">
+          <img src="img/prof-analyst.jpg" alt="" class="course-card__img" width="640" height="360" loading="lazy">
+          <div class="course-card__body">
+            <div class="course-card__school">
+              <img src="img/school-2.jpg" alt="" class="course-card__logo" width="24" height="24">
+              <span><!-- DATA: course.school.name -->Школа 2</span>
+            </div>
+            <p class="course-card__rating"><span class="course-card__stars">4.70</span> <span class="course-card__reviews">298 отзывов</span></p>
+            <h3 class="course-card__title"><!-- DATA: course.name -->Аналитик данных: SQL, Python, BI</h3>
+            <p class="course-card__meta">7 мес · вебинары</p>
+            <div class="course-card__prices">
+              <p class="course-card__month">4 420 ₽/мес <s>6 300 ₽/мес</s></p>
+              <p class="course-card__total">106 000 ₽ <s>151 200 ₽</s></p>
+            </div>
+            <a href="/courses/analytics-school-2/" class="btn btn--outline btn--block">Смотреть курс</a>
+          </div>
+        </article>
+
+        <article class="course-card">
+          <img src="img/prof-marketing.jpg" alt="" class="course-card__img" width="640" height="360" loading="lazy">
+          <div class="course-card__body">
+            <div class="course-card__school">
+              <img src="img/school-3.jpg" alt="" class="course-card__logo" width="24" height="24">
+              <span><!-- DATA: course.school.name -->Школа 3</span>
+            </div>
+            <p class="course-card__rating"><span class="course-card__stars">4.58</span> <span class="course-card__reviews">187 отзывов</span></p>
+            <h3 class="course-card__title"><!-- DATA: course.name -->Интернет-маркетолог</h3>
+            <p class="course-card__meta">6 мес · записи + практика</p>
+            <div class="course-card__prices">
+              <p class="course-card__month">2 990 ₽/мес <s>4 270 ₽/мес</s></p>
+              <p class="course-card__total">53 800 ₽ <s>76 900 ₽</s></p>
+            </div>
+            <a href="/courses/marketing-school-3/" class="btn btn--outline btn--block">Смотреть курс</a>
+          </div>
+        </article>
+        <!-- /DATA: конец цикла по курсам -->
+      </div>
+
+      <p class="section__more"><a href="/courses/" class="link-arrow">Все курсы →</a></p>
+    </section>
+
+    <!-- ============ КАК ЭТО РАБОТАЕТ ============ -->
+    <section class="section section--light" id="how">
+      <h2 class="section__title">Как выбрать курс</h2>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step__num">1</span>
+          <h3 class="step__title">Выберите профессию</h3>
+          <p class="step__text">Откройте направление, которое вам интересно, и посмотрите все курсы по нему в одном списке.</p>
+        </li>
+        <li class="step">
+          <span class="step__num">2</span>
+          <h3 class="step__title">Сравните курсы и цены</h3>
+          <p class="step__text">Программы, длительность и стоимость разных школ стоят рядом — видно, за что вы платите.</p>
+        </li>
+        <li class="step">
+          <span class="step__num">3</span>
+          <h3 class="step__title">Перейдите на сайт школы</h3>
+          <p class="step__text">Когда выбор сделан, переходите на страницу курса и оформляете обучение напрямую у школы.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============ РЕКЛАМНЫЙ СЛОТ 3 — нативный ============ -->
+    <div class="ad-wrap ad-wrap--native">
+      <aside class="ad-slot ad-slot--native" aria-label="Реклама">
+        <span class="ad-label">Реклама</span>
+        <!-- AD SLOT: native_middle | нативная карточка: картинка + заголовок + текст + ссылка. Ссылки с rel="sponsored noopener" -->
+        <div class="ad-native">
+          <div class="ad-native__media placeholder">Изображение рекламодателя</div>
+          <div class="ad-native__body">
+            <p class="ad-native__title">Нативная реклама</p>
+            <p class="ad-native__text">Здесь будет заголовок и короткое описание партнёрского материала.</p>
+            <p class="ad-native__advertiser">Рекламодатель: <!-- AD: advertiser.name -->название, ИНН</p>
+          </div>
+        </div>
+      </aside>
+      <a href="/privacy" class="ad-more">Подробнее о рекламе</a>
+    </div>
+
+    <!-- ============ ШКОЛЫ В КАТАЛОГЕ ============ -->
+    <section class="section" id="schools">
+      <h2 class="section__title">Школы в каталоге</h2>
+
+      <div class="grid school-grid">
+        <!-- DATA: цикл по школам, любое количество. Блок-образец: article.school-card -->
+        <article class="school-card">
+          <img src="img/school-1.jpg" alt="" class="school-card__logo" width="64" height="64"><!-- DATA: school.logo -->
+          <div class="school-card__body">
+            <h3 class="school-card__name"><!-- DATA: school.name -->Школа 1</h3>
+            <p class="school-card__rating"><!-- DATA: school.rating -->4.78 · <!-- DATA: school.reviews_count -->2 140 отзывов</p>
+            <p class="school-card__count"><!-- DATA: school.courses_count -->86 курсов · от <!-- DATA: school.min_price -->1 900 ₽/мес</p>
+          </div>
+          <a href="/schools/school-1/" class="btn btn--outline school-card__btn">Курсы школы</a><!-- DATA: school.url -->
+        </article>
+
+        <article class="school-card">
+          <img src="img/school-2.jpg" alt="" class="school-card__logo" width="64" height="64">
+          <div class="school-card__body">
+            <h3 class="school-card__name"><!-- DATA: school.name -->Школа 2</h3>
+            <p class="school-card__rating">4.72 · 1 380 отзывов</p>
+            <p class="school-card__count">64 курса · от 2 400 ₽/мес</p>
+          </div>
+          <a href="/schools/school-2/" class="btn btn--outline school-card__btn">Курсы школы</a>
+        </article>
+
+        <article class="school-card">
+          <img src="img/school-3.jpg" alt="" class="school-card__logo" width="64" height="64">
+          <div class="school-card__body">
+            <h3 class="school-card__name"><!-- DATA: school.name -->Школа 3</h3>
+            <p class="school-card__rating">4.65 · 960 отзывов</p>
+            <p class="school-card__count">51 курс · от 2 100 ₽/мес</p>
+          </div>
+          <a href="/schools/school-3/" class="btn btn--outline school-card__btn">Курсы школы</a>
+        </article>
+        <!-- /DATA: конец цикла по школам -->
+      </div>
+    </section>
+
+    <!-- ============ КАК МЫ СРАВНИВАЕМ ============ -->
+    <section class="section section--light" id="trust">
+      <h2 class="section__title">Как мы сравниваем</h2>
+
+      <ul class="grid trust-grid">
+        <li class="trust-item">
+          <h3 class="trust-item__title">Данные из официальных программ</h3>
+          <p class="trust-item__text">Берём описание, длительность и состав курса со страниц самих школ, а не из пересказов.</p>
+        </li>
+        <li class="trust-item">
+          <h3 class="trust-item__title">Цены как есть</h3>
+          <p class="trust-item__text">Показываем стоимость, которую указывает школа. Если есть рассрочка или скидка — пишем отдельно, не подменяя основную цену.</p>
+        </li>
+        <li class="trust-item">
+          <h3 class="trust-item__title">Место в подборке не продаётся</h3>
+          <p class="trust-item__text">Порядок курсов в каталоге зависит от фильтров, а не от оплаты. Платные материалы всегда помечены словом «Реклама».</p>
+        </li>
+        <li class="trust-item">
+          <h3 class="trust-item__title">Регулярные обновления</h3>
+          <p class="trust-item__text">Сверяем цены и программы с сайтами школ и указываем дату последней проверки на странице курса.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============ БЛОГ ============ -->
+    <section class="section" id="blog">
+      <h2 class="section__title">Блог</h2>
+
+      <div class="grid blog-grid">
+        <!-- DATA: цикл по статьям, 3-6 последних. Блок-образец: article.post-card -->
+        <article class="post-card">
+          <a href="/blog/kak-sravnivat-ceny-kursov/" class="post-card__link"><!-- DATA: post.url -->
+            <img src="img/blog-1.jpg" alt="" class="post-card__img" width="640" height="360" loading="lazy"><!-- DATA: post.image -->
+            <div class="post-card__body">
+              <p class="post-card__meta"><span class="post-card__tag"><!-- DATA: post.category -->Выбор курса</span> <time datetime="2025-10-02"><!-- DATA: post.date -->2 октября 2025</time></p>
+              <h3 class="post-card__title"><!-- DATA: post.title -->Как сравнивать цены онлайн-курсов и не переплатить</h3>
+              <p class="post-card__excerpt"><!-- DATA: post.excerpt -->Считаем цену месяца обучения, смотрим на часы практики и разбираемся, что на самом деле входит в стоимость.</p>
+              <span class="post-card__more">Читать →</span>
+            </div>
+          </a>
+        </article>
+
+        <article class="post-card">
+          <a href="/blog/smena-professii-posle-30/" class="post-card__link">
+            <img src="img/blog-2.jpg" alt="" class="post-card__img" width="640" height="360" loading="lazy">
+            <div class="post-card__body">
+              <p class="post-card__meta"><span class="post-card__tag">Карьера</span> <time datetime="2025-09-24">24 сентября 2025</time></p>
+              <h3 class="post-card__title">Смена профессии после 30: с чего начать и сколько это займёт</h3>
+              <p class="post-card__excerpt">Реалистичные сроки, первые шаги и как проверить направление до оплаты длинной программы.</p>
+              <span class="post-card__more">Читать →</span>
+            </div>
+          </a>
+        </article>
+
+        <article class="post-card">
+          <a href="/blog/uchitsya-i-rabotat/" class="post-card__link">
+            <img src="img/blog-3.jpg" alt="" class="post-card__img" width="640" height="360" loading="lazy">
+            <div class="post-card__body">
+              <p class="post-card__meta"><span class="post-card__tag">Обучение</span> <time datetime="2025-09-15">15 сентября 2025</time></p>
+              <h3 class="post-card__title">Как учиться онлайн и не бросить на втором месяце</h3>
+              <p class="post-card__excerpt">Сколько часов в неделю закладывать, как выбрать формат под свой график и что делать, если отстали.</p>
+              <span class="post-card__more">Читать →</span>
+            </div>
+          </a>
+        </article>
+        <!-- /DATA: конец цикла по статьям -->
+      </div>
+
+      <p class="section__more"><a href="/blog/" class="link-arrow">Все статьи →</a></p>
+    </section>
+
+    <!-- ============ SEO-ТЕКСТ ============ -->
+    <section class="section section--light" id="about-text">
+      <h2 class="section__title">Онлайн-образование: как не переплатить</h2>
+      <div class="prose prose--wide">
+        <p>Онлайн-курсов сейчас так много, что выбрать один становится отдельной задачей. Одно и то же направление предлагают десятки школ, и стоимость похожих программ может отличаться в несколько раз. При этом разница в цене не всегда означает разницу в качестве: иногда вы платите за громкое имя, иногда — за действительно больший объём практики и обратную связь от наставника.</p>
+        <p>Чтобы не переплатить, сравнивайте не только итоговую сумму, но и то, что в неё входит. Посмотрите длительность курса в месяцах и количество часов практики, узнайте, проверяют ли домашние задания живые люди, есть ли итоговый проект для портфолио. Обратите внимание на формат: записанные лекции обычно стоят дешевле, чем программы с живыми вебинарами и личным наставником.</p>
+        <p>Полезно пересчитать стоимость в цену за месяц обучения. Длинная программа за большую сумму может оказаться выгоднее короткой, если в ней больше практики. И наоборот: если вам нужен один конкретный навык, нет смысла оплачивать годовую профессию целиком — достаточно короткого курса.</p>
+        <p>Отдельно проверяйте условия оплаты. Рассрочка удобна, но уточните, нет ли в ней скрытой переплаты, и можно ли вернуть деньги, если обучение не подошло. Многие школы дают вводные бесплатные уроки — это хороший способ понять подачу материала до оплаты.</p>
+        <p>На edukursy.ru мы собираем эти параметры в одном месте: программы, длительность и цены разных школ стоят рядом, и их удобно сравнивать без звонков менеджеров. Решение остаётся за вами — мы лишь помогаем увидеть картину целиком.</p>
+      </div>
+    </section>
+
+    <!-- ============ FAQ (schema.org FAQPage) ============ -->
+    <section class="section" id="faq" itemscope itemtype="https://schema.org/FAQPage">
+      <h2 class="section__title">Частые вопросы</h2>
+
+      <div class="faq">
+        <!-- DATA: цикл по вопросам FAQ (опционально). Блок-образец: div.faq-item -->
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-1" id="faq-q-1">
+              <span itemprop="name">Это бесплатно для меня?</span>
+            </button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-1" role="region" aria-labelledby="faq-q-1" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Да. Пользоваться каталогом и сравнением можно бесплатно и без регистрации. Платите вы только школе, если решите у неё учиться.</p></div>
+          </div>
+        </div>
+
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-2" id="faq-q-2">
+              <span itemprop="name">Откуда цены?</span>
+            </button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-2" role="region" aria-labelledby="faq-q-2" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Цены берём с официальных страниц курсов. Школы иногда меняют стоимость и запускают акции, поэтому окончательную цену всегда уточняйте на сайте школы перед оплатой.</p></div>
+          </div>
+        </div>
+
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-3" id="faq-q-3">
+              <span itemprop="name">Вы продаёте курсы?</span>
+            </button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-3" role="region" aria-labelledby="faq-q-3" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Нет. Мы не принимаем оплату и не оформляем обучение. Договор вы заключаете напрямую со школой на её сайте.</p></div>
+          </div>
+        </div>
+
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-4" id="faq-q-4">
+              <span itemprop="name">Как часто обновляются данные?</span>
+            </button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-4" role="region" aria-labelledby="faq-q-4" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Мы регулярно сверяем цены и программы со страницами школ. Дата последней проверки указана на странице каждого курса.</p></div>
+          </div>
+        </div>
+
+        <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 class="faq-item__q">
+            <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-5" id="faq-q-5">
+              <span itemprop="name">Как вы зарабатываете?</span>
+            </button>
+          </h3>
+          <div class="faq-item__a" id="faq-a-5" role="region" aria-labelledby="faq-q-5" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <div itemprop="text"><p>Школы могут платить нам вознаграждение за переходы по ссылкам, а также мы размещаем рекламу с пометкой «Реклама». На цену курса для вас это не влияет, а место курса в подборке купить нельзя.</p></div>
+          </div>
+        </div>
+        <!-- /DATA: конец цикла FAQ -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ РЕКЛАМНЫЙ СЛОТ 4 — перед подвалом ============ -->
+  <div class="ad-wrap ad-wrap--bottom">
+    <aside class="ad-slot ad-slot--bottom" aria-label="Реклама">
+      <span class="ad-label">Реклама</span>
+      <!-- AD SLOT: bottom_wide | 970×250 desktop, адаптивный на мобильном. Сюда вставляется <a href="..." rel="sponsored noopener" target="_blank"><img ...></a> -->
+      <div class="ad-placeholder">Рекламный блок 970×250 / адаптивный</div>
+    </aside>
+    <a href="/privacy" class="ad-more">Подробнее о рекламе</a>
+  </div>
+
+  <!-- ============ ПОДВАЛ ============ -->
+  <footer class="site-footer">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a href="/" class="logo logo--light">
+          <img src="img/logo.png" alt="" class="logo__img" width="48" height="40">
+          <span class="logo__text">edukursy<span>.ru</span></span>
+        </a>
+        <p>Сравнение онлайн-курсов ведущих школ: программы, цены и длительность в одном месте.</p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Информация">
+        <h2 class="site-footer__heading">Проект</h2>
+        <ul>
+          <li><a href="/about">О проекте</a></li>
+          <li><a href="/contacts">Контакты</a></li>
+        </ul>
+      </nav>
+
+      <nav class="site-footer__nav" aria-label="Документы">
+        <h2 class="site-footer__heading">Документы</h2>
+        <ul>
+          <li><a href="/privacy">Политика конфиденциальности</a></li>
+          <li><a href="/terms">Пользовательское соглашение</a></li>
+        </ul>
+      </nav>
+
+      <nav class="site-footer__nav" aria-label="Каталог">
+        <h2 class="site-footer__heading">Каталог</h2>
+        <ul>
+          <li><a href="/professions/">Профессии</a></li>
+          <li><a href="/courses/">Курсы</a></li>
+          <li><a href="/schools/">Школы</a></li>
+          <li><a href="/compare/">Сравнения</a></li>
+          <li><a href="/blog/">Блог</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <p class="site-footer__disclosure">Мы можем получать вознаграждение от школ за переходы по ссылкам. На цену для вас это не влияет.</p>
+    <p class="site-footer__copy">© <!-- DATA: current_year -->2025 edukursy.ru</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <!-- SEARCH: демо-данные ТОЛЬКО для макета. На сайте удалить — подсказки идут из /search/suggest/ -->
+  <script type="application/json" id="search-demo">{
+ "demo": true,
+ "professions": [
+  {
+   "name": "Программист",
+   "url": "/professions/programmist/",
+   "image": "img/prof-dev.jpg",
+   "courses_count": 212,
+   "min_price_month": 2900
+  },
+  {
+   "name": "Дизайнер",
+   "url": "/professions/dizajner/",
+   "image": "img/prof-design.jpg",
+   "courses_count": 164,
+   "min_price_month": 2500
+  },
+  {
+   "name": "Маркетолог",
+   "url": "/professions/marketolog/",
+   "image": "img/prof-marketing.jpg",
+   "courses_count": 138,
+   "min_price_month": 1900
+  },
+  {
+   "name": "Аналитик данных",
+   "url": "/professions/analitik-dannyh/",
+   "image": "img/prof-analyst.jpg",
+   "courses_count": 97,
+   "min_price_month": 3400
+  },
+  {
+   "name": "Менеджер проектов",
+   "url": "/professions/menedzher-proektov/",
+   "image": "img/prof-pm.jpg",
+   "courses_count": 74,
+   "min_price_month": 2700
+  },
+  {
+   "name": "Тестировщик",
+   "url": "/professions/testirovshchik/",
+   "image": "img/prof-qa.jpg",
+   "courses_count": 58,
+   "min_price_month": 2200
+  },
+  {
+   "name": "Backend-разработчик",
+   "url": "/professions/backend-razrabotchik/",
+   "image": "img/prof-dev.jpg",
+   "courses_count": 64,
+   "min_price_month": 3100
+  },
+  {
+   "name": "Python-разработчик",
+   "url": "/professions/python-razrabotchik/",
+   "image": "img/prof-dev.jpg",
+   "courses_count": 41,
+   "min_price_month": 2900
+  },
+  {
+   "name": "Графический дизайнер",
+   "url": "/professions/graficheskij-dizajner/",
+   "image": "img/prof-design.jpg",
+   "courses_count": 37,
+   "min_price_month": 2300
+  },
+  {
+   "name": "3D-дизайнер",
+   "url": "/professions/3d-dizajner/",
+   "image": "img/prof-design.jpg",
+   "courses_count": 22,
+   "min_price_month": 2800
+  },
+  {
+   "name": "Фотограф",
+   "url": "/professions/fotograf/",
+   "image": "img/prof-design.jpg",
+   "courses_count": 14,
+   "min_price_month": 1700
+  },
+  {
+   "name": "Продакт-менеджер",
+   "url": "/professions/prodakt-menedzher/",
+   "image": "img/prof-pm.jpg",
+   "courses_count": 29,
+   "min_price_month": 3600
+  }
+ ],
+ "courses": [
+  {
+   "name": "Python-разработчик с нуля",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/python-razrabotchik/",
+   "price": 98000,
+   "price_month": 4900,
+   "duration": "8 месяцев"
+  },
+  {
+   "name": "Python для бэкенда",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/python-backend/",
+   "price": 38000,
+   "price_month": null,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Python-разработчик PRO",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/python-razrabotchik-pro/",
+   "price": 112000,
+   "price_month": 5600,
+   "duration": "10 месяцев"
+  },
+  {
+   "name": "Бэкенд на Python: Django и базы данных",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/backend-na-python/",
+   "price": 64000,
+   "price_month": 3800,
+   "duration": "6 месяцев"
+  },
+  {
+   "name": "Python для анализа данных",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/python-dlya-analiza-dannyh/",
+   "price": 54000,
+   "price_month": 3200,
+   "duration": "5 месяцев"
+  },
+  {
+   "name": "Фронтенд-разработчик: HTML, CSS и JavaScript",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/frontend-razrabotchik/",
+   "price": 39900,
+   "price_month": 2900,
+   "duration": "5 месяцев"
+  },
+  {
+   "name": "Java: основы программирования",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/java-osnovy/",
+   "price": 29500,
+   "price_month": null,
+   "duration": "3 месяца"
+  },
+  {
+   "name": "Java-разработчик с нуля",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/java-razrabotchik/",
+   "price": 87000,
+   "price_month": 4400,
+   "duration": "9 месяцев"
+  },
+  {
+   "name": "SQL для начинающих",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/sql-dlya-nachinayushchih/",
+   "price": 14900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Go-разработчик",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/golang-razrabotchik/",
+   "price": 49000,
+   "price_month": 4100,
+   "duration": "6 месяцев"
+  },
+  {
+   "name": "Git и командная разработка",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/git-i-komandnaya-razrabotka/",
+   "price": 9900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Алгоритмы и структуры данных",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/algoritmy-i-struktury-dannyh/",
+   "price": 34000,
+   "price_month": null,
+   "duration": "3 месяца"
+  },
+  {
+   "name": "JavaScript: продвинутый уровень",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/javascript-prodvinutyj/",
+   "price": 42000,
+   "price_month": 3100,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Capture One",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/capture-one/",
+   "price": 26939,
+   "price_month": 4490,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Adobe Lightroom",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/adobe-lightroom/",
+   "price": 32732,
+   "price_month": null,
+   "duration": "2 месяца"
+  },
+  {
+   "name": "Cinema 4D с нуля",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/cinema-4d/",
+   "price": 33228,
+   "price_month": null,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Adobe Illustrator для fashion-дизайнера",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/illustrator-fashion/",
+   "price": 34368,
+   "price_month": null,
+   "duration": "3 месяца"
+  },
+  {
+   "name": "Adobe Illustrator с нуля",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/adobe-illustrator/",
+   "price": 29900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Adobe Photoshop с нуля",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/adobe-photoshop/",
+   "price": 24900,
+   "price_month": 2100,
+   "duration": "2 месяца"
+  },
+  {
+   "name": "3D-визуализатор: портфолио и карьера",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/3d-vizualizator/",
+   "price": 71000,
+   "price_month": 3900,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "AutoCAD с нуля до PRO",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/autocad-skillbox/",
+   "price": 39000,
+   "price_month": null,
+   "duration": "2 месяца"
+  },
+  {
+   "name": "AutoCAD с нуля до PRO",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/autocad/",
+   "price": 36000,
+   "price_month": null,
+   "duration": "2 месяца"
+  },
+  {
+   "name": "Графический дизайнер с нуля",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/graficheskij-dizajner/",
+   "price": 89000,
+   "price_month": 3700,
+   "duration": "12 месяцев"
+  },
+  {
+   "name": "UX/UI-дизайнер",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/ux-ui-dizajner/",
+   "price": 96000,
+   "price_month": 4200,
+   "duration": "9 месяцев"
+  },
+  {
+   "name": "Figma для начинающих",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/figma/",
+   "price": 12900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Интернет-маркетолог",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/internet-marketolog/",
+   "price": 78000,
+   "price_month": 3300,
+   "duration": "8 месяцев"
+  },
+  {
+   "name": "SMM-менеджер",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/smm-menedzher/",
+   "price": 45000,
+   "price_month": 2500,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Таргетолог",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/targetolog/",
+   "price": 39000,
+   "price_month": 2200,
+   "duration": "3 месяца"
+  },
+  {
+   "name": "Аналитик данных с нуля",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/analitik-dannyh/",
+   "price": 104000,
+   "price_month": 4600,
+   "duration": "10 месяцев"
+  },
+  {
+   "name": "Excel и Google Таблицы",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/excel/",
+   "price": 9900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Тестировщик ПО",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/testirovshchik/",
+   "price": 59000,
+   "price_month": 2900,
+   "duration": "6 месяцев"
+  },
+  {
+   "name": "Автотесты на Python",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/avtotesty-python/",
+   "price": 48000,
+   "price_month": 2700,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Менеджер проектов в IT",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/menedzher-proektov/",
+   "price": 72000,
+   "price_month": 3500,
+   "duration": "6 месяцев"
+  },
+  {
+   "name": "Продакт-менеджер",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/prodakt-menedzher/",
+   "price": 94000,
+   "price_month": 4300,
+   "duration": "8 месяцев"
+  }
+ ],
+ "popular": [
+  "Python",
+  "Дизайнер",
+  "Аналитик данных",
+  "Figma",
+  "Маркетолог",
+  "SQL"
+ ]
+}</script>
+  <!-- SEARCH: подсказки поиска -->
+  <script src="search.js"></script>
+</body>
+</html>

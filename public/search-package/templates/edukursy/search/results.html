@@ -1,0 +1,66 @@
+{% extends "edukursy/base.html" %}
+{% load search_tags %}
+{% comment %}
+Страница результатов /search/?q=... Карточки курсов — ваш существующий partial карточки каталога.
+Если его имя другое — замените include ниже.
+{% endcomment %}
+
+{% block title %}{% if q %}Поиск: {{ q }}{% else %}Поиск курсов{% endif %} — edukursy.ru{% endblock %}
+{% block robots %}<meta name="robots" content="noindex, follow">{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <h1 class="page-head__title">{% if q %}Результаты по запросу «{{ corrected|default:q }}»{% else %}Поиск курсов и профессий{% endif %}</h1>
+  {% if corrected %}<p class="page-head__subtitle">Вы искали «{{ q }}» — показаны результаты в другой раскладке клавиатуры.</p>{% endif %}
+  {% if q and total_professions|add:total_courses %}<p class="page-head__subtitle">Профессий: {{ total_professions }} · курсов: {{ total_courses }}</p>{% endif %}
+</section>
+
+{% if not q or q|length < min_chars %}
+<section class="section">
+  <p>Введите название курса или профессии в строку поиска вверху страницы.</p>
+  <ul class="suggest__chips search-popular">{% for p in popular %}<li><a href="?q={{ p|urlencode }}" class="suggest__chip">{{ p }}</a></li>{% endfor %}</ul>
+</section>
+{% elif not total_professions and not total_courses %}
+<section class="section">
+  <div class="cmp-empty search-empty">
+    <h2 class="section__title">Ничего не нашли</h2>
+    <p>Проверьте написание или попробуйте другое слово. Например:</p>
+    <ul class="suggest__chips search-popular">{% for p in popular %}<li><a href="?q={{ p|urlencode }}" class="suggest__chip">{{ p }}</a></li>{% endfor %}</ul>
+    <a href="{% url 'courses' %}" class="btn btn--primary">Все курсы</a>
+  </div>
+</section>
+{% else %}
+
+{% if professions %}
+<section class="section">
+  <h2 class="section__title">Профессии</h2>
+  <ul class="search-profs">
+    {% for p in professions %}
+    <li><a href="{{ p.get_absolute_url }}" class="suggest__item search-prof">
+      {% if p.image %}<img src="{{ p.image.url }}" alt="" class="suggest__thumb suggest__thumb--round" width="40" height="40" loading="lazy">{% else %}<span class="suggest__thumb suggest__thumb--round suggest__thumb--empty" aria-hidden="true">{{ p.name|first }}</span>{% endif %}
+      <span class="suggest__text"><span class="suggest__name">{{ p.name|highlight:q }}</span><span class="suggest__meta">{{ p.courses_count }} курс(ов){% if p.min_price_month %} · от {{ p.min_price_month|floatformat:"0g" }} ₽/мес{% endif %}</span></span>
+    </a></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if courses_page %}
+<section class="section section--light">
+  <h2 class="section__title">Курсы</h2>
+  <div class="catalog-grid">
+    {% for course in courses_page %}
+      {% include "edukursy/partials/cards/course_card.html" with course=course %}
+    {% endfor %}
+  </div>
+  {% if courses_page.has_other_pages %}
+  <nav class="pagination" aria-label="Страницы">
+    {% if courses_page.has_previous %}<a href="?q={{ q|urlencode }}&amp;page={{ courses_page.previous_page_number }}">← Назад</a>{% endif %}
+    <span>{{ courses_page.number }} из {{ courses_page.paginator.num_pages }}</span>
+    {% if courses_page.has_next %}<a href="?q={{ q|urlencode }}&amp;page={{ courses_page.next_page_number }}">Дальше →</a>{% endif %}
+  </nav>
+  {% endif %}
+</section>
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -65,6 +65,7 @@
             <li><a href="#step-7">Шаг 7. Школы: список и страница школы</a></li>
             <li><a href="#step-8">Шаг 8. Сравнение курсов</a></li>
             <li><a href="#step-compare-btn">Шаг 8.5. Сравнение без ограничений</a></li>
+            <li><a href="#step-search">Шаг 8.6. Строка поиска</a></li>
             <li><a href="#step-9">Шаг 9. Блог: лента и статья</a></li>
             <li><a href="#step-home">Шаг 9.5. Главная страница</a></li>
             <li><a href="#step-10">Шаг 10. Карта сайта, редиректы, финальная проверка</a></li>
@@ -2149,6 +2150,1490 @@ body.has-cmp-tray {
 }
 .cmp-empty .btn {
   padding: 12px 22px;
+}</pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="ins-step" id="step-search">
+        <h2 class="ins-step__title">Шаг 8.6. Строка поиска с подсказками</h2>
+        <p>Под меню на всех страницах — поиск по названию курса и профессии. С 2-й буквы выпадают подсказки из базы: профессии с числом курсов и ценой «от», курсы со школой и ценой. Совпадение подсвечено, Enter ведёт на страницу всех результатов.</p>
+        <p>Как это выглядит: <a href="/main/index.html" target="_blank">главная</a> — наберите «pyt», «диз» или «ghjuh» (неверная раскладка).</p>
+
+        <div class="ins-download">
+          <a href="/search-package.zip" class="btn btn--primary btn--lg" download>Скачать пакет поиска (ZIP, 350 КБ)</a>
+          <p>Отдельный архив — только поиск. В проекте: <code>public/search-package/</code></p>
+        </div>
+
+        <div class="ins-cards">
+          <div class="ins-card"><p class="ins-card__tag ins-card__tag--ok">подсказки</p><p>Профессии и курсы из базы при вводе, совпадение выделено, внизу «Все результаты» с числом.</p></div>
+          <div class="ins-card"><p class="ins-card__tag">раскладка</p><p>«ghjuh» найдёт «прогр…». Регистр и ё/е не важны, в том числе на SQLite.</p></div>
+          <div class="ins-card"><p class="ins-card__tag">история</p><p>Пустое поле показывает «Вы искали» и «Часто ищут» — список задаётся в настройках.</p></div>
+          <div class="ins-card"><p class="ins-card__tag ins-card__tag--new">быстро</p><p>Задержка ввода, отмена старых запросов и кэш на 5 минут — сервер не перегружается.</p></div>
+        </div>
+
+        <h3 class="ins-sub">Перед запуском</h3>
+        <ol class="ins-list">
+          <li>Сделайте коммит в git.</li>
+          <li>Распакуйте архив, папку <code>search-package/</code> положите в корень Django-проекта как <code>_design/search-package/</code>.</li>
+          <li>Откройте в Cline новую задачу, режим <strong>Plan</strong>, вставьте промпт. Проверьте план → <strong>Act</strong>.</li>
+        </ol>
+        <p class="ins-note">Если база SQLite, Cline добавит в модели служебное поле для поиска и миграцию — без этого поиск по русским буквам будет зависеть от регистра.</p>
+
+        <h3 class="ins-sub">Промпт для Cline</h3>
+        <div class="prompt">
+          <div class="prompt__bar"><span>Промпт для Cline</span><button type="button" class="copy-btn" data-target="p-search">Копировать</button></div>
+          <pre class="prompt__code" id="p-search">Добавь на сайт строку поиска под главным меню с подсказками при вводе. Поиск — по названию курса и профессии из базы. Готовые файлы — в _design/search-package/ (прочитай README.md). Используй их, не пиши с нуля. Эталон вида и поведения: _design/search-package/mockups/index.html (поиск по &quot;SEARCH:&quot;).
+
+1. Изучи проект и покажи кратко:
+   - модели Course, Profession, School: поля name, slug, FK course.school, связь курса с профессией (FK или M2M и related_name), поле цены в месяц, длительность, картинка профессии, логотип школы, флаг активности курса;
+   - есть ли get_absolute_url у Course и Profession;
+   - какая СУБД (settings.DATABASES): PostgreSQL или SQLite;
+   - есть ли уже /search/ в urls.py и строка поиска на главной (form.search в первом экране);
+   - имя partial карточки курса каталога.
+
+2. Python (в приложение каталога &lt;app&gt;):
+   - app/search_utils.py, app/views_search.py, app/context_processors_search.py, app/templatetags/search_tags.py → в &lt;app&gt;/ (создай __init__.py в templatetags, если нет).
+   - Маршруты из app/urls_search.py добавь в urls.py ДО маршрутов вида &quot;&lt;slug&gt;/&quot;, имена: &quot;search&quot; и &quot;search_suggest&quot;. Если /search/ уже есть — замени его view на search_page, ничего больше не ломая.
+   - В views_search.py поправь под мои модели: professions_qs() (имя related_name курсов в Count/Min), courses_qs() (фильтр активных), profession_to_dict / course_to_dict (имена полей картинок, цены, длительности). Если поля нет — оставь getattr(..., None), в подсказке строка просто не выведется.
+   - Добавь get_absolute_url туда, где его нет.
+   - settings: &quot;&lt;app&gt;.context_processors_search.search_popular&quot; в TEMPLATES context_processors и SEARCH_POPULAR = [&quot;Python&quot;, &quot;Дизайнер&quot;, &quot;Аналитик данных&quot;, &quot;Figma&quot;, &quot;Маркетолог&quot;, &quot;SQL&quot;] (я поменяю под себя).
+
+3. Поиск по кириллице без учёта регистра:
+   - Если база SQLite — ОБЯЗАТЕЛЬНО: добавь SearchTextMixin из app/models_mixin.py к Course и Profession (models_mixin.py положи в &lt;app&gt;/), makemigrations + migrate, скопируй management/commands/rebuild_search_text.py и запусти python manage.py rebuild_search_text. Без этого «ДИЗ» не найдёт «Дизайнер».
+   - Если PostgreSQL — миксин не обязателен (icontains работает), но если курсов больше 5 000, тоже добавь его — поиск по индексу быстрее.
+   - Если курсы импортируются массово (bulk_create / update без save()) — после импорта вызывай rebuild_search_text, покажи где.
+
+4. Шаблоны и статика:
+   - static/edukursy/js/search.js и static/edukursy/css/search.css → в статику. Если полный style.css из пакета edukursy уже подключён — подключи search.css отдельным &lt;link&gt; ПОСЛЕ style.css.
+   - templates/edukursy/partials/search_bar.html → base.html сразу после &lt;/header&gt; (на ВСЕХ страницах).
+   - templates/edukursy/partials/search_scripts.html → base.html перед &lt;/body&gt;, после основного script.js.
+   - templates/edukursy/search/results.html → страница результатов. Замени include карточки на мой partial карточки курса. Если в base.html нет блока robots — добавь.
+   - На главной в первом экране уже есть своя форма поиска (form.search) — оставь её, но поставь ей action=&quot;{% url &#x27;search&#x27; %}&quot;.
+   - В макете есть data-suggest-demo и &lt;script id=&quot;search-demo&quot;&gt; — это ТОЛЬКО для макета, на сайт НЕ переносить.
+
+5. Тесты: app/tests/test_search_utils.py и test_search_views.py → &lt;app&gt;/tests/. В test_search_views.py поправь функции make_* под обязательные поля моих моделей. Запусти python manage.py test &lt;app&gt;.tests.
+
+6. Проверь руками и покажи результат:
+   - фокус в пустом поле → «Часто ищут»; после поиска появляется «Вы искали»;
+   - «p» → «Введите ещё 1 букву»; «pyt» → профессии и курсы, совпадение подсвечено синим, внизу «Все результаты по запросу «pyt»» с числом;
+   - «ДИЗ» и «диз» дают одинаковый результат; «ghjuh» → «Показаны результаты по запросу «прогр»»;
+   - ↑↓ переключают подсказки, Enter открывает выбранную, Esc закрывает, «/» ставит курсор в поиск;
+   - Enter без выбора → /search/?q=... с профессиями и курсами, пагинация по 24;
+   - на одну подсказку — не больше 4 SQL-запросов (2 count + 2 выборки), при повторе того же запроса — 0 (кэш);
+   - ширина 390 px: выпадашка на всю ширину экрана, не уходит за край, кнопка «Найти» видна;
+   - подсказки не перекрываются плавающей панелью сравнения и липкой шапкой.
+
+Покажи diff base.html, urls.py, settings.py и моделей перед сохранением.</pre>
+        </div>
+
+        <h3 class="ins-sub">Если что-то пошло не так</h3>
+        <ul class="ins-list ins-list--dots">
+          <li><strong>Подсказки не появляются</strong> — «Открой в браузере /search/suggest/?q=pyt и покажи ответ. Проверь, что URL с именем search_suggest есть и стоит выше маршрутов со slug.»</li>
+          <li><strong>«ДИЗ» не находит «Дизайнер»</strong> — «База SQLite: добавь SearchTextMixin к моделям, миграцию и запусти rebuild_search_text.»</li>
+          <li><strong>Ошибка FieldError в Count/Min</strong> — «В professions_qs() укажи правильный related_name курсов у Profession.»</li>
+          <li><strong>Выпадашка под другими блоками</strong> — «У .site-search z-index 95, у шапки 100, у панели сравнения 120. Проверь, что у родителя .site-search нет overflow: hidden.»</li>
+          <li><strong>Картинки в подсказках битые</strong> — «В profession_to_dict / course_to_dict используй правильные поля ImageField и MEDIA_URL.»</li>
+        </ul>
+
+        <h3 class="ins-sub">Код файлов</h3>
+        <details class="ins-file">
+          <summary><code>app/search_utils.py</code><span>Логика поиска: регистр, ё/е, раскладка, ранжирование</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>search_utils.py</span><button type="button" class="copy-btn" data-target="sf0">Копировать</button></div>
+            <pre class="prompt__code" id="sf0">&quot;&quot;&quot;
+Поиск по названию курса и профессии + подсказки при вводе.
+
+Работает на PostgreSQL и SQLite. В SQLite поиск без учёта регистра по кириллице НЕ работает
+(LIKE понимает регистр только для латиницы), поэтому, если у модели есть поле search_text
+(название в нижнем регистре, ё→е), поиск идёт по нему. См. models_mixin.py.
+&quot;&quot;&quot;
+import re
+
+from django.db.models import Case, IntegerField, Q, Value, When
+
+MIN_CHARS = 2
+MAX_QUERY = 100
+SUGGEST_PROFESSIONS = 4
+SUGGEST_COURSES = 6
+
+EN = &quot;qwertyuiop[]asdfghjkl;&#x27;zxcvbnm,.`&quot;
+RU = &quot;йцукенгшщзхъфывапролджэячсмитьбюё&quot;
+_EN2RU = {e: r for e, r in zip(EN, RU)}
+_RU2EN = {r: e for e, r in zip(EN, RU)}
+
+
+def normalize(text):
+    &quot;&quot;&quot;&#x27;  Python  Ёлка &#x27; -&gt; &#x27;python елка&#x27;.&quot;&quot;&quot;
+    text = (text or &quot;&quot;)[:MAX_QUERY].lower().replace(&quot;ё&quot;, &quot;е&quot;)
+    text = re.sub(r&quot;[^\w\s+#.-]&quot;, &quot; &quot;, text)
+    return re.sub(r&quot;\s+&quot;, &quot; &quot;, text).strip()
+
+
+def swap_layout(text):
+    &quot;&quot;&quot;Неверная раскладка: &#x27;ghjuh&#x27; -&gt; &#x27;прогр&#x27;, &#x27;зн&#x27; -&gt; &#x27;py&#x27;.&quot;&quot;&quot;
+    return &quot;&quot;.join(_EN2RU.get(ch, _RU2EN.get(ch, ch)) for ch in text.lower())
+
+
+def words(query):
+    return [w for w in normalize(query).split(&quot; &quot;) if w][:5]
+
+
+def _field(model):
+    names = {f.name for f in model._meta.get_fields()}
+    return &quot;search_text&quot; if &quot;search_text&quot; in names else &quot;name&quot;
+
+
+def filter_by_words(qs, query):
+    &quot;&quot;&quot;Все слова запроса должны встретиться в названии. Ранг: 0 — с начала, 1 — с начала слова, 2 — в середине.&quot;&quot;&quot;
+    ws = words(query)
+    if not ws:
+        return qs.none()
+    field = _field(qs.model)
+    lookup = &quot;contains&quot; if field == &quot;search_text&quot; else &quot;icontains&quot;
+    cond = Q()
+    for w in ws:
+        cond &amp;= Q(**{f&quot;{field}__{lookup}&quot;: w})
+    first = ws[0]
+    start = &quot;startswith&quot; if field == &quot;search_text&quot; else &quot;istartswith&quot;
+    return qs.filter(cond).annotate(
+        search_rank=Case(
+            When(**{f&quot;{field}__{start}&quot;: first}, then=Value(0)),
+            When(**{f&quot;{field}__{lookup}&quot;: &quot; &quot; + first}, then=Value(1)),
+            When(**{f&quot;{field}__{lookup}&quot;: &quot;-&quot; + first}, then=Value(1)),
+            default=Value(2),
+            output_field=IntegerField(),
+        )
+    )
+
+
+def search(professions_qs, courses_qs, query, prof_limit=SUGGEST_PROFESSIONS, course_limit=SUGGEST_COURSES):
+    &quot;&quot;&quot;
+    Возвращает dict: professions, courses, total_professions, total_courses, corrected (или None).
+    Если ничего не нашлось — пробует запрос в другой раскладке.
+    &quot;&quot;&quot;
+
+    def run(q):
+        p = filter_by_words(professions_qs, q)
+        c = filter_by_words(courses_qs, q)
+        p_total, c_total = p.count(), c.count()
+        return {
+            &quot;professions&quot;: list(p.order_by(&quot;search_rank&quot;, &quot;name&quot;)[:prof_limit]) if p_total else [],
+            &quot;courses&quot;: list(c.order_by(&quot;search_rank&quot;, &quot;name&quot;)[:course_limit]) if c_total else [],
+            &quot;total_professions&quot;: p_total,
+            &quot;total_courses&quot;: c_total,
+            &quot;corrected&quot;: None,
+        }
+
+    if len(normalize(query)) &lt; MIN_CHARS:
+        return {&quot;professions&quot;: [], &quot;courses&quot;: [], &quot;total_professions&quot;: 0, &quot;total_courses&quot;: 0, &quot;corrected&quot;: None}
+
+    result = run(query)
+    if not result[&quot;total_professions&quot;] and not result[&quot;total_courses&quot;]:
+        alt = swap_layout(normalize(query))
+        if alt != normalize(query):
+            alt_result = run(alt)
+            if alt_result[&quot;total_professions&quot;] or alt_result[&quot;total_courses&quot;]:
+                alt_result[&quot;corrected&quot;] = alt
+                return alt_result
+    return result</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/views_search.py</code><span>View: подсказки (JSON) и страница результатов</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>views_search.py</span><button type="button" class="copy-btn" data-target="sf1">Копировать</button></div>
+            <pre class="prompt__code" id="sf1">&quot;&quot;&quot;
+Два view:
+  search_suggest — JSON для подсказок при вводе (GET /search/suggest/?q=...)
+  search_page    — страница результатов (GET /search/?q=...), куда ведёт кнопка «Найти»
+
+Модели Course / Profession — ваши. Проверьте функции *_to_dict: имена полей и картинок.
+&quot;&quot;&quot;
+from django.conf import settings
+from django.core.cache import cache
+from django.core.paginator import Paginator
+from django.db.models import Count, Min, Q
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.http import require_GET
+
+from .models import Course, Profession
+from .search_utils import MIN_CHARS, normalize, search
+
+POPULAR = getattr(settings, &quot;SEARCH_POPULAR&quot;, [&quot;Python&quot;, &quot;Дизайнер&quot;, &quot;Аналитик данных&quot;, &quot;Figma&quot;, &quot;Маркетолог&quot;, &quot;SQL&quot;])
+CACHE_SECONDS = 300
+
+
+def professions_qs():
+    return Profession.objects.annotate(
+        courses_count=Count(&quot;courses&quot;, distinct=True),
+        min_price_month=Min(&quot;courses__price_month&quot;),
+    )
+
+
+def courses_qs():
+    qs = Course.objects.select_related(&quot;school&quot;)
+    if any(f.name == &quot;is_active&quot; for f in Course._meta.fields):
+        qs = qs.filter(is_active=True)
+    return qs
+
+
+def _image_url(field):
+    try:
+        return field.url if field else None
+    except ValueError:
+        return None
+
+
+def profession_to_dict(p):
+    return {
+        &quot;name&quot;: p.name,
+        &quot;url&quot;: p.get_absolute_url(),
+        &quot;image&quot;: _image_url(getattr(p, &quot;image&quot;, None)),
+        &quot;courses_count&quot;: getattr(p, &quot;courses_count&quot;, 0) or 0,
+        &quot;min_price_month&quot;: getattr(p, &quot;min_price_month&quot;, None),
+    }
+
+
+def course_to_dict(c):
+    return {
+        &quot;name&quot;: c.name,
+        &quot;url&quot;: c.get_absolute_url(),
+        &quot;school&quot;: c.school.name,
+        &quot;school_logo&quot;: _image_url(getattr(c.school, &quot;logo&quot;, None)),
+        &quot;price&quot;: c.price,
+        &quot;price_month&quot;: getattr(c, &quot;price_month&quot;, None),
+        &quot;duration&quot;: getattr(c, &quot;duration&quot;, None) or None,
+    }
+
+
+@require_GET
+def search_suggest(request):
+    q = request.GET.get(&quot;q&quot;, &quot;&quot;)
+    key = &quot;suggest:&quot; + normalize(q)
+    data = cache.get(key)
+    if data is None:
+        r = search(professions_qs(), courses_qs(), q)
+        data = {
+            &quot;query&quot;: q,
+            &quot;corrected&quot;: r[&quot;corrected&quot;],
+            &quot;professions&quot;: [profession_to_dict(p) for p in r[&quot;professions&quot;]],
+            &quot;courses&quot;: [course_to_dict(c) for c in r[&quot;courses&quot;]],
+            &quot;total_professions&quot;: r[&quot;total_professions&quot;],
+            &quot;total_courses&quot;: r[&quot;total_courses&quot;],
+            &quot;popular&quot;: POPULAR,
+        }
+        cache.set(key, data, CACHE_SECONDS)
+    resp = JsonResponse(data, json_dumps_params={&quot;ensure_ascii&quot;: False})
+    resp[&quot;Cache-Control&quot;] = &quot;public, max-age=60&quot;
+    resp[&quot;X-Robots-Tag&quot;] = &quot;noindex&quot;
+    return resp
+
+
+@require_GET
+def search_page(request):
+    q = request.GET.get(&quot;q&quot;, &quot;&quot;).strip()
+    context = {&quot;q&quot;: q, &quot;popular&quot;: POPULAR, &quot;min_chars&quot;: MIN_CHARS}
+    if len(normalize(q)) &gt;= MIN_CHARS:
+        r = search(professions_qs(), courses_qs(), q, prof_limit=12, course_limit=10_000)
+        page = Paginator(r[&quot;courses&quot;], 24).get_page(request.GET.get(&quot;page&quot;))
+        context.update(
+            professions=r[&quot;professions&quot;],
+            courses_page=page,
+            total_professions=r[&quot;total_professions&quot;],
+            total_courses=r[&quot;total_courses&quot;],
+            corrected=r[&quot;corrected&quot;],
+        )
+    return render(request, &quot;edukursy/search/results.html&quot;, context)</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/urls_search.py</code><span>Маршруты</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>urls_search.py</span><button type="button" class="copy-btn" data-target="sf2">Копировать</button></div>
+            <pre class="prompt__code" id="sf2"># Добавьте в urls.py приложения (до маршрутов вида &lt;slug:...&gt;/, чтобы &quot;search&quot; не принялся за slug):
+from django.urls import path
+
+from .views_search import search_page, search_suggest
+
+urlpatterns = [
+    path(&quot;search/&quot;, search_page, name=&quot;search&quot;),
+    path(&quot;search/suggest/&quot;, search_suggest, name=&quot;search_suggest&quot;),
+]</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/context_processors_search.py</code><span>«Часто ищут» из настроек</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>context_processors_search.py</span><button type="button" class="copy-btn" data-target="sf3">Копировать</button></div>
+            <pre class="prompt__code" id="sf3">import json
+
+from django.conf import settings
+
+DEFAULT = [&quot;Python&quot;, &quot;Дизайнер&quot;, &quot;Аналитик данных&quot;, &quot;Figma&quot;, &quot;Маркетолог&quot;, &quot;SQL&quot;]
+
+
+def search_popular(request):
+    &quot;&quot;&quot;«Часто ищут» в подсказках. Список меняется в settings.SEARCH_POPULAR.&quot;&quot;&quot;
+    items = getattr(settings, &quot;SEARCH_POPULAR&quot;, DEFAULT)
+    return {&quot;search_popular&quot;: items, &quot;search_popular_json&quot;: json.dumps(items, ensure_ascii=False)}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/models_mixin.py</code><span>Поле search_text (нужно для SQLite)</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>models_mixin.py</span><button type="button" class="copy-btn" data-target="sf4">Копировать</button></div>
+            <pre class="prompt__code" id="sf4">&quot;&quot;&quot;
+Нужен, если база — SQLite (или для ускорения на большой базе PostgreSQL).
+Добавьте миксин к моделям Course и Profession, сделайте makemigrations/migrate
+и заполните поле: python manage.py rebuild_search_text
+&quot;&quot;&quot;
+from django.db import models
+
+
+def make_search_text(*parts):
+    from .search_utils import normalize
+
+    return normalize(&quot; &quot;.join(p for p in parts if p))
+
+
+class SearchTextMixin(models.Model):
+    search_text = models.CharField(max_length=400, blank=True, default=&quot;&quot;, db_index=True, editable=False)
+
+    class Meta:
+        abstract = True
+
+    def build_search_text(self):
+        return make_search_text(getattr(self, &quot;name&quot;, &quot;&quot;))
+
+    def save(self, *args, **kwargs):
+        self.search_text = self.build_search_text()
+        update_fields = kwargs.get(&quot;update_fields&quot;)
+        if update_fields is not None and &quot;search_text&quot; not in update_fields:
+            kwargs[&quot;update_fields&quot;] = list(update_fields) + [&quot;search_text&quot;]
+        super().save(*args, **kwargs)</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/management/commands/rebuild_search_text.py</code><span>Команда заполнения search_text</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>rebuild_search_text.py</span><button type="button" class="copy-btn" data-target="sf5">Копировать</button></div>
+            <pre class="prompt__code" id="sf5">from django.apps import apps
+from django.core.management.base import BaseCommand
+
+
+class Command(BaseCommand):
+    help = &quot;Заполняет поле search_text у курсов и профессий (после добавления SearchTextMixin или массового импорта).&quot;
+
+    def add_arguments(self, parser):
+        parser.add_argument(&quot;--models&quot;, default=&quot;&quot;, help=&quot;app_label.Model через запятую; по умолчанию все модели с search_text&quot;)
+
+    def handle(self, *args, **opts):
+        if opts[&quot;models&quot;]:
+            models = [apps.get_model(m.strip()) for m in opts[&quot;models&quot;].split(&quot;,&quot;) if m.strip()]
+        else:
+            models = [m for m in apps.get_models() if any(f.name == &quot;search_text&quot; for f in m._meta.fields)]
+        for model in models:
+            batch, total = [], 0
+            for obj in model.objects.all().iterator(chunk_size=500):
+                obj.search_text = obj.build_search_text()
+                batch.append(obj)
+                if len(batch) &gt;= 500:
+                    model.objects.bulk_update(batch, [&quot;search_text&quot;])
+                    total += len(batch)
+                    batch = []
+            if batch:
+                model.objects.bulk_update(batch, [&quot;search_text&quot;])
+                total += len(batch)
+            self.stdout.write(self.style.SUCCESS(f&quot;{model.__name__}: {total}&quot;))</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/templatetags/search_tags.py</code><span>Фильтр подсветки</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>search_tags.py</span><button type="button" class="copy-btn" data-target="sf6">Копировать</button></div>
+            <pre class="prompt__code" id="sf6">import re
+
+from django import template
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
+
+register = template.Library()
+
+
+@register.filter
+def highlight(text, query):
+    &quot;&quot;&quot;{{ course.name|highlight:q }} — подсвечивает слова запроса тегом &lt;mark&gt;. Безопасно экранирует.&quot;&quot;&quot;
+    text = str(text or &quot;&quot;)
+    ws = sorted({w for w in re.split(r&quot;\s+&quot;, (query or &quot;&quot;).lower().replace(&quot;ё&quot;, &quot;е&quot;)) if len(w) &gt;= 2}, key=len, reverse=True)
+    if not ws:
+        return escape(text)
+    norm = text.lower().replace(&quot;ё&quot;, &quot;е&quot;)
+    marks = []
+    for w in ws:
+        start = 0
+        while (i := norm.find(w, start)) &gt; -1:
+            marks.append((i, i + len(w)))
+            start = i + len(w)
+    marks.sort()
+    out, pos = [], 0
+    for a, b in marks:
+        if a &lt; pos:
+            continue
+        out.append(escape(text[pos:a]))
+        out.append(&quot;&lt;mark&gt;&quot; + escape(text[a:b]) + &quot;&lt;/mark&gt;&quot;)
+        pos = b
+    out.append(escape(text[pos:]))
+    return mark_safe(&quot;&quot;.join(out))</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/tests/test_search_utils.py</code><span>Тесты логики</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>test_search_utils.py</span><button type="button" class="copy-btn" data-target="sf7">Копировать</button></div>
+            <pre class="prompt__code" id="sf7">from django.test import SimpleTestCase
+
+from ..search_utils import normalize, swap_layout, words
+from ..templatetags.search_tags import highlight
+
+
+class NormalizeTests(SimpleTestCase):
+    def test_normalize(self):
+        self.assertEqual(normalize(&quot;  Python   Ёлка!! &quot;), &quot;python елка&quot;)
+        self.assertEqual(normalize(&quot;C++ и C#&quot;), &quot;c++ и c#&quot;)
+        self.assertEqual(len(normalize(&quot;а&quot; * 500)), 100)
+
+    def test_words(self):
+        self.assertEqual(words(&quot;UX/UI дизайнер&quot;), [&quot;ux&quot;, &quot;ui&quot;, &quot;дизайнер&quot;])
+
+    def test_layout(self):
+        self.assertEqual(swap_layout(&quot;ghjuh&quot;), &quot;прогр&quot;)
+        self.assertEqual(swap_layout(&quot;зш&quot;), &quot;pi&quot;)
+
+
+class HighlightTests(SimpleTestCase):
+    def test_marks(self):
+        self.assertEqual(str(highlight(&quot;Python-разработчик&quot;, &quot;pyt&quot;)), &quot;&lt;mark&gt;Pyt&lt;/mark&gt;hon-разработчик&quot;)
+
+    def test_escape(self):
+        self.assertEqual(str(highlight(&quot;&lt;b&gt;SQL&lt;/b&gt;&quot;, &quot;sql&quot;)), &quot;&amp;lt;b&amp;gt;&lt;mark&gt;SQL&lt;/mark&gt;&amp;lt;/b&amp;gt;&quot;)
+
+    def test_yo(self):
+        self.assertIn(&quot;&lt;mark&gt;&quot;, str(highlight(&quot;Ёжик&quot;, &quot;еж&quot;)))</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/tests/test_search_views.py</code><span>Тесты view</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>test_search_views.py</span><button type="button" class="copy-btn" data-target="sf8">Копировать</button></div>
+            <pre class="prompt__code" id="sf8">&quot;&quot;&quot;
+Интеграционные тесты с БД. Перед запуском проверьте фабрики make_* под свои модели
+(обязательные поля Course / School / Profession).
+&quot;&quot;&quot;
+from django.test import TestCase
+from django.urls import reverse
+
+from ..models import Course, Profession, School
+
+
+def make_school(name=&quot;Школа 1&quot;, slug=&quot;school-1&quot;):
+    return School.objects.create(name=name, slug=slug)
+
+
+def make_profession(name, slug):
+    return Profession.objects.create(name=name, slug=slug)
+
+
+def make_course(name, slug, school, profession, price=50000):
+    return Course.objects.create(name=name, slug=slug, school=school, profession=profession, price=price)
+
+
+class SuggestTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        s = make_school()
+        dev = make_profession(&quot;Python-разработчик&quot;, &quot;python-razrabotchik&quot;)
+        des = make_profession(&quot;Дизайнер&quot;, &quot;dizajner&quot;)
+        make_course(&quot;Python с нуля&quot;, &quot;python-s-nulya&quot;, s, dev)
+        make_course(&quot;Автотесты на Python&quot;, &quot;avtotesty&quot;, s, dev)
+        make_course(&quot;Графический дизайнер&quot;, &quot;graf&quot;, s, des)
+
+    def get(self, q):
+        return self.client.get(reverse(&quot;search_suggest&quot;), {&quot;q&quot;: q}).json()
+
+    def test_course_and_profession(self):
+        d = self.get(&quot;pyth&quot;)
+        self.assertEqual([p[&quot;name&quot;] for p in d[&quot;professions&quot;]], [&quot;Python-разработчик&quot;])
+        self.assertEqual(d[&quot;courses&quot;][0][&quot;name&quot;], &quot;Python с нуля&quot;)
+        self.assertEqual(d[&quot;total_courses&quot;], 2)
+
+    def test_cyrillic_case_insensitive(self):
+        self.assertEqual(self.get(&quot;ДИЗ&quot;)[&quot;total_professions&quot;], 1)
+
+    def test_wrong_layout(self):
+        d = self.get(&quot;lbp&quot;)
+        self.assertEqual(d[&quot;corrected&quot;], &quot;диз&quot;)
+        self.assertEqual(d[&quot;total_professions&quot;], 1)
+
+    def test_short_query(self):
+        d = self.get(&quot;p&quot;)
+        self.assertEqual(d[&quot;courses&quot;], [])
+
+    def test_page(self):
+        r = self.client.get(reverse(&quot;search&quot;), {&quot;q&quot;: &quot;python&quot;})
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, &quot;Python с нуля&quot;)</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/partials/search_bar.html</code><span>Строка поиска</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>search_bar.html</span><button type="button" class="copy-btn" data-target="sf9">Копировать</button></div>
+            <pre class="prompt__code" id="sf9">{% comment %}
+Строка поиска под меню. В base.html сразу после &lt;/header&gt;:
+  {% include &quot;edukursy/partials/search_bar.html&quot; %}
+Подсказки: GET {% url &#x27;search_suggest&#x27; %}?q=... (JSON). Кнопка «Найти» — страница {% url &#x27;search&#x27; %}.
+Список «Часто ищут» — settings.SEARCH_POPULAR через context processor search_popular (или уберите атрибут).
+{% endcomment %}
+&lt;div class=&quot;site-search&quot; data-suggest data-suggest-url=&quot;{% url &#x27;search_suggest&#x27; %}&quot; data-suggest-min=&quot;2&quot;{% if search_popular %} data-suggest-popular=&#x27;{{ search_popular_json }}&#x27;{% endif %}&gt;
+  &lt;form class=&quot;site-search__form&quot; action=&quot;{% url &#x27;search&#x27; %}&quot; method=&quot;get&quot; role=&quot;search&quot; autocomplete=&quot;off&quot;&gt;
+    &lt;label for=&quot;site-search-input&quot; class=&quot;visually-hidden&quot;&gt;Поиск курса или профессии&lt;/label&gt;
+    &lt;div class=&quot;site-search__field&quot;&gt;
+      &lt;svg class=&quot;site-search__icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;8&quot;/&gt;&lt;path d=&quot;m21 21-4.3-4.3&quot;/&gt;&lt;/svg&gt;
+      &lt;input type=&quot;search&quot; id=&quot;site-search-input&quot; name=&quot;q&quot; value=&quot;{{ request.GET.q|default:&#x27;&#x27; }}&quot; class=&quot;site-search__input&quot; placeholder=&quot;Найти курс или профессию, например «Python»&quot; data-suggest-input
+             role=&quot;combobox&quot; aria-autocomplete=&quot;list&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;site-search-panel&quot; maxlength=&quot;100&quot; enterkeyhint=&quot;search&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;site-search__clear&quot; data-suggest-clear aria-label=&quot;Очистить поиск&quot;&gt;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M18 6 6 18&quot;/&gt;&lt;path d=&quot;m6 6 12 12&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+      &lt;kbd class=&quot;site-search__kbd&quot; aria-hidden=&quot;true&quot;&gt;/&lt;/kbd&gt;
+      &lt;button type=&quot;submit&quot; class=&quot;site-search__btn&quot;&gt;Найти&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;suggest&quot; id=&quot;site-search-panel&quot; role=&quot;listbox&quot; aria-label=&quot;Подсказки поиска&quot; data-suggest-panel hidden&gt;&lt;/div&gt;
+    &lt;p class=&quot;visually-hidden&quot; aria-live=&quot;polite&quot; data-suggest-live&gt;&lt;/p&gt;
+  &lt;/form&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/partials/search_scripts.html</code><span>Подключение JS</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>search_scripts.html</span><button type="button" class="copy-btn" data-target="sf10">Копировать</button></div>
+            <pre class="prompt__code" id="sf10">{% comment %}В base.html перед &lt;/body&gt;, после основного script.js.{% endcomment %}
+{% load static %}&lt;script src=&quot;{% static &#x27;edukursy/js/search.js&#x27; %}&quot; defer&gt;&lt;/script&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/search/results.html</code><span>Страница /search/</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>results.html</span><button type="button" class="copy-btn" data-target="sf11">Копировать</button></div>
+            <pre class="prompt__code" id="sf11">{% extends &quot;edukursy/base.html&quot; %}
+{% load search_tags %}
+{% comment %}
+Страница результатов /search/?q=... Карточки курсов — ваш существующий partial карточки каталога.
+Если его имя другое — замените include ниже.
+{% endcomment %}
+
+{% block title %}{% if q %}Поиск: {{ q }}{% else %}Поиск курсов{% endif %} — edukursy.ru{% endblock %}
+{% block robots %}&lt;meta name=&quot;robots&quot; content=&quot;noindex, follow&quot;&gt;{% endblock %}
+
+{% block content %}
+&lt;section class=&quot;page-head&quot;&gt;
+  &lt;h1 class=&quot;page-head__title&quot;&gt;{% if q %}Результаты по запросу «{{ corrected|default:q }}»{% else %}Поиск курсов и профессий{% endif %}&lt;/h1&gt;
+  {% if corrected %}&lt;p class=&quot;page-head__subtitle&quot;&gt;Вы искали «{{ q }}» — показаны результаты в другой раскладке клавиатуры.&lt;/p&gt;{% endif %}
+  {% if q and total_professions|add:total_courses %}&lt;p class=&quot;page-head__subtitle&quot;&gt;Профессий: {{ total_professions }} · курсов: {{ total_courses }}&lt;/p&gt;{% endif %}
+&lt;/section&gt;
+
+{% if not q or q|length &lt; min_chars %}
+&lt;section class=&quot;section&quot;&gt;
+  &lt;p&gt;Введите название курса или профессии в строку поиска вверху страницы.&lt;/p&gt;
+  &lt;ul class=&quot;suggest__chips search-popular&quot;&gt;{% for p in popular %}&lt;li&gt;&lt;a href=&quot;?q={{ p|urlencode }}&quot; class=&quot;suggest__chip&quot;&gt;{{ p }}&lt;/a&gt;&lt;/li&gt;{% endfor %}&lt;/ul&gt;
+&lt;/section&gt;
+{% elif not total_professions and not total_courses %}
+&lt;section class=&quot;section&quot;&gt;
+  &lt;div class=&quot;cmp-empty search-empty&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;Ничего не нашли&lt;/h2&gt;
+    &lt;p&gt;Проверьте написание или попробуйте другое слово. Например:&lt;/p&gt;
+    &lt;ul class=&quot;suggest__chips search-popular&quot;&gt;{% for p in popular %}&lt;li&gt;&lt;a href=&quot;?q={{ p|urlencode }}&quot; class=&quot;suggest__chip&quot;&gt;{{ p }}&lt;/a&gt;&lt;/li&gt;{% endfor %}&lt;/ul&gt;
+    &lt;a href=&quot;{% url &#x27;courses&#x27; %}&quot; class=&quot;btn btn--primary&quot;&gt;Все курсы&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+{% else %}
+
+{% if professions %}
+&lt;section class=&quot;section&quot;&gt;
+  &lt;h2 class=&quot;section__title&quot;&gt;Профессии&lt;/h2&gt;
+  &lt;ul class=&quot;search-profs&quot;&gt;
+    {% for p in professions %}
+    &lt;li&gt;&lt;a href=&quot;{{ p.get_absolute_url }}&quot; class=&quot;suggest__item search-prof&quot;&gt;
+      {% if p.image %}&lt;img src=&quot;{{ p.image.url }}&quot; alt=&quot;&quot; class=&quot;suggest__thumb suggest__thumb--round&quot; width=&quot;40&quot; height=&quot;40&quot; loading=&quot;lazy&quot;&gt;{% else %}&lt;span class=&quot;suggest__thumb suggest__thumb--round suggest__thumb--empty&quot; aria-hidden=&quot;true&quot;&gt;{{ p.name|first }}&lt;/span&gt;{% endif %}
+      &lt;span class=&quot;suggest__text&quot;&gt;&lt;span class=&quot;suggest__name&quot;&gt;{{ p.name|highlight:q }}&lt;/span&gt;&lt;span class=&quot;suggest__meta&quot;&gt;{{ p.courses_count }} курс(ов){% if p.min_price_month %} · от {{ p.min_price_month|floatformat:&quot;0g&quot; }} ₽/мес{% endif %}&lt;/span&gt;&lt;/span&gt;
+    &lt;/a&gt;&lt;/li&gt;
+    {% endfor %}
+  &lt;/ul&gt;
+&lt;/section&gt;
+{% endif %}
+
+{% if courses_page %}
+&lt;section class=&quot;section section--light&quot;&gt;
+  &lt;h2 class=&quot;section__title&quot;&gt;Курсы&lt;/h2&gt;
+  &lt;div class=&quot;catalog-grid&quot;&gt;
+    {% for course in courses_page %}
+      {% include &quot;edukursy/partials/cards/course_card.html&quot; with course=course %}
+    {% endfor %}
+  &lt;/div&gt;
+  {% if courses_page.has_other_pages %}
+  &lt;nav class=&quot;pagination&quot; aria-label=&quot;Страницы&quot;&gt;
+    {% if courses_page.has_previous %}&lt;a href=&quot;?q={{ q|urlencode }}&amp;amp;page={{ courses_page.previous_page_number }}&quot;&gt;← Назад&lt;/a&gt;{% endif %}
+    &lt;span&gt;{{ courses_page.number }} из {{ courses_page.paginator.num_pages }}&lt;/span&gt;
+    {% if courses_page.has_next %}&lt;a href=&quot;?q={{ q|urlencode }}&amp;amp;page={{ courses_page.next_page_number }}&quot;&gt;Дальше →&lt;/a&gt;{% endif %}
+  &lt;/nav&gt;
+  {% endif %}
+&lt;/section&gt;
+{% endif %}
+{% endif %}
+{% endblock %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/edukursy/js/search.js</code><span>Скрипт подсказок</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>search.js</span><button type="button" class="copy-btn" data-target="sf12">Копировать</button></div>
+            <pre class="prompt__code" id="sf12">(function () {
+  var roots = document.querySelectorAll(&#x27;[data-suggest]&#x27;);
+  if (!roots.length) return;
+
+  var RECENT_KEY = &#x27;edukursy_recent_search&#x27;;
+  var EN = &quot;qwertyuiop[]asdfghjkl;&#x27;zxcvbnm,.`&quot;;
+  var RU = &#x27;йцукенгшщзхъфывапролджэячсмитьбюё&#x27;;
+
+  function norm(s) {
+    return String(s || &#x27;&#x27;).toLowerCase().replace(/ё/g, &#x27;е&#x27;).replace(/\s+/g, &#x27; &#x27;).trim();
+  }
+  function swapLayout(s) {
+    var out = &#x27;&#x27;;
+    for (var i = 0; i &lt; s.length; i++) {
+      var ch = s[i].toLowerCase();
+      var a = EN.indexOf(ch);
+      var b = RU.indexOf(ch);
+      out += a &gt; -1 ? RU[a] : b &gt; -1 ? EN[b] : ch;
+    }
+    return out;
+  }
+  function esc(s) {
+    return String(s == null ? &#x27;&#x27; : s).replace(/[&amp;&lt;&gt;&quot;]/g, function (c) {
+      return { &#x27;&amp;&#x27;: &#x27;&amp;amp;&#x27;, &#x27;&lt;&#x27;: &#x27;&amp;lt;&#x27;, &#x27;&gt;&#x27;: &#x27;&amp;gt;&#x27;, &#x27;&quot;&#x27;: &#x27;&amp;quot;&#x27; }[c];
+    });
+  }
+  function highlight(text, q) {
+    var t = String(text || &#x27;&#x27;);
+    var nt = norm(t);
+    var words = norm(q).split(&#x27; &#x27;).filter(Boolean).sort(function (a, b) { return b.length - a.length; });
+    var marks = [];
+    words.forEach(function (w) {
+      var from = 0, i;
+      while ((i = nt.indexOf(w, from)) &gt; -1) {
+        marks.push([i, i + w.length]);
+        from = i + w.length;
+      }
+    });
+    if (!marks.length) return esc(t);
+    marks.sort(function (a, b) { return a[0] - b[0]; });
+    var res = &#x27;&#x27;, pos = 0;
+    marks.forEach(function (m) {
+      if (m[0] &lt; pos) return;
+      res += esc(t.slice(pos, m[0])) + &#x27;&lt;mark&gt;&#x27; + esc(t.slice(m[0], m[1])) + &#x27;&lt;/mark&gt;&#x27;;
+      pos = m[1];
+    });
+    return res + esc(t.slice(pos));
+  }
+  function rub(n) {
+    return n == null ? &#x27;&#x27; : String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, &#x27;\u00a0&#x27;) + &#x27;\u00a0₽&#x27;;
+  }
+  function plural(n, f) {
+    var m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 &amp;&amp; m100 !== 11) return f[0];
+    if (m10 &gt;= 2 &amp;&amp; m10 &lt;= 4 &amp;&amp; (m100 &lt; 12 || m100 &gt; 14)) return f[1];
+    return f[2];
+  }
+  function readRecent() {
+    try {
+      var v = JSON.parse(localStorage.getItem(RECENT_KEY) || &#x27;[]&#x27;);
+      return Array.isArray(v) ? v.slice(0, 5) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function saveRecent(q) {
+    q = String(q || &#x27;&#x27;).trim();
+    if (q.length &lt; 2) return;
+    var list = readRecent().filter(function (x) { return norm(x) !== norm(q); });
+    list.unshift(q);
+    try {
+      localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 5)));
+    } catch (e) {}
+  }
+
+  /* Демо-режим (только макет): data-suggest-demo = id &lt;script type=&quot;application/json&quot;&gt; или URL JSON-файла.
+     На Django атрибута нет — идёт запрос к data-suggest-url. */
+  var demoCache = null;
+  function demoSearch(url, q) {
+    if (!demoCache) {
+      var inline = document.getElementById(url);
+      if (inline) demoCache = JSON.parse(inline.textContent);
+    }
+    var load = demoCache
+      ? Promise.resolve(demoCache)
+      : fetch(url).then(function (r) { return r.json(); }).then(function (d) { demoCache = d; return d; });
+    return load.then(function (d) {
+      function run(query) {
+        var words = norm(query).split(&#x27; &#x27;).filter(Boolean);
+        function score(name) {
+          var n = norm(name);
+          for (var i = 0; i &lt; words.length; i++) if (n.indexOf(words[i]) === -1) return -1;
+          if (n.indexOf(words[0]) === 0) return 0;
+          if ((&#x27; &#x27; + n).indexOf(&#x27; &#x27; + words[0]) &gt; -1) return 1;
+          return 2;
+        }
+        function pick(list, limit) {
+          var hit = [];
+          list.forEach(function (x) {
+            var s = score(x.name);
+            if (s &gt; -1) hit.push({ s: s, x: x });
+          });
+          hit.sort(function (a, b) { return a.s - b.s || a.x.name.length - b.x.name.length; });
+          return { items: hit.slice(0, limit).map(function (h) { return h.x; }), total: hit.length };
+        }
+        var p = pick(d.professions, 4);
+        var c = pick(d.courses, 6);
+        return { query: query, professions: p.items, courses: c.items, total_professions: p.total, total_courses: c.total };
+      }
+      var res = run(q);
+      if (!res.professions.length &amp;&amp; !res.courses.length) {
+        var alt = swapLayout(q);
+        if (alt !== q) {
+          var res2 = run(alt);
+          if (res2.professions.length || res2.courses.length) {
+            res2.corrected = alt;
+            return res2;
+          }
+        }
+      }
+      res.popular = d.popular;
+      return res;
+    });
+  }
+
+  for (var r = 0; r &lt; roots.length; r++) init(roots[r]);
+
+  function init(root) {
+    var input = root.querySelector(&#x27;[data-suggest-input]&#x27;);
+    var panel = root.querySelector(&#x27;[data-suggest-panel]&#x27;);
+    var clearBtn = root.querySelector(&#x27;[data-suggest-clear]&#x27;);
+    var form = input.form;
+    var endpoint = root.getAttribute(&#x27;data-suggest-url&#x27;);
+    var demo = root.getAttribute(&#x27;data-suggest-demo&#x27;);
+    var searchUrl = (form &amp;&amp; form.getAttribute(&#x27;action&#x27;)) || &#x27;/search/&#x27;;
+    var minChars = Number(root.getAttribute(&#x27;data-suggest-min&#x27;) || 2);
+    var popular = [];
+    try {
+      popular = JSON.parse(root.getAttribute(&#x27;data-suggest-popular&#x27;) || &#x27;[]&#x27;);
+    } catch (e) {}
+
+    var timer = null;
+    var controller = null;
+    var active = -1;
+    var lastQuery = null;
+    var cache = {};
+
+    function options() {
+      return panel.querySelectorAll(&#x27;[role=&quot;option&quot;]&#x27;);
+    }
+    function setActive(i) {
+      var opts = options();
+      if (!opts.length) return;
+      if (i &lt; 0) i = opts.length - 1;
+      if (i &gt;= opts.length) i = 0;
+      for (var k = 0; k &lt; opts.length; k++) opts[k].classList.toggle(&#x27;is-active&#x27;, k === i);
+      active = i;
+      input.setAttribute(&#x27;aria-activedescendant&#x27;, opts[i].id);
+      opts[i].scrollIntoView({ block: &#x27;nearest&#x27; });
+    }
+    function open() {
+      panel.hidden = false;
+      root.classList.add(&#x27;is-open&#x27;);
+      input.setAttribute(&#x27;aria-expanded&#x27;, &#x27;true&#x27;);
+    }
+    function close() {
+      panel.hidden = true;
+      root.classList.remove(&#x27;is-open&#x27;);
+      input.setAttribute(&#x27;aria-expanded&#x27;, &#x27;false&#x27;);
+      input.removeAttribute(&#x27;aria-activedescendant&#x27;);
+      active = -1;
+    }
+    function allUrl(q) {
+      return searchUrl + &#x27;?q=&#x27; + encodeURIComponent(q);
+    }
+    var uid = 0;
+    function optId() {
+      uid += 1;
+      return input.id + &#x27;-opt-&#x27; + uid;
+    }
+
+    function chip(text, kind) {
+      return &#x27;&lt;li&gt;&lt;a href=&quot;&#x27; + esc(allUrl(text)) + &#x27;&quot; class=&quot;suggest__chip&quot; role=&quot;option&quot; id=&quot;&#x27; + optId() + &#x27;&quot; data-fill=&quot;&#x27; + esc(text) + &#x27;&quot;&gt;&#x27; +
+        (kind === &#x27;recent&#x27;
+          ? &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M3 12a9 9 0 1 0 3-6.7L3 8&quot;/&gt;&lt;path d=&quot;M3 3v5h5&quot;/&gt;&lt;path d=&quot;M12 7v5l3 2&quot;/&gt;&lt;/svg&gt;&#x27;
+          : &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m22 7-8.5 8.5-5-5L2 17&quot;/&gt;&lt;path d=&quot;M16 7h6v6&quot;/&gt;&lt;/svg&gt;&#x27;) +
+        esc(text) + &#x27;&lt;/a&gt;&lt;/li&gt;&#x27;;
+    }
+
+    function renderStart() {
+      var recent = readRecent();
+      var html = &#x27;&#x27;;
+      if (recent.length) {
+        html += &#x27;&lt;div class=&quot;suggest__group&quot;&gt;&lt;div class=&quot;suggest__head&quot;&gt;&lt;span&gt;Вы искали&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;suggest__link&quot; data-suggest-forget&gt;Очистить&lt;/button&gt;&lt;/div&gt;&lt;ul class=&quot;suggest__chips&quot;&gt;&#x27; +
+          recent.map(function (x) { return chip(x, &#x27;recent&#x27;); }).join(&#x27;&#x27;) + &#x27;&lt;/ul&gt;&lt;/div&gt;&#x27;;
+      }
+      if (popular.length) {
+        html += &#x27;&lt;div class=&quot;suggest__group&quot;&gt;&lt;div class=&quot;suggest__head&quot;&gt;&lt;span&gt;Часто ищут&lt;/span&gt;&lt;/div&gt;&lt;ul class=&quot;suggest__chips&quot;&gt;&#x27; +
+          popular.map(function (x) { return chip(x, &#x27;popular&#x27;); }).join(&#x27;&#x27;) + &#x27;&lt;/ul&gt;&lt;/div&gt;&#x27;;
+      }
+      if (!html) return close();
+      panel.innerHTML = html;
+      active = -1;
+      open();
+    }
+
+    function renderLoading() {
+      if (panel.hidden || !panel.querySelector(&#x27;.suggest__group--results&#x27;)) {
+        panel.innerHTML = &#x27;&lt;div class=&quot;suggest__state&quot;&gt;&lt;span class=&quot;suggest__spinner&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Ищем…&lt;/div&gt;&#x27;;
+        open();
+      }
+      root.classList.add(&#x27;is-loading&#x27;);
+    }
+
+    function renderResults(q, data) {
+      root.classList.remove(&#x27;is-loading&#x27;);
+      var shownQ = data.corrected || q;
+      var html = &#x27;&#x27;;
+      if (data.corrected) {
+        html += &#x27;&lt;p class=&quot;suggest__fix&quot;&gt;Показаны результаты по запросу «&lt;strong&gt;&#x27; + esc(data.corrected) + &#x27;&lt;/strong&gt;»&lt;/p&gt;&#x27;;
+      }
+      if (data.professions &amp;&amp; data.professions.length) {
+        html += &#x27;&lt;div class=&quot;suggest__group suggest__group--results&quot;&gt;&lt;div class=&quot;suggest__head&quot;&gt;&lt;span&gt;Профессии&lt;/span&gt;&#x27; +
+          (data.total_professions &gt; data.professions.length ? &#x27;&lt;span class=&quot;suggest__total&quot;&gt;&#x27; + data.total_professions + &#x27;&lt;/span&gt;&#x27; : &#x27;&#x27;) +
+          &#x27;&lt;/div&gt;&lt;ul class=&quot;suggest__list&quot;&gt;&#x27;;
+        data.professions.forEach(function (p) {
+          html += &#x27;&lt;li&gt;&lt;a href=&quot;&#x27; + esc(p.url) + &#x27;&quot; class=&quot;suggest__item&quot; role=&quot;option&quot; id=&quot;&#x27; + optId() + &#x27;&quot;&gt;&#x27; +
+            (p.image ? &#x27;&lt;img src=&quot;&#x27; + esc(p.image) + &#x27;&quot; alt=&quot;&quot; class=&quot;suggest__thumb suggest__thumb--round&quot; width=&quot;40&quot; height=&quot;40&quot; loading=&quot;lazy&quot;&gt;&#x27; : &#x27;&lt;span class=&quot;suggest__thumb suggest__thumb--round suggest__thumb--empty&quot; aria-hidden=&quot;true&quot;&gt;&#x27; + esc(p.name.charAt(0)) + &#x27;&lt;/span&gt;&#x27;) +
+            &#x27;&lt;span class=&quot;suggest__text&quot;&gt;&lt;span class=&quot;suggest__name&quot;&gt;&#x27; + highlight(p.name, shownQ) + &#x27;&lt;/span&gt;&#x27; +
+            &#x27;&lt;span class=&quot;suggest__meta&quot;&gt;&#x27; + p.courses_count + &#x27; &#x27; + plural(p.courses_count, [&#x27;курс&#x27;, &#x27;курса&#x27;, &#x27;курсов&#x27;]) + (p.min_price_month ? &#x27; · от &#x27; + rub(p.min_price_month) + &#x27;/мес&#x27; : &#x27;&#x27;) + &#x27;&lt;/span&gt;&lt;/span&gt;&#x27; +
+            &#x27;&lt;span class=&quot;suggest__tag&quot;&gt;Профессия&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;&#x27;;
+        });
+        html += &#x27;&lt;/ul&gt;&lt;/div&gt;&#x27;;
+      }
+      if (data.courses &amp;&amp; data.courses.length) {
+        html += &#x27;&lt;div class=&quot;suggest__group suggest__group--results&quot;&gt;&lt;div class=&quot;suggest__head&quot;&gt;&lt;span&gt;Курсы&lt;/span&gt;&#x27; +
+          (data.total_courses &gt; data.courses.length ? &#x27;&lt;span class=&quot;suggest__total&quot;&gt;&#x27; + data.total_courses + &#x27;&lt;/span&gt;&#x27; : &#x27;&#x27;) +
+          &#x27;&lt;/div&gt;&lt;ul class=&quot;suggest__list&quot;&gt;&#x27;;
+        data.courses.forEach(function (c) {
+          html += &#x27;&lt;li&gt;&lt;a href=&quot;&#x27; + esc(c.url) + &#x27;&quot; class=&quot;suggest__item&quot; role=&quot;option&quot; id=&quot;&#x27; + optId() + &#x27;&quot;&gt;&#x27; +
+            (c.school_logo ? &#x27;&lt;img src=&quot;&#x27; + esc(c.school_logo) + &#x27;&quot; alt=&quot;&quot; class=&quot;suggest__thumb&quot; width=&quot;40&quot; height=&quot;40&quot; loading=&quot;lazy&quot;&gt;&#x27; : &#x27;&lt;span class=&quot;suggest__thumb suggest__thumb--empty&quot; aria-hidden=&quot;true&quot;&gt;&#x27; + esc((c.school || &#x27;?&#x27;).charAt(0)) + &#x27;&lt;/span&gt;&#x27;) +
+            &#x27;&lt;span class=&quot;suggest__text&quot;&gt;&lt;span class=&quot;suggest__name&quot;&gt;&#x27; + highlight(c.name, shownQ) + &#x27;&lt;/span&gt;&#x27; +
+            &#x27;&lt;span class=&quot;suggest__meta&quot;&gt;&#x27; + esc(c.school) + (c.duration ? &#x27; · &#x27; + esc(c.duration) : &#x27;&#x27;) + &#x27;&lt;/span&gt;&lt;/span&gt;&#x27; +
+            &#x27;&lt;span class=&quot;suggest__price&quot;&gt;&#x27; + (c.price_month ? rub(c.price_month) + &#x27;&lt;small&gt;/мес&lt;/small&gt;&#x27; : rub(c.price)) + &#x27;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;&#x27;;
+        });
+        html += &#x27;&lt;/ul&gt;&lt;/div&gt;&#x27;;
+      }
+      if (!html || (!data.professions.length &amp;&amp; !data.courses.length)) {
+        html = &#x27;&lt;div class=&quot;suggest__empty&quot;&gt;&lt;p class=&quot;suggest__empty-title&quot;&gt;По запросу «&#x27; + esc(q) + &#x27;» ничего не нашли&lt;/p&gt;&lt;p&gt;Проверьте написание или попробуйте другое слово.&lt;/p&gt;&#x27; +
+          ((data.popular || popular).length ? &#x27;&lt;ul class=&quot;suggest__chips&quot;&gt;&#x27; + (data.popular || popular).map(function (x) { return chip(x, &#x27;popular&#x27;); }).join(&#x27;&#x27;) + &#x27;&lt;/ul&gt;&#x27; : &#x27;&#x27;) + &#x27;&lt;/div&gt;&#x27;;
+      } else {
+        var total = (data.total_professions || 0) + (data.total_courses || 0);
+        html += &#x27;&lt;a href=&quot;&#x27; + esc(allUrl(shownQ)) + &#x27;&quot; class=&quot;suggest__all&quot; role=&quot;option&quot; id=&quot;&#x27; + optId() + &#x27;&quot;&gt;Все результаты по запросу «&#x27; + esc(shownQ) + &#x27;»&#x27; + (total ? &#x27; &lt;span&gt;&#x27; + total + &#x27;&lt;/span&gt;&#x27; : &#x27;&#x27;) +
+          &#x27;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;m12 5 7 7-7 7&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;&#x27;;
+      }
+      panel.innerHTML = html;
+      active = -1;
+      input.removeAttribute(&#x27;aria-activedescendant&#x27;);
+      open();
+      var live = root.querySelector(&#x27;[data-suggest-live]&#x27;);
+      if (live) {
+        var n = (data.professions || []).length + (data.courses || []).length;
+        live.textContent = n ? &#x27;Найдено подсказок: &#x27; + n : &#x27;Ничего не найдено&#x27;;
+      }
+    }
+
+    function fetchData(q) {
+      var key = norm(q);
+      if (cache[key]) return Promise.resolve(cache[key]);
+      var p;
+      if (demo) {
+        p = demoSearch(demo, q);
+      } else {
+        if (controller) controller.abort();
+        controller = &#x27;AbortController&#x27; in window ? new AbortController() : null;
+        p = fetch(endpoint + (endpoint.indexOf(&#x27;?&#x27;) &gt; -1 ? &#x27;&amp;&#x27; : &#x27;?&#x27;) + &#x27;q=&#x27; + encodeURIComponent(q), {
+          headers: { Accept: &#x27;application/json&#x27;, &#x27;X-Requested-With&#x27;: &#x27;XMLHttpRequest&#x27; },
+          signal: controller ? controller.signal : undefined
+        }).then(function (r) {
+          if (!r.ok) throw new Error(&#x27;HTTP &#x27; + r.status);
+          return r.json();
+        });
+      }
+      return p.then(function (d) {
+        cache[key] = d;
+        return d;
+      });
+    }
+
+    function onInput() {
+      var q = input.value.trim();
+      root.classList.toggle(&#x27;has-value&#x27;, input.value.length &gt; 0);
+      clearTimeout(timer);
+      if (q.length &lt; minChars) {
+        lastQuery = null;
+        root.classList.remove(&#x27;is-loading&#x27;);
+        if (q.length === 0) renderStart();
+        else {
+          panel.innerHTML = &#x27;&lt;div class=&quot;suggest__state&quot;&gt;Введите ещё &#x27; + (minChars - q.length) + &#x27; &#x27; + plural(minChars - q.length, [&#x27;букву&#x27;, &#x27;буквы&#x27;, &#x27;букв&#x27;]) + &#x27;&lt;/div&gt;&#x27;;
+          open();
+        }
+        return;
+      }
+      if (norm(q) === lastQuery) return;
+      renderLoading();
+      timer = setTimeout(function () {
+        lastQuery = norm(q);
+        fetchData(q).then(function (d) {
+          if (norm(input.value.trim()) !== norm(q)) return;
+          renderResults(q, d);
+        }).catch(function (err) {
+          if (err &amp;&amp; err.name === &#x27;AbortError&#x27;) return;
+          root.classList.remove(&#x27;is-loading&#x27;);
+          panel.innerHTML = &#x27;&lt;div class=&quot;suggest__state&quot;&gt;Не удалось загрузить подсказки. Нажмите «Найти», чтобы увидеть все результаты.&lt;/div&gt;&#x27;;
+          open();
+        });
+      }, demo ? 120 : 220);
+    }
+
+    input.addEventListener(&#x27;input&#x27;, onInput);
+    input.addEventListener(&#x27;focus&#x27;, function () {
+      if (!input.value.trim()) renderStart();
+      else if (panel.innerHTML) open();
+    });
+    input.addEventListener(&#x27;keydown&#x27;, function (e) {
+      if (e.key === &#x27;ArrowDown&#x27;) {
+        e.preventDefault();
+        if (panel.hidden) onInput();
+        setActive(active + 1);
+      } else if (e.key === &#x27;ArrowUp&#x27;) {
+        e.preventDefault();
+        setActive(active - 1);
+      } else if (e.key === &#x27;Escape&#x27;) {
+        if (!panel.hidden) {
+          e.preventDefault();
+          close();
+        } else if (input.value) {
+          input.value = &#x27;&#x27;;
+          onInput();
+        }
+      } else if (e.key === &#x27;Enter&#x27; &amp;&amp; active &gt; -1) {
+        var opt = options()[active];
+        if (opt) {
+          e.preventDefault();
+          saveRecent(opt.getAttribute(&#x27;data-fill&#x27;) || input.value);
+          window.location.href = opt.getAttribute(&#x27;href&#x27;);
+        }
+      }
+    });
+
+    panel.addEventListener(&#x27;mousedown&#x27;, function (e) {
+      if (e.target.closest(&#x27;a, button&#x27;)) e.preventDefault();
+    });
+    panel.addEventListener(&#x27;click&#x27;, function (e) {
+      if (e.target.closest(&#x27;[data-suggest-forget]&#x27;)) {
+        try {
+          localStorage.removeItem(RECENT_KEY);
+        } catch (err) {}
+        renderStart();
+        input.focus();
+        return;
+      }
+      var a = e.target.closest(&#x27;a&#x27;);
+      if (a) saveRecent(a.getAttribute(&#x27;data-fill&#x27;) || input.value);
+    });
+    panel.addEventListener(&#x27;mousemove&#x27;, function (e) {
+      var opt = e.target.closest(&#x27;[role=&quot;option&quot;]&#x27;);
+      if (!opt) return;
+      var opts = options();
+      for (var i = 0; i &lt; opts.length; i++) if (opts[i] === opt &amp;&amp; i !== active) setActive(i);
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener(&#x27;click&#x27;, function () {
+        input.value = &#x27;&#x27;;
+        input.focus();
+        onInput();
+      });
+    }
+    if (form) {
+      form.addEventListener(&#x27;submit&#x27;, function (e) {
+        var q = input.value.trim();
+        if (!q) {
+          e.preventDefault();
+          input.focus();
+          return;
+        }
+        saveRecent(q);
+      });
+    }
+    document.addEventListener(&#x27;click&#x27;, function (e) {
+      if (!root.contains(e.target)) close();
+    });
+    document.addEventListener(&#x27;keydown&#x27;, function (e) {
+      if (e.key === &#x27;/&#x27; &amp;&amp; document.activeElement &amp;&amp; !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) &amp;&amp; !document.activeElement.isContentEditable) {
+        e.preventDefault();
+        input.focus();
+      }
+    });
+
+    root.classList.toggle(&#x27;has-value&#x27;, input.value.length &gt; 0);
+  }
+})();</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/edukursy/css/search.css</code><span>Стили</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>search.css</span><button type="button" class="copy-btn" data-target="sf13">Копировать</button></div>
+            <pre class="prompt__code" id="sf13">/*
+  edukursy — строка поиска под меню и подсказки при вводе.
+  Если на сайте подключён полный style.css из основного пакета — замените в нём блок
+  «СТРОКА ПОИСКА ПОД МЕНЮ» на этот файл (без :root) или подключите этот файл после style.css.
+  Нужен класс .visually-hidden (есть в style.css).
+*/
+:root {
+  --c-text: #1a1d23;
+  --c-muted: #5b6270;
+  --c-bg: #ffffff;
+  --c-bg-light: #f4f6f9;
+  --c-border: #dde1e8;
+  --c-primary: #1f5eff;
+  --c-primary-dark: #1546c4;
+  --gutter: 16px;
+}
+
+/* ============================================================
+   СТРОКА ПОИСКА ПОД МЕНЮ + ПОДСКАЗКИ (search.js)
+   ============================================================ */
+.site-search {
+  position: relative;
+  z-index: 95;
+  padding: 12px var(--gutter);
+  background: var(--c-bg);
+  border-bottom: 1px solid var(--c-border);
+}
+.site-search__form {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+}
+.site-search__field {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  padding-left: 16px;
+  border: 1.5px solid var(--c-border);
+  border-radius: 12px;
+  background: var(--c-bg-light);
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.site-search__field:hover {
+  border-color: #c3cad6;
+}
+.site-search__field:focus-within,
+.site-search.is-open .site-search__field {
+  border-color: var(--c-primary);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(31, 94, 255, 0.12);
+}
+.site-search svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.site-search__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--c-muted);
+}
+.site-search.is-loading .site-search__icon {
+  color: var(--c-primary);
+  animation: suggest-pulse 0.9s ease-in-out infinite;
+}
+@keyframes suggest-pulse {
+  50% { opacity: 0.35; }
+}
+.site-search__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 12px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 17px;
+  color: var(--c-text);
+}
+.site-search__input::placeholder {
+  color: #8a919e;
+}
+.site-search__input::-webkit-search-cancel-button {
+  display: none;
+}
+.site-search__clear {
+  display: none;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  margin-right: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--c-muted);
+  cursor: pointer;
+}
+.site-search__clear:hover {
+  background: var(--c-bg-light);
+  color: var(--c-text);
+}
+.site-search__clear svg {
+  width: 18px;
+  height: 18px;
+}
+.site-search.has-value .site-search__clear {
+  display: grid;
+}
+.site-search__kbd {
+  display: none;
+  flex: none;
+  margin-right: 10px;
+  padding: 2px 8px;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  color: var(--c-muted);
+}
+@media (hover: hover) and (min-width: 768px) {
+  .site-search:not(.has-value):not(.is-open) .site-search__kbd {
+    display: block;
+  }
+}
+.site-search__btn {
+  flex: none;
+  align-self: stretch;
+  margin: 5px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--c-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.site-search__btn:hover {
+  background: var(--c-primary-dark);
+}
+
+/* ----- Выпадающий список ----- */
+.suggest {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 110;
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid var(--c-border);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(20, 23, 28, 0.16);
+  overscroll-behavior: contain;
+}
+.suggest[hidden] {
+  display: none;
+}
+.suggest__group + .suggest__group {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--c-border);
+}
+.suggest__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-muted);
+}
+.suggest__total {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--c-bg-light);
+  font-size: 12px;
+  letter-spacing: 0;
+}
+.suggest__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--c-muted);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.suggest__link:hover {
+  color: var(--c-text);
+}
+.suggest__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: var(--c-text);
+  text-decoration: none;
+}
+.suggest__item.is-active,
+.suggest__all.is-active,
+.suggest__chip.is-active {
+  background: #eef3ff;
+}
+.suggest__thumb {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: var(--c-bg-light);
+}
+.suggest__thumb--round {
+  border-radius: 50%;
+}
+.suggest__thumb--empty {
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: var(--c-muted);
+}
+.suggest__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.suggest__name {
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.suggest__name mark {
+  padding: 0;
+  background: none;
+  color: var(--c-primary);
+  font-weight: 800;
+}
+.suggest__meta {
+  overflow: hidden;
+  font-size: 13px;
+  color: var(--c-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.suggest__tag {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #e2f5ec;
+  color: #1f8a5b;
+  font-size: 12px;
+  font-weight: 700;
+}
+.suggest__price {
+  flex: none;
+  font-size: 15px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.suggest__price small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--c-muted);
+}
+.suggest__all {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 12px 10px;
+  border-top: 1px solid var(--c-border);
+  border-radius: 0 0 8px 8px;
+  color: var(--c-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+.suggest__all span {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #eef3ff;
+  font-size: 13px;
+}
+.suggest__all svg {
+  width: 18px;
+  height: 18px;
+  margin-left: auto;
+}
+.suggest__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 8px 8px;
+}
+.suggest__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  color: var(--c-text);
+  font-size: 14px;
+  text-decoration: none;
+}
+.suggest__chip:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.suggest__chip svg {
+  width: 14px;
+  height: 14px;
+  color: var(--c-muted);
+}
+.suggest__state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 10px;
+  color: var(--c-muted);
+}
+.suggest__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--c-border);
+  border-top-color: var(--c-primary);
+  border-radius: 50%;
+  animation: suggest-spin 0.7s linear infinite;
+}
+@keyframes suggest-spin {
+  to { transform: rotate(360deg); }
+}
+.suggest__fix {
+  padding: 8px 10px 0;
+  font-size: 14px;
+  color: var(--c-muted);
+}
+.suggest__empty {
+  padding: 16px 10px 8px;
+}
+.suggest__empty p {
+  color: var(--c-muted);
+}
+.suggest__empty .suggest__empty-title {
+  margin-bottom: 4px;
+  font-weight: 700;
+  color: var(--c-text);
+}
+.suggest__empty .suggest__chips {
+  padding: 12px 0 0;
+}
+
+@media (max-width: 767.98px) {
+  .site-search {
+    padding: 8px var(--gutter);
+  }
+  .site-search__field {
+    height: 46px;
+    padding-left: 12px;
+  }
+  .site-search__input {
+    font-size: 16px;
+    padding: 0 8px;
+  }
+  .site-search__btn {
+    padding: 0 14px;
+  }
+  .suggest {
+    top: calc(100% + 8px);
+    left: calc(-1 * var(--gutter));
+    right: calc(-1 * var(--gutter));
+    max-height: calc(100vh - 140px);
+    border-radius: 0 0 14px 14px;
+    border-left: 0;
+    border-right: 0;
+  }
+  .suggest__tag {
+    display: none;
+  }
+  .suggest__price {
+    font-size: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .suggest__spinner,
+  .site-search.is-loading .site-search__icon {
+    animation: none;
+  }
+}
+
+/* ----- Страница результатов /search/ ----- */
+.search-profs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+}
+.search-prof {
+  border: 1px solid var(--c-border);
+  background: #fff;
+}
+.search-prof:hover {
+  border-color: var(--c-primary);
+}
+.search-popular {
+  padding: 12px 0 20px;
+}
+.search-empty .search-popular {
+  justify-content: center;
 }</pre>
           </div>
         </details>

@@ -34,6 +34,27 @@
     </div>
   </header>
 
+  <!-- ============ СТРОКА ПОИСКА ПОД МЕНЮ ============ -->
+  <!-- SEARCH: поиск по названию курса и профессии с подсказками.
+       data-suggest-url — JSON-эндпоинт подсказок (Django: {% url 'search_suggest' %}).
+       data-suggest-demo — ТОЛЬКО для макета: ищет по встроенному <script id="search-demo"> в браузере. На сайте этот атрибут удалить.
+       data-suggest-popular — «Часто ищут», показывается при пустом поле (из настроек или из БД). -->
+  <div class="site-search" data-suggest data-suggest-url="/search/suggest/" data-suggest-demo="search-demo" data-suggest-min="2" data-suggest-popular='["Python","Дизайнер","Аналитик данных","Figma","Маркетолог","SQL"]'>
+    <form class="site-search__form" action="/search/" method="get" role="search" autocomplete="off">
+      <label for="site-search-input" class="visually-hidden">Поиск курса или профессии</label>
+      <div class="site-search__field">
+        <svg class="site-search__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="site-search-input" name="q" class="site-search__input" placeholder="Найти курс или профессию, например «Python»" data-suggest-input
+               role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="site-search-panel" maxlength="100" enterkeyhint="search">
+        <button type="button" class="site-search__clear" data-suggest-clear aria-label="Очистить поиск"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+        <kbd class="site-search__kbd" aria-hidden="true">/</kbd>
+        <button type="submit" class="site-search__btn">Найти</button>
+      </div>
+      <div class="suggest" id="site-search-panel" role="listbox" aria-label="Подсказки поиска" data-suggest-panel hidden></div>
+      <p class="visually-hidden" aria-live="polite" data-suggest-live></p>
+    </form>
+  </div>
+
   <main>
 
     <!-- ============ 2. ПЕРВЫЙ ЭКРАН ============ -->
@@ -612,5 +633,413 @@
   </footer>
 
   <script src="script.js"></script>
+  <!-- SEARCH: демо-данные ТОЛЬКО для макета. На сайте удалить — подсказки идут из /search/suggest/ -->
+  <script type="application/json" id="search-demo">{
+ "demo": true,
+ "professions": [
+  {
+   "name": "Программист",
+   "url": "/professions/programmist/",
+   "image": "img/prof-dev.jpg",
+   "courses_count": 212,
+   "min_price_month": 2900
+  },
+  {
+   "name": "Дизайнер",
+   "url": "/professions/dizajner/",
+   "image": "img/prof-design.jpg",
+   "courses_count": 164,
+   "min_price_month": 2500
+  },
+  {
+   "name": "Маркетолог",
+   "url": "/professions/marketolog/",
+   "image": "img/prof-marketing.jpg",
+   "courses_count": 138,
+   "min_price_month": 1900
+  },
+  {
+   "name": "Аналитик данных",
+   "url": "/professions/analitik-dannyh/",
+   "image": "img/prof-analyst.jpg",
+   "courses_count": 97,
+   "min_price_month": 3400
+  },
+  {
+   "name": "Менеджер проектов",
+   "url": "/professions/menedzher-proektov/",
+   "image": "img/prof-pm.jpg",
+   "courses_count": 74,
+   "min_price_month": 2700
+  },
+  {
+   "name": "Тестировщик",
+   "url": "/professions/testirovshchik/",
+   "image": "img/prof-qa.jpg",
+   "courses_count": 58,
+   "min_price_month": 2200
+  },
+  {
+   "name": "Backend-разработчик",
+   "url": "/professions/backend-razrabotchik/",
+   "image": "img/prof-dev.jpg",
+   "courses_count": 64,
+   "min_price_month": 3100
+  },
+  {
+   "name": "Python-разработчик",
+   "url": "/professions/python-razrabotchik/",
+   "image": "img/prof-dev.jpg",
+   "courses_count": 41,
+   "min_price_month": 2900
+  },
+  {
+   "name": "Графический дизайнер",
+   "url": "/professions/graficheskij-dizajner/",
+   "image": "img/prof-design.jpg",
+   "courses_count": 37,
+   "min_price_month": 2300
+  },
+  {
+   "name": "3D-дизайнер",
+   "url": "/professions/3d-dizajner/",
+   "image": "img/prof-design.jpg",
+   "courses_count": 22,
+   "min_price_month": 2800
+  },
+  {
+   "name": "Фотограф",
+   "url": "/professions/fotograf/",
+   "image": "img/prof-design.jpg",
+   "courses_count": 14,
+   "min_price_month": 1700
+  },
+  {
+   "name": "Продакт-менеджер",
+   "url": "/professions/prodakt-menedzher/",
+   "image": "img/prof-pm.jpg",
+   "courses_count": 29,
+   "min_price_month": 3600
+  }
+ ],
+ "courses": [
+  {
+   "name": "Python-разработчик с нуля",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/python-razrabotchik/",
+   "price": 98000,
+   "price_month": 4900,
+   "duration": "8 месяцев"
+  },
+  {
+   "name": "Python для бэкенда",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/python-backend/",
+   "price": 38000,
+   "price_month": null,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Python-разработчик PRO",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/python-razrabotchik-pro/",
+   "price": 112000,
+   "price_month": 5600,
+   "duration": "10 месяцев"
+  },
+  {
+   "name": "Бэкенд на Python: Django и базы данных",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/backend-na-python/",
+   "price": 64000,
+   "price_month": 3800,
+   "duration": "6 месяцев"
+  },
+  {
+   "name": "Python для анализа данных",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/python-dlya-analiza-dannyh/",
+   "price": 54000,
+   "price_month": 3200,
+   "duration": "5 месяцев"
+  },
+  {
+   "name": "Фронтенд-разработчик: HTML, CSS и JavaScript",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/frontend-razrabotchik/",
+   "price": 39900,
+   "price_month": 2900,
+   "duration": "5 месяцев"
+  },
+  {
+   "name": "Java: основы программирования",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/java-osnovy/",
+   "price": 29500,
+   "price_month": null,
+   "duration": "3 месяца"
+  },
+  {
+   "name": "Java-разработчик с нуля",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/java-razrabotchik/",
+   "price": 87000,
+   "price_month": 4400,
+   "duration": "9 месяцев"
+  },
+  {
+   "name": "SQL для начинающих",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/sql-dlya-nachinayushchih/",
+   "price": 14900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Go-разработчик",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/golang-razrabotchik/",
+   "price": 49000,
+   "price_month": 4100,
+   "duration": "6 месяцев"
+  },
+  {
+   "name": "Git и командная разработка",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/git-i-komandnaya-razrabotka/",
+   "price": 9900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Алгоритмы и структуры данных",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/algoritmy-i-struktury-dannyh/",
+   "price": 34000,
+   "price_month": null,
+   "duration": "3 месяца"
+  },
+  {
+   "name": "JavaScript: продвинутый уровень",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/javascript-prodvinutyj/",
+   "price": 42000,
+   "price_month": 3100,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Capture One",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/capture-one/",
+   "price": 26939,
+   "price_month": 4490,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Adobe Lightroom",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/adobe-lightroom/",
+   "price": 32732,
+   "price_month": null,
+   "duration": "2 месяца"
+  },
+  {
+   "name": "Cinema 4D с нуля",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/cinema-4d/",
+   "price": 33228,
+   "price_month": null,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Adobe Illustrator для fashion-дизайнера",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/illustrator-fashion/",
+   "price": 34368,
+   "price_month": null,
+   "duration": "3 месяца"
+  },
+  {
+   "name": "Adobe Illustrator с нуля",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/adobe-illustrator/",
+   "price": 29900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Adobe Photoshop с нуля",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/adobe-photoshop/",
+   "price": 24900,
+   "price_month": 2100,
+   "duration": "2 месяца"
+  },
+  {
+   "name": "3D-визуализатор: портфолио и карьера",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/3d-vizualizator/",
+   "price": 71000,
+   "price_month": 3900,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "AutoCAD с нуля до PRO",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/autocad-skillbox/",
+   "price": 39000,
+   "price_month": null,
+   "duration": "2 месяца"
+  },
+  {
+   "name": "AutoCAD с нуля до PRO",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/autocad/",
+   "price": 36000,
+   "price_month": null,
+   "duration": "2 месяца"
+  },
+  {
+   "name": "Графический дизайнер с нуля",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/graficheskij-dizajner/",
+   "price": 89000,
+   "price_month": 3700,
+   "duration": "12 месяцев"
+  },
+  {
+   "name": "UX/UI-дизайнер",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/ux-ui-dizajner/",
+   "price": 96000,
+   "price_month": 4200,
+   "duration": "9 месяцев"
+  },
+  {
+   "name": "Figma для начинающих",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/figma/",
+   "price": 12900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Интернет-маркетолог",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/internet-marketolog/",
+   "price": 78000,
+   "price_month": 3300,
+   "duration": "8 месяцев"
+  },
+  {
+   "name": "SMM-менеджер",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/smm-menedzher/",
+   "price": 45000,
+   "price_month": 2500,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Таргетолог",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/targetolog/",
+   "price": 39000,
+   "price_month": 2200,
+   "duration": "3 месяца"
+  },
+  {
+   "name": "Аналитик данных с нуля",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/analitik-dannyh/",
+   "price": 104000,
+   "price_month": 4600,
+   "duration": "10 месяцев"
+  },
+  {
+   "name": "Excel и Google Таблицы",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/excel/",
+   "price": 9900,
+   "price_month": null,
+   "duration": "1 месяц"
+  },
+  {
+   "name": "Тестировщик ПО",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/testirovshchik/",
+   "price": 59000,
+   "price_month": 2900,
+   "duration": "6 месяцев"
+  },
+  {
+   "name": "Автотесты на Python",
+   "school": "Школа 1",
+   "school_logo": "img/school-1.jpg",
+   "url": "/courses/school-1/avtotesty-python/",
+   "price": 48000,
+   "price_month": 2700,
+   "duration": "4 месяца"
+  },
+  {
+   "name": "Менеджер проектов в IT",
+   "school": "Школа 2",
+   "school_logo": "img/school-2.jpg",
+   "url": "/courses/school-2/menedzher-proektov/",
+   "price": 72000,
+   "price_month": 3500,
+   "duration": "6 месяцев"
+  },
+  {
+   "name": "Продакт-менеджер",
+   "school": "Школа 3",
+   "school_logo": "img/school-3.jpg",
+   "url": "/courses/school-3/prodakt-menedzher/",
+   "price": 94000,
+   "price_month": 4300,
+   "duration": "8 месяцев"
+  }
+ ],
+ "popular": [
+  "Python",
+  "Дизайнер",
+  "Аналитик данных",
+  "Figma",
+  "Маркетолог",
+  "SQL"
+ ]
+}</script>
+  <!-- SEARCH: подсказки поиска -->
+  <script src="search.js"></script>
 </body>
 </html>

@@ -1,0 +1,21 @@
+{% comment %}
+Строка поиска под меню. В base.html сразу после </header>:
+  {% include "edukursy/partials/search_bar.html" %}
+Подсказки: GET {% url 'search_suggest' %}?q=... (JSON). Кнопка «Найти» — страница {% url 'search' %}.
+Список «Часто ищут» — settings.SEARCH_POPULAR через context processor search_popular (или уберите атрибут).
+{% endcomment %}
+<div class="site-search" data-suggest data-suggest-url="{% url 'search_suggest' %}" data-suggest-min="2"{% if search_popular %} data-suggest-popular='{{ search_popular_json }}'{% endif %}>
+  <form class="site-search__form" action="{% url 'search' %}" method="get" role="search" autocomplete="off">
+    <label for="site-search-input" class="visually-hidden">Поиск курса или профессии</label>
+    <div class="site-search__field">
+      <svg class="site-search__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" id="site-search-input" name="q" value="{{ request.GET.q|default:'' }}" class="site-search__input" placeholder="Найти курс или профессию, например «Python»" data-suggest-input
+             role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="site-search-panel" maxlength="100" enterkeyhint="search">
+      <button type="button" class="site-search__clear" data-suggest-clear aria-label="Очистить поиск"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      <kbd class="site-search__kbd" aria-hidden="true">/</kbd>
+      <button type="submit" class="site-search__btn">Найти</button>
+    </div>
+    <div class="suggest" id="site-search-panel" role="listbox" aria-label="Подсказки поиска" data-suggest-panel hidden></div>
+    <p class="visually-hidden" aria-live="polite" data-suggest-live></p>
+  </form>
+</div>
