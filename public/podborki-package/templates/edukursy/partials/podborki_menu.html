@@ -1,0 +1,46 @@
+{% comment %}
+Пункт меню «Подборки курсов». В base.html внутри <nav class="main-nav"><ul> после пункта «Курсы»:
+  {% load podborki_tags %}{% podborki_menu %}
+Разметка 1:1 с mockups/index.html. Уровни: tree → children → children (максимум 3).
+Пустые (0 курсов) и с show_in_menu=False — не выводятся (menu_tree()).
+{% endcomment %}
+{% load podborki_tags %}
+{% if tree %}
+<li class="nav-drop{% if current %} is-active{% endif %}" data-nav-drop>
+  <a href="{% url 'podborki' %}" class="nav-drop__btn" aria-haspopup="true" aria-expanded="false" data-nav-drop-btn>Подборки курсов<svg class="nav-drop__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
+  <div class="nav-drop__menu" data-nav-drop-menu>
+    <ul class="tnav" role="list">
+      {% for n in tree %}
+      <li class="tnav__item1{% if n.children %} has-children{% endif %}{% if current == n.full_path or current|startswith:n.full_path|add:'/' %} is-current{% endif %}" data-tnav-item>
+        <a href="{{ n.url }}" class="tnav__link1"{% if current == n.full_path %} aria-current="page"{% endif %}>
+          {% if n.icon %}{% include "edukursy/partials/podborki_icon.html" with name=n.icon cls="tnav__icon" %}{% endif %}
+          <span class="tnav__label">{{ n.menu_name }}</span>
+          {% if n.children %}<svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>{% else %}<span class="tnav__cnt">{{ n.count }}</span>{% endif %}
+        </a>
+        {% if n.children %}
+        <button type="button" class="tnav__toggle" aria-expanded="false" aria-controls="tnav-p{{ n.id }}" aria-label="Показать: {{ n.menu_name }}"><svg class="tnav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="tnav__panel" id="tnav-p{{ n.id }}">
+          <a href="{{ n.url }}" class="tnav__all">Все: {{ n.name|lower }} <span>{{ n.count }}</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+          <ul class="tnav__l2">
+            {% for c in n.children %}
+            <li class="tnav__item2{% if c.children %} has-children{% endif %}">
+              <a href="{{ c.url }}" class="tnav__link2"{% if current == c.full_path %} aria-current="page"{% endif %}>{{ c.menu_name }}<span class="tnav__cnt">{{ c.count }}</span></a>
+              {% if c.children %}
+              <ul class="tnav__l3">
+                {% for g in c.children %}
+                <li><a href="{{ g.url }}" class="tnav__link3"{% if current == g.full_path %} aria-current="page"{% endif %}>{{ g.menu_name }}<span class="tnav__cnt">{{ g.count }}</span></a></li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <a href="{% url 'podborki' %}" class="nav-drop__footer">Все подборки курсов<svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+  </div>
+</li>
+{% endif %}

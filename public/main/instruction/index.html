@@ -25,6 +25,16 @@
         <ul>
           <li><a href="/professions/">Профессии</a></li>
           <li><a href="/courses/">Курсы</a></li>
+          <li class="nav-drop" data-nav-drop>
+            <!-- PODBORKI: пункт «Подборки курсов». Дерево до 3 уровней строится из CourseTag (is_active, show_in_menu, order).
+                 Без JS: ссылка ведёт на /podborki/ (все подборки). С JS: hover на десктопе / тап на мобильном раскрывает меню. -->
+            <a href="/main/podborki/index.html" class="nav-drop__btn" aria-haspopup="true" aria-expanded="false" data-nav-drop-btn>Подборки курсов<svg class="nav-drop__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
+            <div class="nav-drop__menu" data-nav-drop-menu>
+              <ul class="tnav" role="list"><li class="tnav__item1 has-children" data-tnav-item><a href="/main/podborki/s-trudoustrojstvom/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg><span class="tnav__label">С трудоустройством</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><button type="button" class="tnav__toggle" aria-expanded="false" aria-controls="tnav-p0" aria-label="Показать: С трудоустройством"><svg class="tnav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="tnav__panel" id="tnav-p0"><a href="/main/podborki/s-trudoustrojstvom/index.html" class="tnav__all">Все курсы с трудоустройством <span>111</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><ul class="tnav__l2"><li class="tnav__item2 has-children"><a href="/main/podborki/s-trudoustrojstvom/srazu/index.html" class="tnav__link2">Трудоустройство сразу<span class="tnav__cnt">49</span></a><ul class="tnav__l3"><li><a href="/main/podborki/s-trudoustrojstvom/srazu/v-it/index.html" class="tnav__link3">В IT<span class="tnav__cnt">26</span></a></li><li><a href="/main/podborki/s-trudoustrojstvom/srazu/ne-v-it/index.html" class="tnav__link3">Не в IT<span class="tnav__cnt">15</span></a></li></ul></li><li class="tnav__item2 has-children"><a href="/main/podborki/s-trudoustrojstvom/posle-stazhirovki/index.html" class="tnav__link2">После стажировки<span class="tnav__cnt">59</span></a><ul class="tnav__l3"><li><a href="/main/podborki/s-trudoustrojstvom/posle-stazhirovki/v-it/index.html" class="tnav__link3">В IT<span class="tnav__cnt">47</span></a></li><li><a href="/main/podborki/s-trudoustrojstvom/posle-stazhirovki/ne-v-it/index.html" class="tnav__link3">Не в IT<span class="tnav__cnt">9</span></a></li></ul></li><li class="tnav__item2"><a href="/main/podborki/s-trudoustrojstvom/s-garantiej/index.html" class="tnav__link2">С гарантией в договоре<span class="tnav__cnt">0</span></a></li></ul></div></li><li class="tnav__item1 has-children" data-tnav-item><a href="/main/podborki/dlya-nachinayushchih/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg><span class="tnav__label">Для начинающих</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><button type="button" class="tnav__toggle" aria-expanded="false" aria-controls="tnav-p1" aria-label="Показать: Для начинающих"><svg class="tnav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="tnav__panel" id="tnav-p1"><a href="/main/podborki/dlya-nachinayushchih/index.html" class="tnav__all">Все курсы для начинающих <span>77</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><ul class="tnav__l2"><li class="tnav__item2"><a href="/main/podborki/dlya-nachinayushchih/it-bez-opyta/index.html" class="tnav__link2">IT без опыта<span class="tnav__cnt">29</span></a></li><li class="tnav__item2"><a href="/main/podborki/dlya-nachinayushchih/dlya-gumanitariev/index.html" class="tnav__link2">Для гуманитариев<span class="tnav__cnt">43</span></a></li><li class="tnav__item2"><a href="/main/podborki/dlya-nachinayushchih/posle-40/index.html" class="tnav__link2">После 40 лет<span class="tnav__cnt">0</span></a></li></ul></div></li><li class="tnav__item1 has-children" data-tnav-item><a href="/main/podborki/dlya-detej/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg><span class="tnav__label">Для детей</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><button type="button" class="tnav__toggle" aria-expanded="false" aria-controls="tnav-p2" aria-label="Показать: Для детей"><svg class="tnav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="tnav__panel" id="tnav-p2"><a href="/main/podborki/dlya-detej/index.html" class="tnav__all">Все курсы для детей <span>93</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><ul class="tnav__l2"><li class="tnav__item2 has-children"><a href="/main/podborki/dlya-detej/7-10-let/index.html" class="tnav__link2">7–10 лет<span class="tnav__cnt">27</span></a><ul class="tnav__l3"><li><a href="/main/podborki/dlya-detej/7-10-let/programmirovanie/index.html" class="tnav__link3">Программирование<span class="tnav__cnt">8</span></a></li><li><a href="/main/podborki/dlya-detej/7-10-let/risovanie/index.html" class="tnav__link3">Рисование и дизайн<span class="tnav__cnt">11</span></a></li></ul></li><li class="tnav__item2 has-children"><a href="/main/podborki/dlya-detej/11-14-let/index.html" class="tnav__link2">11–14 лет<span class="tnav__cnt">47</span></a><ul class="tnav__l3"><li><a href="/main/podborki/dlya-detej/11-14-let/programmirovanie/index.html" class="tnav__link3">Программирование<span class="tnav__cnt">32</span></a></li><li><a href="/main/podborki/dlya-detej/11-14-let/razrabotka-igr/index.html" class="tnav__link3">Разработка игр<span class="tnav__cnt">10</span></a></li></ul></li><li class="tnav__item2"><a href="/main/podborki/dlya-detej/ege-oge/index.html" class="tnav__link2">ЕГЭ и ОГЭ<span class="tnav__cnt">11</span></a></li></ul></div></li><li class="tnav__item1" data-tnav-item><a href="/main/podborki/besplatnye/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg><span class="tnav__label">Бесплатные</span><span class="tnav__cnt">9</span></a></li><li class="tnav__item1" data-tnav-item><a href="/main/podborki/v-rassrochku/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg><span class="tnav__label">В рассрочку</span><span class="tnav__cnt">42</span></a></li><li class="tnav__item1" data-tnav-item><a href="/main/podborki/korotkie/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg><span class="tnav__label">Короткие, до 3 месяцев</span><span class="tnav__cnt">13</span></a></li></ul>
+              <a href="/main/podborki/index.html" class="nav-drop__footer">Все подборки курсов<svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+            </div>
+          </li>
+
           <li><a href="/schools/">Школы</a></li>
           <li><a href="/compare/">Сравнения</a></li>
           <li><a href="/blog/">Блог</a></li>
@@ -66,6 +76,7 @@
             <li><a href="#step-8">Шаг 8. Сравнение курсов</a></li>
             <li><a href="#step-compare-btn">Шаг 8.5. Сравнение без ограничений</a></li>
             <li><a href="#step-search">Шаг 8.6. Строка поиска</a></li>
+            <li><a href="#step-podborki">Шаг 8.7. Подборки курсов</a></li>
             <li><a href="#step-9">Шаг 9. Блог: лента и статья</a></li>
             <li><a href="#step-home">Шаг 9.5. Главная страница</a></li>
             <li><a href="#step-10">Шаг 10. Карта сайта, редиректы, финальная проверка</a></li>
@@ -3639,6 +3650,2592 @@ class SuggestTests(TestCase):
         </details>
       </section>
 
+      <section class="ins-step" id="step-podborki">
+        <h2 class="ins-step__title">Шаг 8.7. Подборки курсов: меню до 3 уровней и админка</h2>
+        <p>В меню рядом с «Курсы» появляется пункт «Подборки курсов» с выпадающим списком до 3 уровней: например, «С трудоустройством → Трудоустройство сразу → В IT». Подборка может быть на любом уровне: «Бесплатные» — только 1-й, «Для начинающих» — 1-й и 2-й. По клику открывается страница со всеми курсами подборки и всех вложенных.</p>
+        <p>Как это выглядит: <a href="/main/index.html" target="_blank">меню на главной</a> (наведите на «Подборки курсов»), <a href="/main/podborki/index.html" target="_blank">все подборки</a>, <a href="/main/podborki/s-trudoustrojstvom/srazu/index.html" target="_blank">подборка 2-го уровня</a>, <a href="/main/podborki/s-trudoustrojstvom/srazu/v-it/index.html" target="_blank">подборка 3-го уровня</a>, <a href="/main/admin-demo/index.html" target="_blank">макет админки</a> (5 экранов).</p>
+
+        <div class="ins-download">
+          <a href="/podborki-package.zip" class="btn btn--primary btn--lg" download>Скачать пакет подборок (ZIP, 510 КБ)</a>
+          <p>Отдельный архив: код, шаблоны, макеты, описание и промпт. В проекте: <code>public/podborki-package/</code></p>
+        </div>
+
+        <div class="ins-cards">
+          <div class="ins-card"><p class="ins-card__tag ins-card__tag--ok">меню</p><p>На компьютере — мега-меню: слева 1-й уровень с иконками, справа 2-й и 3-й. На телефоне — аккордеон в бургере. Числа курсов у каждой подборки.</p></div>
+          <div class="ins-card"><p class="ins-card__tag">страница</p><p>Курсы подборки и всех вложенных без дублей, чипы для уточнения, крошки, сортировка, пагинация, «Сравнить».</p></div>
+          <div class="ins-card"><p class="ins-card__tag">админка</p><p>Список-дерево с перетаскиванием, добавление, изменение, скрытие. Удалить нельзя, если в подборке есть курсы или вложенные.</p></div>
+          <div class="ins-card"><p class="ins-card__tag ins-card__tag--new">курс</p><p>В карточке курса — дерево подборок с галочками, поиском и выбранными чипами. Курс сам появляется в родительских подборках.</p></div>
+        </div>
+
+        <h3 class="ins-sub">Как работает для посетителя</h3>
+        <ul class="ins-list ins-list--dots">
+          <li><strong>Меню.</strong> Наведение на «Подборки курсов» открывает панель. Подборки без курсов, скрытые и с «Не показывать в меню» не выводятся. Работает с клавиатуры и без JavaScript (ведёт на страницу всех подборок).</li>
+          <li><strong>Адреса</strong> повторяют иерархию: <code>/podborki/s-trudoustrojstvom/srazu/v-it/</code>. Крошки — по всей цепочке.</li>
+          <li><strong>Курсы в подборке.</strong> Показываются курсы самой подборки и всех вложенных. Курс, отмеченный в «Сразу › В IT», виден и в «Трудоустройство сразу», и в «С трудоустройством».</li>
+          <li><strong>Навигация.</strong> На подборке с вложенными — чипы «Все · В IT · Не в IT». На последнем уровне — «← Все: родитель» и соседние подборки.</li>
+          <li><strong>Скрытая подборка</strong> (или со скрытым родителем) отдаёт 404. Пустая — «В подборке пока нет курсов» и ссылка в каталог.</li>
+        </ul>
+
+        <h3 class="ins-sub">Что умеет админка</h3>
+        <div class="ins-table-wrap">
+        <table class="ins-table">
+          <thead><tr><th>Экран</th><th>Возможности</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Список подборок</strong></td><td>Дерево с отступами и бейджем уровня. Колонки «Курсов» (напрямую, ссылка на курсы) и «Всего» (с вложенными). Галочки «Активна» и «В меню» прямо в списке. Поиск, фильтры: уровень, статус, с курсами / без.</td></tr>
+            <tr><td><strong>Сортировка</strong></td><td>Перетаскивание строки за ⋮⋮ или стрелки ↑↓ — только внутри одного родителя, ветка переезжает целиком, сохраняется сразу.</td></tr>
+            <tr><td><strong>Добавление</strong></td><td>Кнопка «Добавить подборку» или ＋ в строке — форма с уже выбранным родителем. На 3-м уровне ＋ неактивен.</td></tr>
+            <tr><td><strong>Изменение</strong></td><td>Название, короткое название для меню, адрес, родитель (только 1-й и 2-й уровень, без самой подборки и её вложенных), описание, иконка, «Активна», «В меню», порядок, SEO. Понятные ошибки при попытке сделать 4-й уровень, повторить адрес или зациклить дерево. При смене адреса или родителя адреса вложенных пересчитываются.</td></tr>
+            <tr><td><strong>Удаление</strong></td><td>Только если к подборке не привязан ни один курс и нет вложенных. В списке — 🗑 или 🔒 с причиной. Страница «Удалить нельзя» объясняет, что мешает и что сделать: снять подборку с курсов или скрыть её. Массовое удаление пропускает занятые подборки с сообщением. Защита работает и при удалении из кода.</td></tr>
+            <tr><td><strong>Карточка курса</strong></td><td>Поле «Подборки» — дерево всех 3 уровней с галочками, поиском и числами. Выбранные — чипами с полным путём. Родители отмечаются «частично», отмечать их не нужно.</td></tr>
+            <tr><td><strong>Список курсов</strong></td><td>Колонка «Подборки», фильтр «Подборка» (с вложенными) и «Без подборок», массовые «Добавить в подборку…» и «Убрать из подборки…».</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <h3 class="ins-sub">Перед запуском</h3>
+        <ol class="ins-list">
+          <li>Сделайте коммит в git и резервную копию базы — будет миграция.</li>
+          <li>Распакуйте архив, папку <code>podborki-package/</code> положите в корень Django-проекта как <code>_design/podborki-package/</code>.</li>
+          <li>Отправляйте в Cline <strong>по одной части</strong> в режиме Plan → Act. Следующую — только когда предыдущая проверена.</li>
+        </ol>
+        <p class="ins-note">Код пакета проверен на чистом Django 5.1: 19 тестов проходят, меню строится за 2 запроса к базе и кэшируется, страница подборки — 5 запросов при любой глубине.</p>
+
+        <h3 class="ins-sub">Промпты для Cline</h3>
+        <h4 class="ins-sub ins-sub--small">Часть 1 из 3 — модель и админка</h4>
+        <div class="prompt">
+          <div class="prompt__bar"><span>Часть 1 из 3 — модель и админка</span><button type="button" class="copy-btn" data-target="p-podb0">Копировать</button></div>
+          <pre class="prompt__code" id="p-podb0">Внедри подборки курсов (теги с иерархией до 3 уровней). Готовые файлы — в _design/podborki-package/, сначала прочитай README.md целиком. Используй файлы пакета, не пиши с нуля. В этой части — ТОЛЬКО модель и админка, сайт не трогай.
+
+1. Изучи и покажи кратко: приложение с моделью Course (назову его &lt;app&gt;), есть ли у Course поле is_active и цена, как зарегистрирован CourseAdmin (декоратор или admin.site.register, какие fields/fieldsets/list_display/list_filter), есть ли уже модель тегов/категорий курсов. Если похожая модель уже есть — СТОП, покажи её и спроси меня, мигрировать её или делать новую.
+
+2. Модель:
+   - app/models_tags.py → &lt;app&gt;/models_tags.py. В &lt;app&gt;/models.py: from .models_tags import CourseTag (импорт — до класса Course).
+   - В Course добавь: tags = models.ManyToManyField(&quot;CourseTag&quot;, blank=True, related_name=&quot;courses&quot;, verbose_name=&quot;Подборки&quot;)
+   - В settings: PODBORKI_TAG_MODEL = &quot;&lt;app&gt;.CourseTag&quot;
+   - app/podborki_services.py → &lt;app&gt;/. Если у Course нет is_active — ничего не меняй, visible_courses это учитывает.
+   - makemigrations &lt;app&gt; → покажи миграцию → migrate.
+
+3. Админка:
+   - app/admin_tags.py, app/widgets_tags.py → &lt;app&gt;/. В admin_tags.py строка &quot;from .models import CourseTag&quot; — оставь как есть.
+   - app/templates/podborki/ → &lt;app&gt;/templates/podborki/ (шаблоны виджета).
+   - templates/admin/podborki/ → в templates/admin/podborki/ проекта.
+   - static/admin/podborki/ → в static/admin/podborki/.
+   - В &lt;app&gt;/admin.py: импортируй admin_tags (он сам регистрирует CourseTagAdmin) и добавь в CourseAdmin:
+       class CourseAdmin(CourseTagsAdminMixin, admin.ModelAdmin)   ← миксин ПЕРВЫМ
+       &quot;tags&quot; — в fields или в отдельный fieldset (&quot;Подборки&quot;, {&quot;fields&quot;: (&quot;tags&quot;,)})
+       &quot;tags_col&quot; — в list_display
+       TagTreeFilter — в list_filter
+     Если у CourseAdmin свой get_queryset, formfield_for_manytomany, get_actions или action_form — объедини с миксином через super(), покажи diff.
+   - Если в CourseAdmin tags попадает в filter_horizontal/autocomplete_fields/raw_id_fields — убери оттуда.
+
+4. Тестовые данные: app/management/commands/load_podborki_demo.py → &lt;app&gt;/management/commands/ и запусти python manage.py load_podborki_demo.
+
+5. Тесты: app/tests/test_podborki.py → &lt;app&gt;/tests/. Поправь make_course() под обязательные поля моего Course и School. Запусти python manage.py test &lt;app&gt;.tests.test_podborki — должны пройти все 19 (кроме PagesTests — они заработают в части 2, их пока можно пропустить через -k).
+
+6. Проверь в админке и покажи мне:
+   - «Подборки курсов»: дерево 23 подборок с отступами и «ур. 1/2/3»; ↑↓ и перетаскивание за ⋮⋮ меняют порядок только внутри одного родителя, после перезагрузки порядок сохранился;
+   - у пустых подборок без вложенных — 🗑, у остальных — 🔒 с причиной при наведении;
+   - удаление подборки с курсом или с вложенными → страница «Удалить нельзя», подборка НЕ удалена; массовое удаление пропускает такие с сообщением;
+   - форма: в «Родитель» нет подборок 3-го уровня и самой подборки; попытка вложить 4-й уровень — понятная ошибка;
+   - карточка курса: поле «Подборки» деревом с чекбоксами, поиск, чипы с путём; отметил «С трудоустройством › Трудоустройство сразу › В IT» — сохранилось, родители помечены полоской, но не отмечены;
+   - список курсов: колонка «Подборки», фильтр «Подборка», действия «Добавить в подборку…» / «Убрать из подборки…».</pre>
+        </div>
+        <h4 class="ins-sub ins-sub--small">Часть 2 из 3 — страницы подборок</h4>
+        <div class="prompt">
+          <div class="prompt__bar"><span>Часть 2 из 3 — страницы подборок</span><button type="button" class="copy-btn" data-target="p-podb1">Копировать</button></div>
+          <pre class="prompt__code" id="p-podb1">Часть 2: страницы подборок на сайте. Эталон: _design/podborki-package/mockups/podborki/ (index.html и вложенные папки). Карточки курсов — мой существующий partial карточки каталога.
+
+1. app/views_podborki.py → &lt;app&gt;/. Маршруты из app/urls_podborki.py — в urls.py ДО общих маршрутов со slug; имена &quot;podborki&quot; и &quot;podborka&quot;. Если у меня есть маршрут вида &quot;&lt;slug:...&gt;/&quot;, который может перехватить &quot;podborki/&quot;, — покажи и поставь мои маршруты выше.
+2. templates/edukursy/podborki/index.html и detail.html → в шаблоны. Замени include &quot;edukursy/partials/cards/course_card.html&quot; на мой partial карточки курса. Если в base.html нет блоков meta_description или canonical — добавь их, не ломая существующие страницы.
+3. Если у Course есть поле популярности с другим именем — добавь его в Course_default_order во views_podborki.py. Сортировки по цене — по моему полю цены (поправь SORTS).
+4. static/edukursy/css/podborki.css → в статику, подключи в base.html ПОСЛЕ основного style.css.
+5. Карточка курса в подборке должна быть ровно той же, что в каталоге (с кнопкой «Сравнить», если она у меня есть).
+6. В sitemap.xml (если есть django.contrib.sitemaps) — добавь активные подборки: CourseTag.objects.filter(is_active=True), location = get_absolute_url.
+7. Запусти все тесты из test_podborki.py — 19 из 19.
+8. Проверь и покажи:
+   - /podborki/ — карточки 1-го уровня, внутри 2-й и 3-й с числами;
+   - /podborki/s-trudoustrojstvom/ — курсы из всех вложенных подборок без дублей, чипы «Все · Трудоустройство сразу · После стажировки · С гарантией»;
+   - /podborki/s-trudoustrojstvom/srazu/v-it/ — крошки из 4 звеньев, чип «← Все: Трудоустройство сразу» и соседние;
+   - сортировка и пагинация сохраняют друг друга в URL;
+   - скрытая подборка и подборка со скрытым родителем — 404; /podborki/a/b/c/d/ — 404;
+   - на странице подборки не больше 6 SQL-запросов (без учёта карточек курса).</pre>
+        </div>
+        <h4 class="ins-sub ins-sub--small">Часть 3 из 3 — пункт меню</h4>
+        <div class="prompt">
+          <div class="prompt__bar"><span>Часть 3 из 3 — пункт меню</span><button type="button" class="copy-btn" data-target="p-podb2">Копировать</button></div>
+          <pre class="prompt__code" id="p-podb2">Часть 3: пункт «Подборки курсов» в главном меню. Эталон: _design/podborki-package/mockups/index.html — меню между «Курсы» и «Школы» (поиск по &quot;PODBORKI:&quot;).
+
+1. templates/edukursy/partials/podborki_menu.html и podborki_icon.html → в шаблоны. app/templatetags/podborki_tags.py → &lt;app&gt;/templatetags/ (создай __init__.py, если нет).
+2. В base.html (и во всех шаблонах, где меню продублировано, — найди grep &quot;Курсы&lt;/a&gt;&quot;) сразу после пункта «Курсы» внутри &lt;nav class=&quot;main-nav&quot;&gt;&lt;ul&gt;:
+     {% load podborki_tags %}{% podborki_menu %}
+   Тег уже знает текущую страницу и подсвечивает пункт на /podborki/....
+3. static/edukursy/js/podborki.js → в статику, подключи в base.html перед &lt;/body&gt; после основного script.js. Стили меню уже в podborki.css из части 2.
+4. Если в шапке у меня свой бургер/скрипт меню — проверь, что открытие подменю не закрывает бургер (podborki.js вешает обработчики только на [data-nav-drop]).
+5. Кэш меню: убедись, что CACHES настроен (хотя бы LocMemCache). Сброс кэша уже вызывается при сохранении/удалении подборки и при действиях с курсами в админке. Если курсы меняются ещё где-то (импорт, API, сигналы) — после изменения tags вызывай podborki_services.invalidate_menu_cache(). В apps.py приложения в ready() вызови from .models_tags import connect_course_tags_signal; connect_course_tags_signal() — он сбрасывает кэш при любом изменении Course.tags.
+6. Проверь и покажи (скриншоты при ширине 1440, 900 и 390 px):
+   - компьютер: наведение на «Подборки курсов» → слева 1-й уровень с иконками, справа 2-й и 3-й уровни; «Бесплатные» — без стрелки, сразу с числом; меню не закрывается при переводе мыши с пункта на панель;
+   - телефон: в бургере «Подборки курсов» раскрывается аккордеоном, стрелка у подборки раскрывает её уровни, тап по названию — переход;
+   - клавиатура: Tab до пункта, ↓ открывает, ↑↓ по 1-му уровню, → в панель, Esc закрывает;
+   - подборки без курсов и с «Не показывать в меню» в меню отсутствуют, на /podborki/ — тоже нет пустых карточек;
+   - на любой странице меню добавляет 0 SQL-запросов при повторном открытии (кэш) и 2 — при холодном.
+Покажи diff base.html.</pre>
+        </div>
+
+        <h3 class="ins-sub">Если что-то пошло не так</h3>
+        <ul class="ins-list ins-list--dots">
+          <li><strong>makemigrations ругается на related_name «courses»</strong> — «У Course уже есть related_name courses на другой модели — переименуй related_name в CourseTag-связи на &quot;tagged_courses&quot; и замени .courses на .tagged_courses в models_tags.py, podborki_services.py и admin_tags.py.»</li>
+          <li><strong>В карточке курса обычный список вместо дерева</strong> — «Проверь, что CourseTagsAdminMixin стоит первым в наследовании CourseAdmin и что tags нет в filter_horizontal.»</li>
+          <li><strong>Перетаскивание не сохраняется</strong> — «Открой консоль браузера на списке подборок: должен быть POST на …/coursetag/reorder/ с ответом {&quot;ok&quot;: true}. Проверь CSRF и что podborki-admin.js подключился.»</li>
+          <li><strong>Подборку с курсами всё равно удалось удалить</strong> — «Проверь, что models_tags.py импортируется при старте (сигнал pre_delete). Запусти DeleteTests.»</li>
+          <li><strong>Меню не обновляется после изменений</strong> — «Вызови invalidate_menu_cache() в месте, где меняются курсы или подборки, и проверь настройку CACHES.»</li>
+          <li><strong>В меню на компьютере подменю уезжает за экран</strong> — «.nav-drop__menu позиционируется fixed по центру экрана под шапкой. Проверь, что у шапки нет transform/filter — они ломают fixed.»</li>
+        </ul>
+
+        <h3 class="ins-sub">Код файлов</h3>
+        <details class="ins-file">
+          <summary><code>app/models_tags.py</code><span>Модель CourseTag: уровни, пути, проверки, запрет удаления</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>models_tags.py</span><button type="button" class="copy-btn" data-target="pf0">Копировать</button></div>
+            <pre class="prompt__code" id="pf0">&quot;&quot;&quot;
+Подборки курсов (CourseTag) — иерархия до 3 уровней.
+
+Подключение:
+  1) скопируйте класс CourseTag в models.py приложения каталога (или импортируйте отсюда);
+  2) в модель Course добавьте:
+         tags = models.ManyToManyField(&quot;CourseTag&quot;, blank=True, related_name=&quot;courses&quot;, verbose_name=&quot;Подборки&quot;)
+  3) makemigrations + migrate.
+
+Без сторонних библиотек (django-mptt не нужен): при 3 уровнях и сотнях подборок
+дерево целиком строится одним запросом и кэшируется.
+&quot;&quot;&quot;
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.db.models import Q
+from django.urls import reverse
+from django.utils.text import slugify
+
+MAX_DEPTH = 3
+
+ICON_CHOICES = [
+    (&quot;&quot;, &quot;— без иконки —&quot;),
+    (&quot;briefcase&quot;, &quot;Портфель (трудоустройство)&quot;),
+    (&quot;sprout&quot;, &quot;Росток (для начинающих)&quot;),
+    (&quot;smile&quot;, &quot;Смайл (для детей)&quot;),
+    (&quot;gift&quot;, &quot;Подарок (бесплатные)&quot;),
+    (&quot;wallet&quot;, &quot;Кошелёк (рассрочка)&quot;),
+    (&quot;timer&quot;, &quot;Таймер (короткие)&quot;),
+    (&quot;star&quot;, &quot;Звезда&quot;),
+    (&quot;graduation-cap&quot;, &quot;Шапочка выпускника&quot;),
+]
+
+
+class CourseTagQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_active=True)
+
+    def roots(self):
+        return self.filter(parent__isnull=True)
+
+
+class CourseTag(models.Model):
+    name = models.CharField(&quot;Название&quot;, max_length=150, help_text=&quot;Заголовок страницы подборки (H1).&quot;)
+    menu_name = models.CharField(&quot;Название в меню&quot;, max_length=60, blank=True, help_text=&quot;Короткий вариант для меню. Если пусто — берётся «Название».&quot;)
+    slug = models.SlugField(&quot;Slug&quot;, max_length=80, allow_unicode=False, help_text=&quot;Часть адреса. Уникален внутри родителя.&quot;)
+    parent = models.ForeignKey(
+        &quot;self&quot;, null=True, blank=True, on_delete=models.PROTECT, related_name=&quot;children&quot;,
+        verbose_name=&quot;Родительская подборка&quot;, help_text=&quot;Пусто — 1-й уровень. Глубже 3 уровней вложить нельзя.&quot;,
+    )
+    description = models.TextField(&quot;Описание&quot;, blank=True, help_text=&quot;Текст под заголовком на странице подборки.&quot;)
+    icon = models.CharField(&quot;Иконка&quot;, max_length=30, blank=True, choices=ICON_CHOICES, help_text=&quot;Только для 1-го уровня — показывается в меню.&quot;)
+    is_active = models.BooleanField(&quot;Активна&quot;, default=True, db_index=True, help_text=&quot;Скрытая подборка не видна на сайте, её страница отдаёт 404.&quot;)
+    show_in_menu = models.BooleanField(&quot;Показывать в меню&quot;, default=True, help_text=&quot;Можно убрать из меню, но оставить страницу.&quot;)
+    order = models.PositiveIntegerField(&quot;Порядок&quot;, default=0, db_index=True, help_text=&quot;Меньше — выше. Удобнее менять перетаскиванием в списке.&quot;)
+    seo_title = models.CharField(&quot;SEO title&quot;, max_length=200, blank=True)
+    seo_description = models.CharField(&quot;Meta description&quot;, max_length=300, blank=True)
+
+    level = models.PositiveSmallIntegerField(&quot;Уровень&quot;, default=0, editable=False)
+    full_path = models.CharField(&quot;Путь&quot;, max_length=255, editable=False, db_index=True, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = CourseTagQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = &quot;подборка курсов&quot;
+        verbose_name_plural = &quot;подборки курсов&quot;
+        ordering = [&quot;full_path&quot;]
+        constraints = [
+            models.UniqueConstraint(fields=[&quot;parent&quot;, &quot;slug&quot;], name=&quot;coursetag_unique_slug_in_parent&quot;),
+            models.UniqueConstraint(fields=[&quot;slug&quot;], condition=Q(parent__isnull=True), name=&quot;coursetag_unique_root_slug&quot;),
+        ]
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def path_name(self):
+        &quot;&quot;&quot;«С трудоустройством › Сразу › В IT» (делает запросы к родителям — не использовать в циклах).&quot;&quot;&quot;
+        return &quot; › &quot;.join(t.display_name for t in self.ancestors(include_self=True))
+
+    @property
+    def display_name(self):
+        return self.menu_name or self.name
+
+    def get_absolute_url(self):
+        return reverse(&quot;podborka&quot;, kwargs={&quot;path&quot;: self.full_path})
+
+    # ---------- дерево ----------
+    def ancestors(self, include_self=False):
+        chain, node, seen = [], self if include_self else self.parent, set()
+        while node is not None and node.pk not in seen:
+            seen.add(node.pk)
+            chain.insert(0, node)
+            node = node.parent
+        return chain
+
+    def descendant_ids(self, include_self=True):
+        &quot;&quot;&quot;Все id вложенных подборок одним запросом по full_path.&quot;&quot;&quot;
+        ids = list(CourseTag.objects.filter(full_path__startswith=self.full_path + &quot;/&quot;).values_list(&quot;id&quot;, flat=True))
+        return ([self.pk] if include_self else []) + ids
+
+    def subtree_height(self):
+        &quot;&quot;&quot;Сколько уровней под подборкой (0 — нет детей).&quot;&quot;&quot;
+        paths = CourseTag.objects.filter(full_path__startswith=self.full_path + &quot;/&quot;).values_list(&quot;full_path&quot;, flat=True)
+        base = self.full_path.count(&quot;/&quot;)
+        return max((p.count(&quot;/&quot;) - base for p in paths), default=0)
+
+    # ---------- валидация ----------
+    def clean(self):
+        if self.slug:
+            self.slug = self.slug.strip().lower()
+        if not self.slug and self.name:
+            self.slug = slugify(self.name, allow_unicode=False)[:80]
+        if self.parent_id:
+            if self.pk and self.parent_id == self.pk:
+                raise ValidationError({&quot;parent&quot;: &quot;Нельзя выбрать родителем саму подборку.&quot;})
+            parent = self.parent
+            if self.pk:
+                for a in parent.ancestors(include_self=True):
+                    if a.pk == self.pk:
+                        raise ValidationError({&quot;parent&quot;: &quot;Нельзя выбрать родителем вложенную подборку.&quot;})
+            new_level = parent.level + 1
+        else:
+            new_level = 0
+        height = self.subtree_height() if self.pk else 0
+        if new_level + height + 1 &gt; MAX_DEPTH:
+            raise ValidationError({&quot;parent&quot;: f&quot;Нельзя вложить глубже {MAX_DEPTH} уровней: у подборки есть вложенные, вместе получится {new_level + height + 1}.&quot;})
+        qs = CourseTag.objects.filter(parent_id=self.parent_id, slug=self.slug)
+        if self.pk:
+            qs = qs.exclude(pk=self.pk)
+        if self.slug and qs.exists():
+            raise ValidationError({&quot;slug&quot;: f&quot;Подборка с адресом «{self.slug}» уже есть у этого родителя.&quot;})
+
+    # ---------- сохранение ----------
+    def _compute_path(self):
+        self.level = self.parent.level + 1 if self.parent_id else 0
+        self.full_path = f&quot;{self.parent.full_path}/{self.slug}&quot; if self.parent_id else self.slug
+
+    def save(self, *args, **kwargs):
+        old_path = None
+        if self.pk:
+            old_path = CourseTag.objects.filter(pk=self.pk).values_list(&quot;full_path&quot;, flat=True).first()
+        if not self.slug:
+            self.slug = slugify(self.name)[:80] or &quot;podborka&quot;
+        self._compute_path()
+        super().save(*args, **kwargs)
+        if old_path and old_path != self.full_path:
+            for child in CourseTag.objects.filter(full_path__startswith=old_path + &quot;/&quot;).order_by(&quot;level&quot;):
+                child.parent = CourseTag.objects.get(pk=child.parent_id)
+                child._compute_path()
+                CourseTag.objects.filter(pk=child.pk).update(level=child.level, full_path=child.full_path)
+        from .podborki_services import invalidate_menu_cache
+
+        invalidate_menu_cache()
+
+    # ---------- удаление ----------
+    def delete_blockers(self):
+        &quot;&quot;&quot;Причины, по которым удалить нельзя. Пустой список — можно удалять.&quot;&quot;&quot;
+        reasons = []
+        n_children = self.children.count()
+        if n_children:
+            names = &quot;, &quot;.join(f&quot;«{c.display_name}»&quot; for c in self.children.all()[:3])
+            reasons.append(f&quot;есть вложенные подборки ({n_children}): {names}&quot;)
+        n_courses = self.courses.count()
+        if n_courses:
+            reasons.append(f&quot;к подборке привязано курсов: {n_courses}&quot;)
+        return reasons
+
+    def can_delete(self):
+        return not self.delete_blockers()
+
+    def delete(self, *args, **kwargs):
+        reasons = self.delete_blockers()
+        if reasons:
+            raise ValidationError(f&quot;Подборку «{self.name}» нельзя удалить: &quot; + &quot;; &quot;.join(reasons) + &quot;.&quot;)
+        result = super().delete(*args, **kwargs)
+        from .podborki_services import invalidate_menu_cache
+
+        invalidate_menu_cache()
+        return result
+
+
+# ---------- защита от удаления любым способом (QuerySet.delete, каскад из админки, shell) ----------
+from django.db.models import ProtectedError  # noqa: E402
+from django.db.models.signals import pre_delete  # noqa: E402
+from django.dispatch import receiver  # noqa: E402
+
+
+@receiver(pre_delete, sender=CourseTag)
+def protect_used_tag(sender, instance, **kwargs):
+    reasons = instance.delete_blockers()
+    if reasons:
+        raise ProtectedError(f&quot;Подборку «{instance.name}» нельзя удалить: &quot; + &quot;; &quot;.join(reasons) + &quot;.&quot;, set())
+
+
+def connect_course_tags_signal():
+    &quot;&quot;&quot;Сбрасывает кэш меню при изменении Course.tags откуда угодно. Вызывается из AppConfig.ready() или в конце models.py.&quot;&quot;&quot;
+    from django.db.models.signals import m2m_changed
+
+    from .podborki_services import invalidate_menu_cache
+
+    through = CourseTag._meta.get_field(&quot;courses&quot;).through
+
+    def _changed(sender, action, **kwargs):
+        if action in (&quot;post_add&quot;, &quot;post_remove&quot;, &quot;post_clear&quot;):
+            invalidate_menu_cache()
+
+    m2m_changed.connect(_changed, sender=through, weak=False, dispatch_uid=&quot;podborki_tags_changed&quot;)</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/podborki_services.py</code><span>Дерево, счётчики курсов, кэш меню</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>podborki_services.py</span><button type="button" class="copy-btn" data-target="pf1">Копировать</button></div>
+            <pre class="prompt__code" id="pf1">&quot;&quot;&quot;
+Дерево подборок для меню и страниц. Один запрос на всё дерево + кэш.
+
+Число курсов в подборке = курсы этой подборки И всех вложенных (без дублей).
+Так посетитель, открыв «Курсы с трудоустройством», видит всё, что лежит в «Сразу › В IT» и т.д.
+&quot;&quot;&quot;
+from collections import defaultdict
+
+from django.apps import apps
+from django.core.cache import cache
+from django.db.models import Count
+
+MENU_CACHE_KEY = &quot;podborki:tree:v1&quot;
+MENU_CACHE_SECONDS = 600
+
+
+def _models():
+    CourseTag = apps.get_model(*_tag_model_label().split(&quot;.&quot;))
+    Course = CourseTag._meta.get_field(&quot;courses&quot;).related_model
+    return CourseTag, Course
+
+
+def _tag_model_label():
+    from django.conf import settings
+
+    return getattr(settings, &quot;PODBORKI_TAG_MODEL&quot;, &quot;catalog.CourseTag&quot;)
+
+
+def visible_courses(Course):
+    qs = Course.objects.all()
+    names = {f.name for f in Course._meta.get_fields()}
+    if &quot;is_active&quot; in names:
+        qs = qs.filter(is_active=True)
+    return qs
+
+
+def invalidate_menu_cache():
+    cache.delete(MENU_CACHE_KEY)
+
+
+class Node:
+    __slots__ = (&quot;id&quot;, &quot;name&quot;, &quot;menu_name&quot;, &quot;slug&quot;, &quot;full_path&quot;, &quot;level&quot;, &quot;icon&quot;, &quot;url&quot;, &quot;show_in_menu&quot;, &quot;children&quot;, &quot;count&quot;, &quot;parent_id&quot;, &quot;description&quot;)
+
+    def __init__(self, tag):
+        self.id = tag.id
+        self.name = tag.name
+        self.menu_name = tag.menu_name or tag.name
+        self.slug = tag.slug
+        self.full_path = tag.full_path
+        self.level = tag.level
+        self.icon = tag.icon
+        self.url = tag.get_absolute_url()
+        self.show_in_menu = tag.show_in_menu
+        self.parent_id = tag.parent_id
+        self.description = tag.description
+        self.children = []
+        self.count = 0
+
+
+def build_tree(use_cache=True):
+    &quot;&quot;&quot;
+    Список корневых Node (только активные, по order). У каждого .children и .count.
+    Подборка с неактивным родителем тоже скрывается.
+    &quot;&quot;&quot;
+    if use_cache:
+        cached = cache.get(MENU_CACHE_KEY)
+        if cached is not None:
+            return cached
+    CourseTag, Course = _models()
+    tags = list(CourseTag.objects.filter(is_active=True).order_by(&quot;level&quot;, &quot;order&quot;, &quot;name&quot;))
+    nodes = {t.id: Node(t) for t in tags}
+    roots = []
+    for t in tags:
+        n = nodes[t.id]
+        if t.parent_id is None:
+            roots.append(n)
+        elif t.parent_id in nodes:
+            nodes[t.parent_id].children.append(n)
+
+    through = Course.tags.through
+    tag_fk = [f.name for f in through._meta.fields if f.related_model is CourseTag][0]
+    course_fk = [f.name for f in through._meta.fields if f.related_model is Course][0]
+    rows = through.objects.filter(**{f&quot;{tag_fk}__in&quot;: list(nodes), f&quot;{course_fk}__in&quot;: visible_courses(Course)}).values_list(f&quot;{tag_fk}_id&quot;, f&quot;{course_fk}_id&quot;)
+    direct = defaultdict(set)
+    for tag_id, course_id in rows:
+        direct[tag_id].add(course_id)
+
+    def fill(node):
+        ids = set(direct.get(node.id, ()))
+        for ch in node.children:
+            ids |= fill(ch)
+        node.count = len(ids)
+        return ids
+
+    for r in roots:
+        fill(r)
+    if use_cache:
+        cache.set(MENU_CACHE_KEY, roots, MENU_CACHE_SECONDS)
+    return roots
+
+
+def menu_tree():
+    &quot;&quot;&quot;Для меню: только show_in_menu, пустые подборки скрываются (count == 0).&quot;&quot;&quot;
+
+    def keep(nodes):
+        out = []
+        for n in nodes:
+            if not n.show_in_menu or n.count == 0:
+                continue
+            copy = Node.__new__(Node)
+            for s in Node.__slots__:
+                setattr(copy, s, getattr(n, s))
+            copy.children = keep(n.children)
+            out.append(copy)
+        return out
+
+    return keep(build_tree())
+
+
+def find_node(path):
+    def walk(nodes):
+        for n in nodes:
+            if n.full_path == path:
+                return n
+            if path.startswith(n.full_path + &quot;/&quot;):
+                found = walk(n.children)
+                if found:
+                    return found
+        return None
+
+    return walk(build_tree())
+
+
+def courses_for_tag(tag):
+    &quot;&quot;&quot;Курсы подборки и всех вложенных, без дублей.&quot;&quot;&quot;
+    CourseTag, Course = _models()
+    ids = tag.descendant_ids(include_self=True)
+    active_ids = list(CourseTag.objects.filter(id__in=ids, is_active=True).values_list(&quot;id&quot;, flat=True))
+    return visible_courses(Course).filter(tags__in=active_ids).distinct()
+
+
+def admin_counts():
+    &quot;&quot;&quot;Для списка в админке: {tag_id: (напрямую, всего с вложенными)} — 2 запроса на всё дерево.&quot;&quot;&quot;
+    CourseTag, Course = _models()
+    tags = list(CourseTag.objects.values(&quot;id&quot;, &quot;parent_id&quot;))
+    direct_qs = CourseTag.objects.annotate(n=Count(&quot;courses&quot;, distinct=True)).values_list(&quot;id&quot;, &quot;n&quot;)
+    direct_n = dict(direct_qs)
+    through = Course.tags.through
+    tag_fk = [f.name for f in through._meta.fields if f.related_model is CourseTag][0]
+    course_fk = [f.name for f in through._meta.fields if f.related_model is Course][0]
+    sets = defaultdict(set)
+    for t, c in through.objects.values_list(f&quot;{tag_fk}_id&quot;, f&quot;{course_fk}_id&quot;):
+        sets[t].add(c)
+    children = defaultdict(list)
+    for t in tags:
+        children[t[&quot;parent_id&quot;]].append(t[&quot;id&quot;])
+
+    total = {}
+
+    def fill(tid):
+        s = set(sets.get(tid, ()))
+        for ch in children.get(tid, ()):
+            s |= fill(ch)
+        total[tid] = len(s)
+        return s
+
+    for root in children.get(None, ()):
+        fill(root)
+    return {t[&quot;id&quot;]: (direct_n.get(t[&quot;id&quot;], 0), total.get(t[&quot;id&quot;], 0)) for t in tags}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/admin_tags.py</code><span>Админка: список-дерево, сортировка, безопасное удаление, миксин для CourseAdmin</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>admin_tags.py</span><button type="button" class="copy-btn" data-target="pf2">Копировать</button></div>
+            <pre class="prompt__code" id="pf2">&quot;&quot;&quot;
+Админка подборок.
+
+- Список CourseTag деревом: отступы, уровень, «Курсов» (напрямую) и «Всего» (с вложенными),
+  переключатели «Активна»/«В меню» прямо в списке, порядок перетаскиванием и стрелками.
+- Удаление: только если нет курсов и вложенных подборок. Замок с причиной в списке,
+  своя страница «Удалить нельзя», массовое удаление пропускает занятые подборки.
+- Форма: родитель — только 1-й и 2-й уровень, без себя и своих вложенных.
+- CourseAdmin: поле tags виджетом-деревом, колонка «Подборки», фильтр по подборке
+  (с вложенными) и действия «Добавить в подборку / Убрать из подборки».
+
+Подключение: см. PROMPT.md, шаг «Админка».
+&quot;&quot;&quot;
+import json
+
+from django import forms
+from django.contrib import admin, messages
+from django.contrib.admin.helpers import ActionForm
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.db import transaction
+from django.db.models import Case, IntegerField, ProtectedError, Value, When
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import path, reverse
+from django.utils.html import format_html, format_html_join
+
+from .models import CourseTag
+from .models_tags import MAX_DEPTH
+from .podborki_services import admin_counts, invalidate_menu_cache
+from .widgets_tags import TagTreeWidget
+
+
+def tag_url(action, *args):
+    o = CourseTag._meta
+    return reverse(f&quot;admin:{o.app_label}_{o.model_name}_{action}&quot;, args=args)
+
+
+def course_list_url(tag_id=None):
+    o = CourseTag._meta.get_field(&quot;courses&quot;).related_model._meta
+    url = reverse(f&quot;admin:{o.app_label}_{o.model_name}_changelist&quot;)
+    return f&quot;{url}?podborka={tag_id}&quot; if tag_id else url
+
+
+def tree_ordered(qs=None):
+    &quot;&quot;&quot;Подборки в порядке дерева: родитель, затем его дети по order.&quot;&quot;&quot;
+    tags = list((qs if qs is not None else CourseTag.objects.all()).select_related(&quot;parent&quot;).order_by(&quot;level&quot;, &quot;order&quot;, &quot;name&quot;))
+    by_parent = {}
+    for t in tags:
+        by_parent.setdefault(t.parent_id, []).append(t)
+    out = []
+
+    def walk(pid):
+        for t in by_parent.get(pid, []):
+            out.append(t)
+            walk(t.pk)
+
+    walk(None)
+    seen = {t.pk for t in out}
+    out += [t for t in tags if t.pk not in seen]
+    return out
+
+
+class CourseTagForm(forms.ModelForm):
+    class Meta:
+        model = CourseTag
+        fields = &quot;__all__&quot;
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        qs = CourseTag.objects.filter(level__lt=MAX_DEPTH - 1)
+        if self.instance.pk:
+            qs = qs.exclude(pk__in=self.instance.descendant_ids(include_self=True))
+        self.fields[&quot;parent&quot;].queryset = qs
+        self.fields[&quot;parent&quot;].label_from_instance = lambda t: (&quot;— &quot; * t.level) + t.name
+        self.fields[&quot;parent&quot;].choices = [(&quot;&quot;, &quot;— Нет (1-й уровень) —&quot;)] + [(t.pk, (&quot;— &quot; * t.level) + t.name) for t in tree_ordered(qs)]
+        self.fields[&quot;slug&quot;].required = False
+
+
+class LevelFilter(admin.SimpleListFilter):
+    title = &quot;уровень&quot;
+    parameter_name = &quot;level&quot;
+
+    def lookups(self, request, model_admin):
+        return [(str(i), f&quot;{i + 1}-й&quot;) for i in range(MAX_DEPTH)]
+
+    def queryset(self, request, qs):
+        return qs.filter(level=int(self.value())) if self.value() else qs
+
+
+class HasCoursesFilter(admin.SimpleListFilter):
+    title = &quot;курсы&quot;
+    parameter_name = &quot;has_courses&quot;
+
+    def lookups(self, request, model_admin):
+        return [(&quot;no&quot;, &quot;Без курсов&quot;), (&quot;yes&quot;, &quot;С курсами&quot;)]
+
+    def queryset(self, request, qs):
+        if self.value() == &quot;no&quot;:
+            return qs.filter(courses__isnull=True)
+        if self.value() == &quot;yes&quot;:
+            return qs.filter(courses__isnull=False).distinct()
+        return qs
+
+
+@admin.register(CourseTag)
+class CourseTagAdmin(admin.ModelAdmin):
+    form = CourseTagForm
+    change_list_template = &quot;admin/podborki/coursetag/change_list.html&quot;
+    delete_confirmation_template = &quot;admin/podborki/coursetag/delete_confirmation.html&quot;
+    list_display = (&quot;drag&quot;, &quot;tree_name&quot;, &quot;direct_col&quot;, &quot;total_col&quot;, &quot;is_active&quot;, &quot;show_in_menu&quot;, &quot;order_col&quot;, &quot;actions_col&quot;)
+    list_display_links = None
+    list_editable = (&quot;is_active&quot;, &quot;show_in_menu&quot;)
+    list_filter = (LevelFilter, &quot;is_active&quot;, &quot;show_in_menu&quot;, HasCoursesFilter)
+    search_fields = (&quot;name&quot;, &quot;menu_name&quot;, &quot;slug&quot;, &quot;full_path&quot;)
+    list_per_page = 500
+    actions = [&quot;safe_delete&quot;, &quot;make_active&quot;, &quot;make_hidden&quot;, &quot;add_to_menu&quot;, &quot;remove_from_menu&quot;]
+    readonly_fields = (&quot;full_path_link&quot;, &quot;courses_info&quot;)
+    fieldsets = (
+        (&quot;Основное&quot;, {&quot;fields&quot;: (&quot;name&quot;, &quot;menu_name&quot;, &quot;slug&quot;, &quot;parent&quot;, &quot;description&quot;, &quot;icon&quot;, &quot;full_path_link&quot;)}),
+        (&quot;Показ&quot;, {&quot;fields&quot;: (&quot;is_active&quot;, &quot;show_in_menu&quot;, &quot;order&quot;)}),
+        (&quot;SEO&quot;, {&quot;classes&quot;: (&quot;collapse&quot;,), &quot;fields&quot;: (&quot;seo_title&quot;, &quot;seo_description&quot;)}),
+        (&quot;Курсы в подборке&quot;, {&quot;fields&quot;: (&quot;courses_info&quot;,)}),
+    )
+
+    class Media:
+        css = {&quot;all&quot;: (&quot;admin/podborki/podborki-admin.css&quot;,)}
+        js = (&quot;admin/podborki/podborki-admin.js&quot;,)
+
+    # ---------- данные для списка ----------
+    def changelist_view(self, request, extra_context=None):
+        self._counts = admin_counts()
+        self._parents = set(CourseTag.objects.exclude(parent__isnull=True).values_list(&quot;parent_id&quot;, flat=True))
+        extra_context = extra_context or {}
+        extra_context[&quot;reorder_url&quot;] = tag_url(&quot;reorder&quot;)
+        return super().changelist_view(request, extra_context)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related(&quot;parent&quot;)
+
+    def get_ordering(self, request):
+        &quot;&quot;&quot;Порядок дерева (родитель → дети по order) — через CASE по id, работает с пагинацией и фильтрами.&quot;&quot;&quot;
+        ids = [t.pk for t in tree_ordered()]
+        if not ids:
+            return [&quot;full_path&quot;]
+        return [Case(*[When(pk=pk, then=Value(i)) for i, pk in enumerate(ids)], default=Value(len(ids)), output_field=IntegerField())]
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        actions.pop(&quot;delete_selected&quot;, None)
+        return actions
+
+    # ---------- колонки ----------
+    @admin.display(description=&quot;&quot;)
+    def drag(self, obj):
+        return format_html(&#x27;&lt;span class=&quot;pdb-drag&quot; draggable=&quot;true&quot; title=&quot;Перетащите, чтобы изменить порядок&quot; data-id=&quot;{}&quot; data-parent=&quot;{}&quot; data-level=&quot;{}&quot;&gt;⋮⋮&lt;/span&gt;&#x27;, obj.pk, obj.parent_id or &quot;&quot;, obj.level)
+
+    @admin.display(description=&quot;Подборка&quot;, ordering=&quot;full_path&quot;)
+    def tree_name(self, obj):
+        return format_html(
+            &#x27;&lt;div class=&quot;pdb-name&quot; style=&quot;--lvl:{}&quot;&gt;&lt;a href=&quot;{}&quot;&gt;{}&lt;/a&gt; &lt;span class=&quot;pdb-level&quot;&gt;ур. {}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;pdb-path&quot; style=&quot;--lvl:{}&quot;&gt;в меню: «{}» · /podborki/{}/&lt;/div&gt;&#x27;,
+            obj.level, tag_url(&quot;change&quot;, obj.pk), obj.name, obj.level + 1, obj.level, obj.display_name, obj.full_path,
+        )
+
+    @admin.display(description=&quot;В меню как&quot;)
+    def menu_name_col(self, obj):
+        return obj.menu_name or &quot;—&quot;
+
+    @admin.display(description=&quot;Курсов&quot;)
+    def direct_col(self, obj):
+        n = self._counts.get(obj.pk, (0, 0))[0]
+        if not n:
+            return format_html(&#x27;&lt;span class=&quot;pdb-muted&quot;&gt;0&lt;/span&gt;&#x27;)
+        return format_html(&#x27;&lt;a href=&quot;{}&quot;&gt;{}&lt;/a&gt;&#x27;, course_list_url(obj.pk), n)
+
+    @admin.display(description=&quot;Всего&quot;)
+    def total_col(self, obj):
+        return format_html(&quot;&lt;strong&gt;{}&lt;/strong&gt;&quot;, self._counts.get(obj.pk, (0, 0))[1])
+
+    @admin.display(description=&quot;Порядок&quot;)
+    def order_col(self, obj):
+        return format_html(&#x27;&lt;button type=&quot;button&quot; class=&quot;pdb-move&quot; data-dir=&quot;-1&quot; data-id=&quot;{0}&quot; title=&quot;Выше&quot;&gt;↑&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;pdb-move&quot; data-dir=&quot;1&quot; data-id=&quot;{0}&quot; title=&quot;Ниже&quot;&gt;↓&lt;/button&gt;&#x27;, obj.pk)
+
+    @admin.display(description=&quot;Действия&quot;)
+    def actions_col(self, obj):
+        edit = format_html(&#x27;&lt;a class=&quot;pdb-act&quot; href=&quot;{}&quot; title=&quot;Изменить&quot;&gt;✎&lt;/a&gt;&#x27;, tag_url(&quot;change&quot;, obj.pk))
+        if obj.level &lt; MAX_DEPTH - 1:
+            add = format_html(&#x27;&lt;a class=&quot;pdb-act&quot; href=&quot;{}?parent={}&quot; title=&quot;Добавить вложенную&quot;&gt;＋&lt;/a&gt;&#x27;, tag_url(&quot;add&quot;), obj.pk)
+        else:
+            add = format_html(&#x27;&lt;span class=&quot;pdb-act pdb-act--off&quot; title=&quot;Максимум {} уровня&quot;&gt;＋&lt;/span&gt;&#x27;, MAX_DEPTH)
+        direct, _ = self._counts.get(obj.pk, (0, 0))
+        has_children = obj.pk in self._parents
+        if direct == 0 and not has_children:
+            delete = format_html(&#x27;&lt;a class=&quot;pdb-act pdb-act--del&quot; href=&quot;{}&quot; title=&quot;Удалить&quot;&gt;🗑&lt;/a&gt;&#x27;, tag_url(&quot;delete&quot;, obj.pk))
+        else:
+            reasons = []
+            if has_children:
+                reasons.append(&quot;есть вложенные подборки&quot;)
+            if direct:
+                reasons.append(f&quot;привязано курсов: {direct}&quot;)
+            delete = format_html(&#x27;&lt;span class=&quot;pdb-act pdb-act--lock&quot; tabindex=&quot;0&quot; title=&quot;Нельзя удалить: {}&quot;&gt;🔒&lt;/span&gt;&#x27;, &quot;; &quot;.join(reasons))
+        return format_html(&quot;{}{}{}&quot;, edit, add, delete)
+
+    # ---------- форма ----------
+    @admin.display(description=&quot;Адрес на сайте&quot;)
+    def full_path_link(self, obj):
+        if not obj.pk:
+            return &quot;Появится после сохранения&quot;
+        return format_html(&#x27;&lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;{0}&lt;/a&gt;&#x27;, obj.get_absolute_url())
+
+    @admin.display(description=&quot;Курсы&quot;)
+    def courses_info(self, obj):
+        if not obj.pk:
+            return &quot;Курсы добавляются в карточке курса, поле «Подборки».&quot;
+        direct, total = admin_counts().get(obj.pk, (0, 0))
+        return format_html(
+            &#x27;Привязано напрямую: &lt;strong&gt;{}&lt;/strong&gt; · вместе с вложенными: &lt;strong&gt;{}&lt;/strong&gt;. &#x27;
+            &#x27;Курсы добавляются в карточке курса, поле «Подборки». &lt;a href=&quot;{}&quot;&gt;Открыть список курсов →&lt;/a&gt;&#x27;,
+            direct, total, course_list_url(obj.pk),
+        )
+
+    def get_changeform_initial_data(self, request):
+        initial = super().get_changeform_initial_data(request)
+        if request.GET.get(&quot;parent&quot;):
+            initial[&quot;parent&quot;] = request.GET[&quot;parent&quot;]
+        return initial
+
+    # ---------- удаление ----------
+    def delete_view(self, request, object_id, extra_context=None):
+        obj = self.get_object(request, object_id)
+        if obj is not None:
+            reasons = obj.delete_blockers()
+            if reasons:
+                courses = obj.courses.all()[:5]
+                return render(request, &quot;admin/podborki/coursetag/delete_blocked.html&quot;, {
+                    **self.admin_site.each_context(request),
+                    &quot;opts&quot;: self.model._meta, &quot;object&quot;: obj, &quot;reasons&quot;: reasons,
+                    &quot;courses&quot;: courses, &quot;courses_total&quot;: obj.courses.count(),
+                    &quot;children&quot;: obj.children.all(),
+                    &quot;courses_url&quot;: course_list_url(obj.pk),
+                    &quot;title&quot;: &quot;Удалить нельзя&quot;,
+                })
+        return super().delete_view(request, object_id, extra_context)
+
+    def delete_model(self, request, obj):
+        try:
+            obj.delete()
+        except (ValidationError, ProtectedError) as e:
+            self.message_user(request, str(getattr(e, &quot;message&quot;, e.args[0])), messages.ERROR)
+
+    @admin.action(description=&quot;Удалить выбранные (только без курсов и вложенных)&quot;, permissions=[&quot;delete&quot;])
+    def safe_delete(self, request, queryset):
+        deleted, skipped = [], []
+        for tag in sorted(queryset, key=lambda t: -t.level):
+            if tag.can_delete():
+                name = tag.name
+                tag.delete()
+                deleted.append(name)
+            else:
+                skipped.append(f&quot;«{tag.name}»&quot;)
+        if deleted:
+            self.message_user(request, f&quot;Удалено подборок: {len(deleted)}.&quot;, messages.SUCCESS)
+        if skipped:
+            self.message_user(request, &quot;Пропущено — привязаны курсы или есть вложенные: &quot; + &quot;, &quot;.join(skipped), messages.WARNING)
+
+    @admin.action(description=&quot;Сделать активными&quot;)
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+        invalidate_menu_cache()
+
+    @admin.action(description=&quot;Скрыть&quot;)
+    def make_hidden(self, request, queryset):
+        queryset.update(is_active=False)
+        invalidate_menu_cache()
+
+    @admin.action(description=&quot;Показывать в меню&quot;)
+    def add_to_menu(self, request, queryset):
+        queryset.update(show_in_menu=True)
+        invalidate_menu_cache()
+
+    @admin.action(description=&quot;Убрать из меню&quot;)
+    def remove_from_menu(self, request, queryset):
+        queryset.update(show_in_menu=False)
+        invalidate_menu_cache()
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        invalidate_menu_cache()
+
+    # ---------- сортировка ----------
+    def get_urls(self):
+        o = self.model._meta
+        return [path(&quot;reorder/&quot;, self.admin_site.admin_view(self.reorder_view), name=f&quot;{o.app_label}_{o.model_name}_reorder&quot;)] + super().get_urls()
+
+    def reorder_view(self, request):
+        &quot;&quot;&quot;POST JSON {&quot;parent&quot;: id|null, &quot;ids&quot;: [id, id, ...]} — новый порядок детей одного родителя.&quot;&quot;&quot;
+        if request.method != &quot;POST&quot;:
+            return JsonResponse({&quot;error&quot;: &quot;POST only&quot;}, status=405)
+        if not self.has_change_permission(request):
+            raise PermissionDenied
+        data = json.loads(request.body or &quot;{}&quot;)
+        parent = data.get(&quot;parent&quot;) or None
+        ids = [int(i) for i in data.get(&quot;ids&quot;, [])]
+        siblings = set(CourseTag.objects.filter(parent_id=parent).values_list(&quot;id&quot;, flat=True))
+        if set(ids) != siblings:
+            return JsonResponse({&quot;error&quot;: &quot;Можно менять порядок только внутри одного уровня&quot;}, status=400)
+        with transaction.atomic():
+            for i, pk in enumerate(ids):
+                CourseTag.objects.filter(pk=pk).update(order=(i + 1) * 10)
+        invalidate_menu_cache()
+        return JsonResponse({&quot;ok&quot;: True})
+
+
+# ---------- для CourseAdmin ----------
+class TagTreeFilter(admin.SimpleListFilter):
+    &quot;&quot;&quot;Фильтр списка курсов по подборке — вместе с вложенными.&quot;&quot;&quot;
+
+    title = &quot;подборка&quot;
+    parameter_name = &quot;podborka&quot;
+
+    def lookups(self, request, model_admin):
+        return [(str(t.pk), (&quot;— &quot; * t.level) + t.name) for t in tree_ordered()] + [(&quot;none&quot;, &quot;Без подборок&quot;)]
+
+    def queryset(self, request, qs):
+        if self.value() == &quot;none&quot;:
+            return qs.filter(tags__isnull=True)
+        if self.value():
+            tag = CourseTag.objects.filter(pk=self.value()).first()
+            if tag:
+                return qs.filter(tags__in=tag.descendant_ids()).distinct()
+        return qs
+
+
+class TagAssignForm(ActionForm):
+    tag = forms.ChoiceField(required=False, label=&quot;Подборка&quot;, choices=())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields[&quot;tag&quot;].choices = [(&quot;&quot;, &quot;— подборка —&quot;)] + [(t.pk, (&quot;— &quot; * t.level) + t.name) for t in tree_ordered()]
+
+
+class CourseTagsAdminMixin:
+    &quot;&quot;&quot;
+    Добавьте в свой CourseAdmin:  class CourseAdmin(CourseTagsAdminMixin, admin.ModelAdmin): ...
+    и &quot;tags&quot; в fields/fieldsets, TagTreeFilter в list_filter, &quot;tags_col&quot; в list_display.
+    &quot;&quot;&quot;
+
+    action_form = TagAssignForm
+    tag_actions = [&quot;add_to_tag&quot;, &quot;remove_from_tag&quot;]
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == &quot;tags&quot;:
+            kwargs[&quot;widget&quot;] = TagTreeWidget()
+            kwargs[&quot;queryset&quot;] = CourseTag.objects.all()
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(&quot;tags&quot;)
+
+    @admin.display(description=&quot;Подборки&quot;)
+    def tags_col(self, obj):
+        tags = list(obj.tags.all())
+        if not tags:
+            return format_html(&#x27;&lt;span style=&quot;color:#999&quot;&gt;—&lt;/span&gt;&#x27;)
+        return format_html_join(&quot;&quot;, &#x27;&lt;span class=&quot;pdb-tag&quot;&gt;{}&lt;/span&gt;&#x27;, ((t.display_name,) for t in tags))
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        for name in self.tag_actions:
+            func = getattr(self, name)
+            actions[name] = (func, name, func.short_description)
+        return actions
+
+    def add_to_tag(self, modeladmin, request, queryset):
+        tag = CourseTag.objects.filter(pk=request.POST.get(&quot;tag&quot;)).first()
+        if not tag:
+            self.message_user(request, &quot;Выберите подборку в поле рядом с действием.&quot;, messages.WARNING)
+            return
+        for c in queryset:
+            c.tags.add(tag)
+        invalidate_menu_cache()
+        self.message_user(request, f&quot;Добавлено в «{tag}»: {queryset.count()}.&quot;, messages.SUCCESS)
+
+    add_to_tag.short_description = &quot;Добавить в подборку…&quot;
+
+    def remove_from_tag(self, modeladmin, request, queryset):
+        tag = CourseTag.objects.filter(pk=request.POST.get(&quot;tag&quot;)).first()
+        if not tag:
+            self.message_user(request, &quot;Выберите подборку в поле рядом с действием.&quot;, messages.WARNING)
+            return
+        for c in queryset:
+            c.tags.remove(tag)
+        invalidate_menu_cache()
+        self.message_user(request, f&quot;Убрано из «{tag}»: {queryset.count()}.&quot;, messages.SUCCESS)
+
+    remove_from_tag.short_description = &quot;Убрать из подборки…&quot;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/widgets_tags.py</code><span>Виджет «дерево с чекбоксами» для курса</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>widgets_tags.py</span><button type="button" class="copy-btn" data-target="pf3">Копировать</button></div>
+            <pre class="prompt__code" id="pf3">&quot;&quot;&quot;
+Виджет «дерево с чекбоксами» для Course.tags (ManyToMany на CourseTag).
+Выбранные — чипами сверху, поиск, развернуть/свернуть. Родители выбранных отмечаются «частично».
+В базу пишется только то, что отмечено.
+&quot;&quot;&quot;
+from django import forms
+
+
+class TagTreeWidget(forms.CheckboxSelectMultiple):
+    &quot;&quot;&quot;
+    Шаблон лежит в &lt;app&gt;/templates/podborki/widgets/. Рендерится через django.template.loader,
+    поэтому работает без настройки FORM_RENDERER.
+    &quot;&quot;&quot;
+
+    template_name = &quot;podborki/widgets/tag_tree.html&quot;
+
+    def render(self, name, value, attrs=None, renderer=None):
+        from django.template.loader import render_to_string
+        from django.utils.safestring import mark_safe
+
+        return mark_safe(render_to_string(self.template_name, self.get_context(name, value, attrs)))
+
+    class Media:
+        css = {&quot;all&quot;: (&quot;admin/podborki/podborki-admin.css&quot;,)}
+        js = (&quot;admin/podborki/tag-tree.js&quot;,)
+
+    def get_context(self, name, value, attrs):
+        from .admin_tags import tree_ordered
+        from .podborki_services import admin_counts
+
+        ctx = super().get_context(name, value, attrs)
+        selected = {str(v) for v in (value or [])}
+        tags = tree_ordered()
+        counts = admin_counts()
+        by_parent = {}
+        by_id = {t.pk: t for t in tags}
+        for t in tags:
+            by_parent.setdefault(t.parent_id, []).append(t)
+
+        def path_of(t):
+            names = []
+            while t is not None:
+                names.insert(0, t.display_name)
+                t = by_id.get(t.parent_id)
+            return &quot; › &quot;.join(names)
+
+        def build(pid):
+            out = []
+            for t in by_parent.get(pid, []):
+                kids = build(t.pk)
+                checked = str(t.pk) in selected
+                partial = not checked and any(k[&quot;checked&quot;] or k[&quot;partial&quot;] for k in kids)
+                out.append({
+                    &quot;id&quot;: t.pk, &quot;name&quot;: t.name, &quot;short&quot;: t.display_name, &quot;level&quot;: t.level,
+                    &quot;active&quot;: t.is_active, &quot;checked&quot;: checked, &quot;partial&quot;: partial,
+                    &quot;count&quot;: counts.get(t.pk, (0, 0))[1], &quot;children&quot;: kids,
+                    &quot;path&quot;: path_of(t),
+                })
+            return out
+
+        ctx[&quot;widget&quot;][&quot;tree&quot;] = build(None)
+        ctx[&quot;widget&quot;][&quot;selected_items&quot;] = [{&quot;pk&quot;: t.pk, &quot;path&quot;: path_of(t)} for t in tags if str(t.pk) in selected]
+        return ctx</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/templates/podborki/widgets/tag_tree.html</code><span>Шаблон виджета</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>tag_tree.html</span><button type="button" class="copy-btn" data-target="pf4">Копировать</button></div>
+            <pre class="prompt__code" id="pf4">{% comment %}Виджет TagTreeWidget: дерево подборок с чекбоксами для Course.tags.{% endcomment %}
+&lt;div class=&quot;tt&quot; data-tag-tree&gt;
+  &lt;div class=&quot;tt-selected&quot; data-tt-selected&gt;
+    {% for t in widget.selected_items %}&lt;span class=&quot;tt-chip&quot;&gt;{{ t.path }}&lt;button type=&quot;button&quot; aria-label=&quot;Убрать&quot; data-tt-remove=&quot;{{ t.pk }}&quot;&gt;×&lt;/button&gt;&lt;/span&gt;{% empty %}&lt;span class=&quot;tt-empty&quot;&gt;Подборки не выбраны — курс не попадёт ни в одну подборку&lt;/span&gt;{% endfor %}
+  &lt;/div&gt;
+  &lt;div class=&quot;tt-box&quot;&gt;
+    &lt;div class=&quot;tt-tools&quot;&gt;
+      &lt;input type=&quot;search&quot; class=&quot;vTextField tt-search&quot; placeholder=&quot;Найти подборку…&quot; data-tt-search aria-label=&quot;Найти подборку&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;button&quot; data-tt-expand&gt;Развернуть все&lt;/button&gt;
+      &lt;button type=&quot;button&quot; class=&quot;button&quot; data-tt-collapse&gt;Свернуть&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;tt-scroll&quot;&gt;
+      {% include &quot;podborki/widgets/tag_tree_level.html&quot; with nodes=widget.tree name=widget.name %}
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;p class=&quot;help&quot;&gt;Отмечайте самую точную подборку. Курс автоматически появится и на страницах родительских подборок. Скрытые подборки показаны серым.&lt;/p&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/templates/podborki/widgets/tag_tree_level.html</code><span>Шаблон уровня виджета</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>tag_tree_level.html</span><button type="button" class="copy-btn" data-target="pf5">Копировать</button></div>
+            <pre class="prompt__code" id="pf5">&lt;ul class=&quot;tt-list&quot;&gt;
+{% for n in nodes %}
+  &lt;li class=&quot;tt-item{% if n.partial or n.checked %} is-open{% endif %}{% if not n.active %} is-inactive{% endif %}&quot; data-tt-item&gt;
+    &lt;div class=&quot;tt-row&quot;&gt;
+      {% if n.children %}&lt;button type=&quot;button&quot; class=&quot;tt-toggle&quot; aria-expanded=&quot;{% if n.partial or n.checked %}true{% else %}false{% endif %}&quot; data-tt-toggle&gt;▾&lt;/button&gt;{% else %}&lt;span class=&quot;tt-toggle tt-toggle--leaf&quot;&gt;&lt;/span&gt;{% endif %}
+      &lt;label class=&quot;tt-label&quot;&gt;
+        &lt;input type=&quot;checkbox&quot; name=&quot;{{ name }}&quot; value=&quot;{{ n.id }}&quot;{% if n.checked %} checked{% endif %}{% if n.partial %} data-partial{% endif %} data-tt-check data-path=&quot;{{ n.path }}&quot;&gt;
+        &lt;span class=&quot;tt-name&quot; data-short=&quot;{{ n.short }}&quot;&gt;{{ n.name }}&lt;/span&gt;{% if not n.active %} &lt;span class=&quot;tt-off&quot;&gt;скрыта&lt;/span&gt;{% endif %}
+        &lt;span class=&quot;tt-count&quot;&gt;{{ n.count }}&lt;/span&gt;
+      &lt;/label&gt;
+    &lt;/div&gt;
+    {% if n.children %}{% include &quot;podborki/widgets/tag_tree_level.html&quot; with nodes=n.children name=name %}{% endif %}
+  &lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/views_podborki.py</code><span>Страницы /podborki/ и /podborki/&lt;путь&gt;/</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>views_podborki.py</span><button type="button" class="copy-btn" data-target="pf6">Копировать</button></div>
+            <pre class="prompt__code" id="pf6">&quot;&quot;&quot;
+Страницы подборок:
+  /podborki/                       — все подборки деревом
+  /podborki/&lt;путь&gt;/                — курсы подборки и всех вложенных, до 3 сегментов пути
+&quot;&quot;&quot;
+from django.core.paginator import Paginator
+from django.http import Http404
+from django.shortcuts import get_object_or_404, render
+
+from .models import CourseTag
+from .podborki_services import build_tree, courses_for_tag, find_node
+
+PER_PAGE = 24
+SORTS = {
+    &quot;popular&quot;: None,
+    &quot;price_asc&quot;: &quot;price&quot;,
+    &quot;price_desc&quot;: &quot;-price&quot;,
+    &quot;new&quot;: &quot;-id&quot;,
+}
+
+
+def Course_default_order(qs):
+    &quot;&quot;&quot;«Популярные»: по полю популярности, если есть, иначе — новые сверху.&quot;&quot;&quot;
+    names = {f.name for f in qs.model._meta.get_fields()}
+    for field in (&quot;popularity&quot;, &quot;rating&quot;, &quot;reviews_count&quot;, &quot;views&quot;):
+        if field in names:
+            return (f&quot;-{field}&quot;, &quot;-id&quot;)
+    return (&quot;-id&quot;,)
+
+
+def podborki_index(request):
+    return render(request, &quot;edukursy/podborki/index.html&quot;, {&quot;tree&quot;: build_tree()})
+
+
+def podborka_detail(request, path):
+    path = path.strip(&quot;/&quot;)
+    if path.count(&quot;/&quot;) &gt; 2:
+        raise Http404
+    tag = get_object_or_404(CourseTag.objects.select_related(&quot;parent__parent&quot;), full_path=path, is_active=True)
+    for a in tag.ancestors():
+        if not a.is_active:
+            raise Http404
+
+    qs = courses_for_tag(tag).select_related(&quot;school&quot;)
+    sort = request.GET.get(&quot;sort&quot;, &quot;popular&quot;)
+    if sort not in SORTS:
+        sort = &quot;popular&quot;
+    order = SORTS[sort]
+    qs = qs.order_by(order, &quot;id&quot;) if order else qs.order_by(*(Course_default_order(qs)))
+    page = Paginator(qs, PER_PAGE).get_page(request.GET.get(&quot;page&quot;))
+
+    node = find_node(tag.full_path)
+    children = node.children if node else []
+    siblings, parent_node = [], None
+    if not children and tag.parent_id:
+        parent_node = find_node(tag.parent.full_path)
+        siblings = parent_node.children if parent_node else []
+
+    return render(request, &quot;edukursy/podborki/detail.html&quot;, {
+        &quot;tag&quot;: tag,
+        &quot;node&quot;: node,
+        &quot;ancestors&quot;: tag.ancestors(),
+        &quot;children&quot;: children,
+        &quot;siblings&quot;: siblings,
+        &quot;parent_node&quot;: parent_node,
+        &quot;page_obj&quot;: page,
+        &quot;total&quot;: page.paginator.count,
+        &quot;sort&quot;: sort,
+    })</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/urls_podborki.py</code><span>Маршруты</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>urls_podborki.py</span><button type="button" class="copy-btn" data-target="pf7">Копировать</button></div>
+            <pre class="prompt__code" id="pf7"># В urls.py приложения (до общих маршрутов со slug):
+from django.urls import path, re_path
+
+from .views_podborki import podborka_detail, podborki_index
+
+urlpatterns = [
+    path(&quot;podborki/&quot;, podborki_index, name=&quot;podborki&quot;),
+    re_path(r&quot;^podborki/(?P&lt;path&gt;[-a-z0-9_]+(?:/[-a-z0-9_]+){0,2})/$&quot;, podborka_detail, name=&quot;podborka&quot;),
+]</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/templatetags/podborki_tags.py</code><span>Тег {% podborki_menu %}</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>podborki_tags.py</span><button type="button" class="copy-btn" data-target="pf8">Копировать</button></div>
+            <pre class="prompt__code" id="pf8">from django import template
+
+from ..podborki_services import menu_tree
+
+register = template.Library()
+
+
+@register.inclusion_tag(&quot;edukursy/partials/podborki_menu.html&quot;, takes_context=True)
+def podborki_menu(context):
+    &quot;&quot;&quot;{% load podborki_tags %}{% podborki_menu %} — пункт «Подборки курсов» с выпадающим деревом.&quot;&quot;&quot;
+    request = context.get(&quot;request&quot;)
+    current = &quot;&quot;
+    if request is not None and request.path.startswith(&quot;/podborki/&quot;):
+        current = request.path[len(&quot;/podborki/&quot;):].strip(&quot;/&quot;)
+    return {&quot;tree&quot;: menu_tree(), &quot;current&quot;: current, &quot;request&quot;: request}
+
+
+@register.filter
+def ru_plural(n, forms):
+    one, few, many = forms.split(&quot;,&quot;)
+    n = abs(int(n or 0))
+    if n % 10 == 1 and n % 100 != 11:
+        return one
+    if 2 &lt;= n % 10 &lt;= 4 and not 12 &lt;= n % 100 &lt;= 14:
+        return few
+    return many
+
+
+@register.filter
+def startswith(value, prefix):
+    return str(value or &quot;&quot;).startswith(str(prefix or &quot;&quot;))</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/management/commands/load_podborki_demo.py</code><span>Пример дерева из 23 подборок</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>load_podborki_demo.py</span><button type="button" class="copy-btn" data-target="pf9">Копировать</button></div>
+            <pre class="prompt__code" id="pf9">from django.core.management.base import BaseCommand
+
+from ...models import CourseTag
+
+TREE = [
+    (&quot;Курсы с трудоустройством&quot;, &quot;С трудоустройством&quot;, &quot;s-trudoustrojstvom&quot;, &quot;briefcase&quot;, [
+        (&quot;Курсы с трудоустройством сразу&quot;, &quot;Трудоустройство сразу&quot;, &quot;srazu&quot;, &quot;&quot;, [
+            (&quot;Курсы с трудоустройством сразу в IT&quot;, &quot;В IT&quot;, &quot;v-it&quot;, &quot;&quot;, []),
+            (&quot;Курсы с трудоустройством сразу не в IT&quot;, &quot;Не в IT&quot;, &quot;ne-v-it&quot;, &quot;&quot;, []),
+        ]),
+        (&quot;Курсы с трудоустройством после стажировки&quot;, &quot;После стажировки&quot;, &quot;posle-stazhirovki&quot;, &quot;&quot;, [
+            (&quot;Курсы со стажировкой в IT&quot;, &quot;В IT&quot;, &quot;v-it&quot;, &quot;&quot;, []),
+            (&quot;Курсы со стажировкой не в IT&quot;, &quot;Не в IT&quot;, &quot;ne-v-it&quot;, &quot;&quot;, []),
+        ]),
+        (&quot;Курсы с гарантией трудоустройства&quot;, &quot;С гарантией в договоре&quot;, &quot;s-garantiej&quot;, &quot;&quot;, []),
+    ]),
+    (&quot;Курсы для начинающих&quot;, &quot;Для начинающих&quot;, &quot;dlya-nachinayushchih&quot;, &quot;sprout&quot;, [
+        (&quot;Курсы в IT без опыта&quot;, &quot;IT без опыта&quot;, &quot;it-bez-opyta&quot;, &quot;&quot;, []),
+        (&quot;Курсы для гуманитариев&quot;, &quot;Для гуманитариев&quot;, &quot;dlya-gumanitariev&quot;, &quot;&quot;, []),
+        (&quot;Курсы для смены профессии после 40&quot;, &quot;После 40 лет&quot;, &quot;posle-40&quot;, &quot;&quot;, []),
+    ]),
+    (&quot;Курсы для детей&quot;, &quot;Для детей&quot;, &quot;dlya-detej&quot;, &quot;smile&quot;, [
+        (&quot;Курсы для детей 7–10 лет&quot;, &quot;7–10 лет&quot;, &quot;7-10-let&quot;, &quot;&quot;, [
+            (&quot;Программирование для детей 7–10 лет&quot;, &quot;Программирование&quot;, &quot;programmirovanie&quot;, &quot;&quot;, []),
+            (&quot;Рисование и дизайн для детей 7–10 лет&quot;, &quot;Рисование и дизайн&quot;, &quot;risovanie&quot;, &quot;&quot;, []),
+        ]),
+        (&quot;Курсы для детей 11–14 лет&quot;, &quot;11–14 лет&quot;, &quot;11-14-let&quot;, &quot;&quot;, [
+            (&quot;Программирование для детей 11–14 лет&quot;, &quot;Программирование&quot;, &quot;programmirovanie&quot;, &quot;&quot;, []),
+            (&quot;Разработка игр для детей 11–14 лет&quot;, &quot;Разработка игр&quot;, &quot;razrabotka-igr&quot;, &quot;&quot;, []),
+        ]),
+        (&quot;Подготовка к ЕГЭ и ОГЭ&quot;, &quot;ЕГЭ и ОГЭ&quot;, &quot;ege-oge&quot;, &quot;&quot;, []),
+    ]),
+    (&quot;Бесплатные курсы&quot;, &quot;Бесплатные&quot;, &quot;besplatnye&quot;, &quot;gift&quot;, []),
+    (&quot;Курсы в рассрочку&quot;, &quot;В рассрочку&quot;, &quot;v-rassrochku&quot;, &quot;wallet&quot;, []),
+    (&quot;Короткие курсы до 3 месяцев&quot;, &quot;Короткие, до 3 месяцев&quot;, &quot;korotkie&quot;, &quot;timer&quot;, []),
+]
+
+
+class Command(BaseCommand):
+    help = &quot;Создаёт пример дерева подборок (существующие с тем же путём не трогает).&quot;
+
+    def handle(self, *args, **opts):
+        created = 0
+
+        def walk(items, parent=None):
+            nonlocal created
+            for i, (name, menu, slug, icon, kids) in enumerate(items):
+                tag, is_new = CourseTag.objects.get_or_create(
+                    parent=parent, slug=slug,
+                    defaults={&quot;name&quot;: name, &quot;menu_name&quot;: menu, &quot;icon&quot;: icon, &quot;order&quot;: (i + 1) * 10},
+                )
+                created += is_new
+                walk(kids, tag)
+
+        walk(TREE)
+        self.stdout.write(self.style.SUCCESS(f&quot;Создано подборок: {created}&quot;))</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/tests/test_podborki.py</code><span>19 тестов</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>test_podborki.py</span><button type="button" class="copy-btn" data-target="pf10">Копировать</button></div>
+            <pre class="prompt__code" id="pf10">&quot;&quot;&quot;
+Тесты подборок. Перед запуском поправьте make_course под обязательные поля вашей модели Course.
+&quot;&quot;&quot;
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.db.models import ProtectedError
+from django.test import TestCase
+from django.urls import reverse
+
+from ..models import Course, CourseTag, School
+
+
+def make_course(name, **extra):
+    school = School.objects.first() or School.objects.create(name=&quot;Школа 1&quot;, slug=&quot;school-1&quot;)
+    return Course.objects.create(name=name, slug=name.lower().replace(&quot; &quot;, &quot;-&quot;), school=school, price=10000, **extra)
+
+
+class TreeTests(TestCase):
+    def setUp(self):
+        self.root = CourseTag.objects.create(name=&quot;Курсы с трудоустройством&quot;, slug=&quot;job&quot;)
+        self.l2 = CourseTag.objects.create(name=&quot;Сразу&quot;, slug=&quot;now&quot;, parent=self.root)
+        self.l3 = CourseTag.objects.create(name=&quot;В IT&quot;, slug=&quot;it&quot;, parent=self.l2)
+
+    def test_paths_and_levels(self):
+        self.assertEqual(self.l3.full_path, &quot;job/now/it&quot;)
+        self.assertEqual(self.l3.level, 2)
+        self.assertEqual(self.l3.get_absolute_url(), &quot;/podborki/job/now/it/&quot;)
+
+    def test_max_depth(self):
+        t = CourseTag(name=&quot;4-й&quot;, slug=&quot;four&quot;, parent=self.l3)
+        with self.assertRaises(ValidationError):
+            t.full_clean()
+
+    def test_move_subtree_too_deep(self):
+        other = CourseTag.objects.create(name=&quot;Другая&quot;, slug=&quot;other&quot;)
+        other2 = CourseTag.objects.create(name=&quot;Другая 2&quot;, slug=&quot;o2&quot;, parent=other)
+        self.l2.parent = other2
+        with self.assertRaises(ValidationError):
+            self.l2.full_clean()
+
+    def test_no_cycle(self):
+        self.root.parent = self.l3
+        with self.assertRaises(ValidationError):
+            self.root.full_clean()
+
+    def test_unique_slug_in_parent(self):
+        t = CourseTag(name=&quot;Ещё&quot;, slug=&quot;now&quot;, parent=self.root)
+        with self.assertRaises(ValidationError):
+            t.full_clean()
+        other = CourseTag.objects.create(name=&quot;Другая&quot;, slug=&quot;other&quot;)
+        CourseTag(name=&quot;Можно&quot;, slug=&quot;now&quot;, parent=other).full_clean()
+
+    def test_rename_updates_children_paths(self):
+        self.root.slug = &quot;rabota&quot;
+        self.root.save()
+        self.l3.refresh_from_db()
+        self.assertEqual(self.l3.full_path, &quot;rabota/now/it&quot;)
+
+
+class DeleteTests(TestCase):
+    def setUp(self):
+        self.root = CourseTag.objects.create(name=&quot;Root&quot;, slug=&quot;root&quot;)
+        self.leaf = CourseTag.objects.create(name=&quot;Leaf&quot;, slug=&quot;leaf&quot;, parent=self.root)
+        self.empty = CourseTag.objects.create(name=&quot;Empty&quot;, slug=&quot;empty&quot;)
+
+    def test_cannot_delete_with_children(self):
+        with self.assertRaises((ValidationError, ProtectedError)):
+            self.root.delete()
+
+    def test_cannot_delete_with_courses(self):
+        c = make_course(&quot;Python&quot;)
+        c.tags.add(self.leaf)
+        with self.assertRaises((ValidationError, ProtectedError)):
+            self.leaf.delete()
+        with self.assertRaises(ProtectedError), transaction.atomic():
+            CourseTag.objects.filter(pk=self.leaf.pk).delete()
+        self.assertTrue(CourseTag.objects.filter(pk=self.leaf.pk).exists())
+
+    def test_can_delete_empty(self):
+        self.empty.delete()
+        self.assertFalse(CourseTag.objects.filter(slug=&quot;empty&quot;).exists())
+
+
+class PagesTests(TestCase):
+    def setUp(self):
+        self.root = CourseTag.objects.create(name=&quot;Для детей&quot;, menu_name=&quot;Для детей&quot;, slug=&quot;kids&quot;)
+        self.l2 = CourseTag.objects.create(name=&quot;7–10 лет&quot;, slug=&quot;7-10&quot;, parent=self.root)
+        self.l3 = CourseTag.objects.create(name=&quot;Программирование&quot;, slug=&quot;prog&quot;, parent=self.l2)
+        self.hidden = CourseTag.objects.create(name=&quot;Скрытая&quot;, slug=&quot;hidden&quot;, is_active=False)
+        self.c1 = make_course(&quot;Scratch&quot;)
+        self.c1.tags.add(self.l3)
+        self.c2 = make_course(&quot;Roblox&quot;)
+        self.c2.tags.add(self.l2, self.l3)
+
+    def test_parent_shows_children_courses_without_duplicates(self):
+        r = self.client.get(&quot;/podborki/kids/&quot;)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.context[&quot;total&quot;], 2)
+        self.assertContains(r, &quot;Scratch&quot;)
+
+    def test_leaf(self):
+        r = self.client.get(&quot;/podborki/kids/7-10/prog/&quot;)
+        self.assertEqual(r.context[&quot;total&quot;], 2)
+
+    def test_hidden_404(self):
+        self.assertEqual(self.client.get(&quot;/podborki/hidden/&quot;).status_code, 404)
+        self.root.is_active = False
+        self.root.save()
+        self.assertEqual(self.client.get(&quot;/podborki/kids/7-10/&quot;).status_code, 404)
+
+    def test_index_and_menu(self):
+        r = self.client.get(&quot;/podborki/&quot;)
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, &quot;Для детей&quot;)
+        self.assertNotContains(r, &quot;Скрытая&quot;)
+
+    def test_menu_query_count_is_constant(self):
+        from django.core.cache import cache
+
+        from ..podborki_services import build_tree
+
+        cache.clear()
+        with self.assertNumQueries(2):
+            build_tree()
+        with self.assertNumQueries(0):
+            build_tree()
+
+
+class AdminTests(TestCase):
+    def setUp(self):
+        self.admin = get_user_model().objects.create_superuser(&quot;admin&quot;, &quot;a@a.ru&quot;, &quot;pass&quot;)
+        self.client.force_login(self.admin)
+        self.root = CourseTag.objects.create(name=&quot;Root&quot;, slug=&quot;root&quot;)
+        self.a = CourseTag.objects.create(name=&quot;A&quot;, slug=&quot;a&quot;, parent=self.root, order=10)
+        self.b = CourseTag.objects.create(name=&quot;B&quot;, slug=&quot;b&quot;, parent=self.root, order=20)
+        o = CourseTag._meta
+        self.prefix = f&quot;admin:{o.app_label}_{o.model_name}&quot;
+
+    def test_changelist(self):
+        r = self.client.get(reverse(f&quot;{self.prefix}_changelist&quot;))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, &quot;ур. 2&quot;)
+
+    def test_reorder(self):
+        r = self.client.post(reverse(f&quot;{self.prefix}_reorder&quot;), data=f&#x27;{{&quot;parent&quot;: {self.root.pk}, &quot;ids&quot;: [{self.b.pk}, {self.a.pk}]}}&#x27;, content_type=&quot;application/json&quot;)
+        self.assertEqual(r.status_code, 200)
+        self.a.refresh_from_db()
+        self.b.refresh_from_db()
+        self.assertLess(self.b.order, self.a.order)
+
+    def test_reorder_rejects_other_level(self):
+        r = self.client.post(reverse(f&quot;{self.prefix}_reorder&quot;), data=f&#x27;{{&quot;parent&quot;: null, &quot;ids&quot;: [{self.a.pk}]}}&#x27;, content_type=&quot;application/json&quot;)
+        self.assertEqual(r.status_code, 400)
+
+    def test_delete_blocked_page(self):
+        r = self.client.get(reverse(f&quot;{self.prefix}_delete&quot;, args=[self.root.pk]))
+        self.assertContains(r, &quot;Удалить нельзя&quot;)
+
+    def test_bulk_delete_skips_used(self):
+        r = self.client.post(reverse(f&quot;{self.prefix}_changelist&quot;), {&quot;action&quot;: &quot;safe_delete&quot;, &quot;_selected_action&quot;: [self.root.pk, self.a.pk]}, follow=True)
+        self.assertFalse(CourseTag.objects.filter(pk=self.a.pk).exists())
+        self.assertTrue(CourseTag.objects.filter(pk=self.root.pk).exists())</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/partials/podborki_menu.html</code><span>Меню до 3 уровней</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>podborki_menu.html</span><button type="button" class="copy-btn" data-target="pf11">Копировать</button></div>
+            <pre class="prompt__code" id="pf11">{% comment %}
+Пункт меню «Подборки курсов». В base.html внутри &lt;nav class=&quot;main-nav&quot;&gt;&lt;ul&gt; после пункта «Курсы»:
+  {% load podborki_tags %}{% podborki_menu %}
+Разметка 1:1 с mockups/index.html. Уровни: tree → children → children (максимум 3).
+Пустые (0 курсов) и с show_in_menu=False — не выводятся (menu_tree()).
+{% endcomment %}
+{% load podborki_tags %}
+{% if tree %}
+&lt;li class=&quot;nav-drop{% if current %} is-active{% endif %}&quot; data-nav-drop&gt;
+  &lt;a href=&quot;{% url &#x27;podborki&#x27; %}&quot; class=&quot;nav-drop__btn&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot; data-nav-drop-btn&gt;Подборки курсов&lt;svg class=&quot;nav-drop__chev&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m6 9 6 6 6-6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+  &lt;div class=&quot;nav-drop__menu&quot; data-nav-drop-menu&gt;
+    &lt;ul class=&quot;tnav&quot; role=&quot;list&quot;&gt;
+      {% for n in tree %}
+      &lt;li class=&quot;tnav__item1{% if n.children %} has-children{% endif %}{% if current == n.full_path or current|startswith:n.full_path|add:&#x27;/&#x27; %} is-current{% endif %}&quot; data-tnav-item&gt;
+        &lt;a href=&quot;{{ n.url }}&quot; class=&quot;tnav__link1&quot;{% if current == n.full_path %} aria-current=&quot;page&quot;{% endif %}&gt;
+          {% if n.icon %}{% include &quot;edukursy/partials/podborki_icon.html&quot; with name=n.icon cls=&quot;tnav__icon&quot; %}{% endif %}
+          &lt;span class=&quot;tnav__label&quot;&gt;{{ n.menu_name }}&lt;/span&gt;
+          {% if n.children %}&lt;svg class=&quot;tnav__arr&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m9 18 6-6-6-6&quot;/&gt;&lt;/svg&gt;{% else %}&lt;span class=&quot;tnav__cnt&quot;&gt;{{ n.count }}&lt;/span&gt;{% endif %}
+        &lt;/a&gt;
+        {% if n.children %}
+        &lt;button type=&quot;button&quot; class=&quot;tnav__toggle&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;tnav-p{{ n.id }}&quot; aria-label=&quot;Показать: {{ n.menu_name }}&quot;&gt;&lt;svg class=&quot;tnav__chev&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m6 9 6 6 6-6&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+        &lt;div class=&quot;tnav__panel&quot; id=&quot;tnav-p{{ n.id }}&quot;&gt;
+          &lt;a href=&quot;{{ n.url }}&quot; class=&quot;tnav__all&quot;&gt;Все: {{ n.name|lower }} &lt;span&gt;{{ n.count }}&lt;/span&gt;&lt;svg class=&quot;tnav__arr&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m9 18 6-6-6-6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+          &lt;ul class=&quot;tnav__l2&quot;&gt;
+            {% for c in n.children %}
+            &lt;li class=&quot;tnav__item2{% if c.children %} has-children{% endif %}&quot;&gt;
+              &lt;a href=&quot;{{ c.url }}&quot; class=&quot;tnav__link2&quot;{% if current == c.full_path %} aria-current=&quot;page&quot;{% endif %}&gt;{{ c.menu_name }}&lt;span class=&quot;tnav__cnt&quot;&gt;{{ c.count }}&lt;/span&gt;&lt;/a&gt;
+              {% if c.children %}
+              &lt;ul class=&quot;tnav__l3&quot;&gt;
+                {% for g in c.children %}
+                &lt;li&gt;&lt;a href=&quot;{{ g.url }}&quot; class=&quot;tnav__link3&quot;{% if current == g.full_path %} aria-current=&quot;page&quot;{% endif %}&gt;{{ g.menu_name }}&lt;span class=&quot;tnav__cnt&quot;&gt;{{ g.count }}&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                {% endfor %}
+              &lt;/ul&gt;
+              {% endif %}
+            &lt;/li&gt;
+            {% endfor %}
+          &lt;/ul&gt;
+        &lt;/div&gt;
+        {% endif %}
+      &lt;/li&gt;
+      {% endfor %}
+    &lt;/ul&gt;
+    &lt;a href=&quot;{% url &#x27;podborki&#x27; %}&quot; class=&quot;nav-drop__footer&quot;&gt;Все подборки курсов&lt;svg class=&quot;tnav__arr&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m9 18 6-6-6-6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/li&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/podborki/index.html</code><span>Все подборки</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>index.html</span><button type="button" class="copy-btn" data-target="pf12">Копировать</button></div>
+            <pre class="prompt__code" id="pf12">{% extends &quot;edukursy/base.html&quot; %}
+{% load podborki_tags %}
+{% block title %}Подборки курсов — edukursy.ru{% endblock %}
+{% block meta_description %}Подборки онлайн-курсов: с трудоустройством, для начинающих, для детей, бесплатные и в рассрочку.{% endblock %}
+
+{% block content %}
+&lt;section class=&quot;page-head podb-head&quot;&gt;
+  &lt;nav class=&quot;breadcrumbs&quot; aria-label=&quot;Хлебные крошки&quot;&gt;
+    &lt;ol itemscope itemtype=&quot;https://schema.org/BreadcrumbList&quot;&gt;
+      &lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;&lt;a href=&quot;/&quot; itemprop=&quot;item&quot;&gt;&lt;span itemprop=&quot;name&quot;&gt;Главная&lt;/span&gt;&lt;/a&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;1&quot;&gt;&lt;/li&gt;
+      &lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;&lt;span itemprop=&quot;name&quot; aria-current=&quot;page&quot;&gt;Подборки курсов&lt;/span&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;2&quot;&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/nav&gt;
+  &lt;h1 class=&quot;page-head__title&quot;&gt;Подборки курсов&lt;/h1&gt;
+  &lt;p class=&quot;podb-head__desc&quot;&gt;Готовые подборки онлайн-курсов под вашу задачу.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section class=&quot;section section--light&quot;&gt;
+  &lt;div class=&quot;podb-tree&quot;&gt;
+    {% for n in tree %}
+    &lt;article class=&quot;podb-card&quot;&gt;
+      &lt;a href=&quot;{{ n.url }}&quot; class=&quot;podb-card__head&quot;&gt;
+        {% if n.icon %}&lt;span class=&quot;podb-card__icon&quot;&gt;{% include &quot;edukursy/partials/podborki_icon.html&quot; with name=n.icon cls=&quot;&quot; %}&lt;/span&gt;{% endif %}
+        &lt;span&gt;&lt;span class=&quot;podb-card__title&quot;&gt;{{ n.name }}&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;podb-card__count&quot;&gt;{{ n.count }} {{ n.count|ru_plural:&quot;курс,курса,курсов&quot; }}&lt;/span&gt;&lt;/span&gt;
+      &lt;/a&gt;
+      {% if n.description %}&lt;p class=&quot;podb-card__desc&quot;&gt;{{ n.description|truncatechars:160 }}&lt;/p&gt;{% endif %}
+      {% if n.children %}
+      &lt;div class=&quot;podb-card__list&quot;&gt;
+        &lt;ul style=&quot;margin:0;padding:0;border:0&quot;&gt;
+          {% for c in n.children %}
+          &lt;li&gt;&lt;a href=&quot;{{ c.url }}&quot;&gt;{{ c.menu_name }}&lt;span&gt;{{ c.count }}&lt;/span&gt;&lt;/a&gt;
+            {% if c.children %}&lt;ul&gt;{% for g in c.children %}&lt;li&gt;&lt;a href=&quot;{{ g.url }}&quot;&gt;{{ g.menu_name }}&lt;span&gt;{{ g.count }}&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;{% endfor %}&lt;/ul&gt;{% endif %}
+          &lt;/li&gt;
+          {% endfor %}
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      {% endif %}
+    &lt;/article&gt;
+    {% endfor %}
+  &lt;/div&gt;
+&lt;/section&gt;
+{% endblock %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/podborki/detail.html</code><span>Страница подборки</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>detail.html</span><button type="button" class="copy-btn" data-target="pf13">Копировать</button></div>
+            <pre class="prompt__code" id="pf13">{% extends &quot;edukursy/base.html&quot; %}
+{% load podborki_tags %}
+{% comment %}
+Страница подборки: курсы этой подборки И всех вложенных. Разметка 1:1 с mockups/podborki/.../index.html.
+Карточка курса — ваш partial каталога (замените include, если имя другое).
+{% endcomment %}
+{% block title %}{{ tag.seo_title|default:tag.name }}{% if page_obj.number &gt; 1 %} — страница {{ page_obj.number }}{% endif %} — edukursy.ru{% endblock %}
+{% block meta_description %}{{ tag.seo_description|default:tag.description|truncatechars:160 }}{% endblock %}
+{% block canonical %}&lt;link rel=&quot;canonical&quot; href=&quot;{{ request.scheme }}://{{ request.get_host }}{{ tag.get_absolute_url }}{% if page_obj.number &gt; 1 %}?page={{ page_obj.number }}{% endif %}&quot;&gt;{% endblock %}
+
+{% block content %}
+&lt;section class=&quot;page-head podb-head&quot;&gt;
+  &lt;nav class=&quot;breadcrumbs&quot; aria-label=&quot;Хлебные крошки&quot;&gt;
+    &lt;ol itemscope itemtype=&quot;https://schema.org/BreadcrumbList&quot;&gt;
+      &lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;&lt;a href=&quot;/&quot; itemprop=&quot;item&quot;&gt;&lt;span itemprop=&quot;name&quot;&gt;Главная&lt;/span&gt;&lt;/a&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;1&quot;&gt;&lt;/li&gt;
+      &lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;&lt;a href=&quot;{% url &#x27;podborki&#x27; %}&quot; itemprop=&quot;item&quot;&gt;&lt;span itemprop=&quot;name&quot;&gt;Подборки курсов&lt;/span&gt;&lt;/a&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;2&quot;&gt;&lt;/li&gt;
+      {% for a in ancestors %}
+      &lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;&lt;a href=&quot;{{ a.get_absolute_url }}&quot; itemprop=&quot;item&quot;&gt;&lt;span itemprop=&quot;name&quot;&gt;{{ a.name }}&lt;/span&gt;&lt;/a&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;{{ forloop.counter|add:2 }}&quot;&gt;&lt;/li&gt;
+      {% endfor %}
+      &lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;&lt;span itemprop=&quot;name&quot; aria-current=&quot;page&quot;&gt;{{ tag.name }}&lt;/span&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;{{ ancestors|length|add:3 }}&quot;&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/nav&gt;
+  &lt;h1 class=&quot;page-head__title&quot;&gt;{{ tag.name }}&lt;/h1&gt;
+  {% if tag.description %}&lt;p class=&quot;podb-head__desc&quot;&gt;{{ tag.description }}&lt;/p&gt;{% endif %}
+
+  {% if children %}
+  &lt;nav class=&quot;podb-chips&quot; aria-label=&quot;Уточнить подборку&quot;&gt;
+    &lt;a href=&quot;{{ tag.get_absolute_url }}&quot; class=&quot;podb-chip&quot; aria-current=&quot;page&quot;&gt;Все &lt;span&gt;{{ total }}&lt;/span&gt;&lt;/a&gt;
+    {% for c in children %}&lt;a href=&quot;{{ c.url }}&quot; class=&quot;podb-chip&quot;&gt;{{ c.menu_name }} &lt;span&gt;{{ c.count }}&lt;/span&gt;&lt;/a&gt;{% endfor %}
+  &lt;/nav&gt;
+  {% elif parent_node %}
+  &lt;nav class=&quot;podb-chips&quot; aria-label=&quot;Соседние подборки&quot;&gt;
+    &lt;a href=&quot;{{ parent_node.url }}&quot; class=&quot;podb-chip podb-chip--up&quot;&gt;&lt;svg viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;m15 18-6-6 6-6&quot;/&gt;&lt;/svg&gt;Все: {{ parent_node.menu_name }} &lt;span&gt;{{ parent_node.count }}&lt;/span&gt;&lt;/a&gt;
+    {% for c in siblings %}&lt;a href=&quot;{{ c.url }}&quot; class=&quot;podb-chip&quot;{% if c.id == tag.id %} aria-current=&quot;page&quot;{% endif %}&gt;{{ c.menu_name }} &lt;span&gt;{{ c.count }}&lt;/span&gt;&lt;/a&gt;{% endfor %}
+  &lt;/nav&gt;
+  {% endif %}
+&lt;/section&gt;
+
+&lt;section class=&quot;section catalog-main podb-list&quot; aria-label=&quot;Курсы подборки&quot;&gt;
+  &lt;div class=&quot;toolbar&quot;&gt;
+    &lt;p class=&quot;toolbar__count&quot;&gt;Найдено &lt;span class=&quot;results-count&quot;&gt;{{ total }} {{ total|ru_plural:&quot;курс,курса,курсов&quot; }}&lt;/span&gt;&lt;/p&gt;
+    {% if total &gt; 1 %}
+    &lt;form class=&quot;sort&quot; method=&quot;get&quot;&gt;
+      &lt;label for=&quot;sort&quot; class=&quot;sort__label&quot;&gt;Сортировка&lt;/label&gt;
+      &lt;select id=&quot;sort&quot; name=&quot;sort&quot; class=&quot;sort__select&quot; onchange=&quot;this.form.submit()&quot;&gt;
+        &lt;option value=&quot;popular&quot;{% if sort == &quot;popular&quot; %} selected{% endif %}&gt;Популярные&lt;/option&gt;
+        &lt;option value=&quot;price_asc&quot;{% if sort == &quot;price_asc&quot; %} selected{% endif %}&gt;Сначала дешёвые&lt;/option&gt;
+        &lt;option value=&quot;price_desc&quot;{% if sort == &quot;price_desc&quot; %} selected{% endif %}&gt;Сначала дорогие&lt;/option&gt;
+        &lt;option value=&quot;new&quot;{% if sort == &quot;new&quot; %} selected{% endif %}&gt;Новые&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;noscript&gt;&lt;button type=&quot;submit&quot; class=&quot;btn btn--outline&quot;&gt;ОК&lt;/button&gt;&lt;/noscript&gt;
+    &lt;/form&gt;
+    {% endif %}
+  &lt;/div&gt;
+
+  {% if page_obj.object_list %}
+  &lt;div class=&quot;catalog-grid catalog-grid--wide&quot;&gt;
+    {% for course in page_obj.object_list %}
+      {% include &quot;edukursy/partials/cards/course_card.html&quot; with course=course %}
+    {% endfor %}
+  &lt;/div&gt;
+  {% if page_obj.has_other_pages %}
+  &lt;nav class=&quot;pagination&quot; aria-label=&quot;Страницы подборки&quot;&gt;
+    {% if page_obj.has_previous %}&lt;a href=&quot;?page={{ page_obj.previous_page_number }}{% if sort != &#x27;popular&#x27; %}&amp;amp;sort={{ sort }}{% endif %}&quot; class=&quot;pagination__link pagination__link--nav&quot;&gt;← Назад&lt;/a&gt;{% else %}&lt;span class=&quot;pagination__link pagination__link--nav pagination__link--disabled&quot; aria-disabled=&quot;true&quot;&gt;← Назад&lt;/span&gt;{% endif %}
+    &lt;ul class=&quot;pagination__list&quot;&gt;
+      {% for p in page_obj.paginator.page_range %}
+        {% if p == page_obj.number %}&lt;li&gt;&lt;span class=&quot;pagination__link is-current&quot; aria-current=&quot;page&quot;&gt;{{ p }}&lt;/span&gt;&lt;/li&gt;
+        {% elif p == 1 or p == page_obj.paginator.num_pages or p &gt;= page_obj.number|add:-2 and p &lt;= page_obj.number|add:2 %}&lt;li&gt;&lt;a href=&quot;?page={{ p }}{% if sort != &#x27;popular&#x27; %}&amp;amp;sort={{ sort }}{% endif %}&quot; class=&quot;pagination__link&quot;&gt;{{ p }}&lt;/a&gt;&lt;/li&gt;
+        {% elif p == page_obj.number|add:-3 or p == page_obj.number|add:3 %}&lt;li&gt;&lt;span class=&quot;pagination__gap&quot;&gt;…&lt;/span&gt;&lt;/li&gt;{% endif %}
+      {% endfor %}
+    &lt;/ul&gt;
+    {% if page_obj.has_next %}&lt;a href=&quot;?page={{ page_obj.next_page_number }}{% if sort != &#x27;popular&#x27; %}&amp;amp;sort={{ sort }}{% endif %}&quot; class=&quot;pagination__link pagination__link--nav&quot;&gt;Дальше →&lt;/a&gt;{% else %}&lt;span class=&quot;pagination__link pagination__link--nav pagination__link--disabled&quot; aria-disabled=&quot;true&quot;&gt;Дальше →&lt;/span&gt;{% endif %}
+  &lt;/nav&gt;
+  {% endif %}
+  {% else %}
+  &lt;div class=&quot;podb-empty&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;В подборке пока нет курсов&lt;/h2&gt;
+    &lt;p&gt;Мы скоро добавим подходящие программы. А пока посмотрите весь каталог.&lt;/p&gt;
+    &lt;a href=&quot;{% url &#x27;courses&#x27; %}&quot; class=&quot;btn btn--primary&quot;&gt;Все курсы&lt;/a&gt;
+  &lt;/div&gt;
+  {% endif %}
+&lt;/section&gt;
+{% endblock %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/admin/podborki/coursetag/change_list.html</code><span>Список в админке</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>change_list.html</span><button type="button" class="copy-btn" data-target="pf14">Копировать</button></div>
+            <pre class="prompt__code" id="pf14">{% extends &quot;admin/change_list.html&quot; %}
+{% comment %}
+Список подборок деревом. Перетаскивание строк (за ⋮⋮) и стрелки ↑↓ меняют порядок внутри одного родителя —
+сохраняется сразу через POST {{ reorder_url }}.
+{% endcomment %}
+{% block content %}
+  &lt;div class=&quot;pdb-help&quot;&gt;
+    &lt;span&gt;⋮⋮ Перетащите строку или нажмите ↑↓, чтобы изменить порядок внутри уровня. Порядок сохраняется сразу.&lt;/span&gt;
+    &lt;span&gt;🔒 — удалить нельзя: к подборке привязаны курсы или у неё есть вложенные. Наведите на замок, чтобы увидеть причину.&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;pdb-reorder&quot; data-url=&quot;{{ reorder_url }}&quot; data-csrf=&quot;{{ csrf_token }}&quot; hidden&gt;&lt;/div&gt;
+  {{ block.super }}
+{% endblock %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/admin/podborki/coursetag/delete_blocked.html</code><span>«Удалить нельзя»</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>delete_blocked.html</span><button type="button" class="copy-btn" data-target="pf15">Копировать</button></div>
+            <pre class="prompt__code" id="pf15">{% extends &quot;admin/base_site.html&quot; %}
+{% load admin_urls %}
+{% block extrastyle %}{{ block.super }}&lt;link rel=&quot;stylesheet&quot; href=&quot;/static/admin/podborki/podborki-admin.css&quot;&gt;{% endblock %}
+{% block breadcrumbs %}
+&lt;div class=&quot;breadcrumbs&quot;&gt;
+  &lt;a href=&quot;{% url &#x27;admin:index&#x27; %}&quot;&gt;Начало&lt;/a&gt; ›
+  &lt;a href=&quot;{% url &#x27;admin:app_list&#x27; app_label=opts.app_label %}&quot;&gt;{{ opts.app_config.verbose_name }}&lt;/a&gt; ›
+  &lt;a href=&quot;{% url opts|admin_urlname:&#x27;changelist&#x27; %}&quot;&gt;{{ opts.verbose_name_plural|capfirst }}&lt;/a&gt; ›
+  &lt;a href=&quot;{% url opts|admin_urlname:&#x27;change&#x27; object.pk %}&quot;&gt;{{ object.name }}&lt;/a&gt; › Удалить
+&lt;/div&gt;
+{% endblock %}
+{% block content %}
+&lt;h1&gt;Удалить нельзя&lt;/h1&gt;
+&lt;p&gt;Подборку «&lt;strong&gt;{{ object.name }}&lt;/strong&gt;» нельзя удалить:&lt;/p&gt;
+&lt;ul class=&quot;pdb-checks&quot;&gt;
+  {% if children %}&lt;li class=&quot;no&quot;&gt;Есть вложенные подборки: {% for c in children %}&lt;a href=&quot;{% url opts|admin_urlname:&#x27;change&#x27; c.pk %}&quot;&gt;{{ c.name }}&lt;/a&gt;{% if not forloop.last %}, {% endif %}{% endfor %}. Сначала перенесите их к другому родителю или удалите.&lt;/li&gt;{% endif %}
+  {% if courses_total %}&lt;li class=&quot;no&quot;&gt;К подборке привязано курсов: &lt;strong&gt;{{ courses_total }}&lt;/strong&gt; — {% for c in courses %}{{ c.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if courses_total &gt; 5 %} и ещё {{ courses_total|add:&quot;-5&quot; }}{% endif %}. &lt;a href=&quot;{{ courses_url }}&quot;&gt;Открыть список →&lt;/a&gt;&lt;/li&gt;{% endif %}
+&lt;/ul&gt;
+&lt;p&gt;Что можно сделать:&lt;/p&gt;
+&lt;ol class=&quot;pdb-steps&quot;&gt;
+  {% if courses_total %}&lt;li&gt;Снять подборку с курсов: в списке курсов выбрать их → действие «Убрать из подборки…», затем удалить.&lt;/li&gt;{% endif %}
+  &lt;li&gt;Или просто &lt;strong&gt;скрыть&lt;/strong&gt; подборку — снять «Активна». Курсы останутся привязаны, страница пропадёт с сайта.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;submit-row&quot; style=&quot;justify-content:flex-start&quot;&gt;
+  &lt;a href=&quot;{% url opts|admin_urlname:&#x27;change&#x27; object.pk %}&quot; class=&quot;button default&quot;&gt;Открыть подборку&lt;/a&gt;
+  &lt;a href=&quot;{% url opts|admin_urlname:&#x27;changelist&#x27; %}&quot; class=&quot;button cancel-link&quot;&gt;Вернуться к списку&lt;/a&gt;
+&lt;/div&gt;
+{% endblock %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/admin/podborki/coursetag/delete_confirmation.html</code><span>Подтверждение удаления</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>delete_confirmation.html</span><button type="button" class="copy-btn" data-target="pf16">Копировать</button></div>
+            <pre class="prompt__code" id="pf16">{% extends &quot;admin/delete_confirmation.html&quot; %}
+{% comment %}Показывается, только если удалить МОЖНО (иначе — delete_blocked.html).{% endcomment %}
+{% block content %}
+&lt;ul class=&quot;pdb-checks&quot;&gt;
+  &lt;li class=&quot;ok&quot;&gt;К подборке не привязан ни один курс&lt;/li&gt;
+  &lt;li class=&quot;ok&quot;&gt;Нет вложенных подборок&lt;/li&gt;
+  &lt;li class=&quot;info&quot;&gt;Пункт исчезнет из меню, адрес {{ object.get_absolute_url }} начнёт отдавать 404&lt;/li&gt;
+&lt;/ul&gt;
+{{ block.super }}
+{% endblock %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/edukursy/js/podborki.js</code><span>Скрипт меню</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>podborki.js</span><button type="button" class="copy-btn" data-target="pf17">Копировать</button></div>
+            <pre class="prompt__code" id="pf17">(function () {
+  var drops = document.querySelectorAll(&#x27;[data-nav-drop]&#x27;);
+  if (!drops.length) return;
+
+  var desktop = window.matchMedia(&#x27;(min-width: 1024px) and (hover: hover)&#x27;);
+
+  function isDesktop() {
+    return desktop.matches;
+  }
+
+  for (var d = 0; d &lt; drops.length; d++) init(drops[d]);
+
+  function init(drop) {
+    var btn = drop.querySelector(&#x27;[data-nav-drop-btn]&#x27;);
+    var menu = drop.querySelector(&#x27;[data-nav-drop-menu]&#x27;);
+    var items = drop.querySelectorAll(&#x27;[data-tnav-item]&#x27;);
+    var closeTimer = null;
+    var hoverTimer = null;
+
+    function setActiveItem(item) {
+      for (var i = 0; i &lt; items.length; i++) {
+        var on = items[i] === item;
+        items[i].classList.toggle(&#x27;is-hover&#x27;, on);
+        var t = items[i].querySelector(&#x27;.tnav__toggle&#x27;);
+        if (t) t.setAttribute(&#x27;aria-expanded&#x27;, String(on &amp;&amp; items[i].classList.contains(&#x27;has-children&#x27;)));
+      }
+    }
+
+    function firstActive() {
+      var cur = drop.querySelector(&#x27;.tnav__item1.is-current.has-children&#x27;) || drop.querySelector(&#x27;.tnav__item1.has-children&#x27;);
+      return cur;
+    }
+
+    function open() {
+      clearTimeout(closeTimer);
+      if (drop.classList.contains(&#x27;is-open&#x27;)) return;
+      closeOthers(drop);
+      drop.classList.add(&#x27;is-open&#x27;);
+      btn.setAttribute(&#x27;aria-expanded&#x27;, &#x27;true&#x27;);
+      if (isDesktop() &amp;&amp; !drop.querySelector(&#x27;.tnav__item1.is-hover&#x27;)) setActiveItem(firstActive());
+    }
+
+    function close() {
+      drop.classList.remove(&#x27;is-open&#x27;);
+      btn.setAttribute(&#x27;aria-expanded&#x27;, &#x27;false&#x27;);
+      if (!isDesktop()) setActiveItem(null);
+    }
+
+    drop._close = close;
+
+    btn.addEventListener(&#x27;click&#x27;, function (e) {
+      if (isDesktop()) return;
+      e.preventDefault();
+      if (drop.classList.contains(&#x27;is-open&#x27;)) close();
+      else open();
+    });
+
+    drop.addEventListener(&#x27;mouseenter&#x27;, function () {
+      if (isDesktop()) open();
+    });
+    drop.addEventListener(&#x27;mouseleave&#x27;, function () {
+      if (!isDesktop()) return;
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(close, 180);
+    });
+
+    for (var i = 0; i &lt; items.length; i++) {
+      (function (item) {
+        item.addEventListener(&#x27;mouseenter&#x27;, function () {
+          if (!isDesktop()) return;
+          clearTimeout(hoverTimer);
+          if (!item.classList.contains(&#x27;has-children&#x27;)) return;
+          hoverTimer = setTimeout(function () { setActiveItem(item); }, 90);
+        });
+        var toggle = item.querySelector(&#x27;.tnav__toggle&#x27;);
+        if (toggle) {
+          toggle.addEventListener(&#x27;click&#x27;, function (e) {
+            e.preventDefault();
+            var opened = item.classList.contains(&#x27;is-hover&#x27;);
+            setActiveItem(opened ? null : item);
+          });
+        }
+        var sub2 = item.querySelectorAll(&#x27;.tnav__item2.has-children &gt; .tnav__link2&#x27;);
+        for (var k = 0; k &lt; sub2.length; k++) {
+          sub2[k].addEventListener(&#x27;focus&#x27;, function () {
+            if (isDesktop()) setActiveItem(item);
+          });
+        }
+      })(items[i]);
+    }
+
+    btn.addEventListener(&#x27;keydown&#x27;, function (e) {
+      if (e.key === &#x27;ArrowDown&#x27; || ((e.key === &#x27;Enter&#x27; || e.key === &#x27; &#x27;) &amp;&amp; !drop.classList.contains(&#x27;is-open&#x27;) &amp;&amp; !isDesktop())) {
+        e.preventDefault();
+        open();
+        var first = menu.querySelector(&#x27;.tnav__link1&#x27;);
+        if (first) first.focus();
+      }
+    });
+
+    menu.addEventListener(&#x27;focusin&#x27;, function (e) {
+      var item = e.target.closest(&#x27;[data-tnav-item]&#x27;);
+      if (item &amp;&amp; isDesktop() &amp;&amp; item.classList.contains(&#x27;has-children&#x27;)) setActiveItem(item);
+      open();
+    });
+
+    menu.addEventListener(&#x27;keydown&#x27;, function (e) {
+      var links = Array.prototype.slice.call(menu.querySelectorAll(&#x27;.tnav__link1&#x27;));
+      var idx = links.indexOf(document.activeElement);
+      if (e.key === &#x27;Escape&#x27;) {
+        e.preventDefault();
+        close();
+        btn.focus();
+      } else if (idx &gt; -1 &amp;&amp; e.key === &#x27;ArrowDown&#x27;) {
+        e.preventDefault();
+        links[(idx + 1) % links.length].focus();
+      } else if (idx &gt; -1 &amp;&amp; e.key === &#x27;ArrowUp&#x27;) {
+        e.preventDefault();
+        links[(idx - 1 + links.length) % links.length].focus();
+      } else if (idx &gt; -1 &amp;&amp; e.key === &#x27;ArrowRight&#x27;) {
+        var panel = links[idx].parentNode.querySelector(&#x27;.tnav__panel a&#x27;);
+        if (panel) {
+          e.preventDefault();
+          setActiveItem(links[idx].parentNode);
+          panel.focus();
+        }
+      } else if (e.key === &#x27;ArrowLeft&#x27; &amp;&amp; idx === -1) {
+        var it = document.activeElement.closest(&#x27;[data-tnav-item]&#x27;);
+        if (it) {
+          e.preventDefault();
+          it.querySelector(&#x27;.tnav__link1&#x27;).focus();
+        }
+      }
+    });
+
+    drop.addEventListener(&#x27;focusout&#x27;, function (e) {
+      if (!drop.contains(e.relatedTarget)) close();
+    });
+  }
+
+  function closeOthers(except) {
+    for (var i = 0; i &lt; drops.length; i++) if (drops[i] !== except &amp;&amp; drops[i]._close) drops[i]._close();
+  }
+
+  document.addEventListener(&#x27;click&#x27;, function (e) {
+    for (var i = 0; i &lt; drops.length; i++) {
+      if (!drops[i].contains(e.target) &amp;&amp; drops[i]._close) drops[i]._close();
+    }
+  });
+  document.addEventListener(&#x27;keydown&#x27;, function (e) {
+    if (e.key === &#x27;Escape&#x27;) closeOthers(null);
+  });
+})();</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/admin/podborki/podborki-admin.js</code><span>Перетаскивание в админке</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>podborki-admin.js</span><button type="button" class="copy-btn" data-target="pf18">Копировать</button></div>
+            <pre class="prompt__code" id="pf18">/* Список подборок: перетаскивание и стрелки ↑↓ внутри одного родителя, сохранение сразу. */
+(function () {
+  function ready(fn) { if (document.readyState !== &#x27;loading&#x27;) fn(); else document.addEventListener(&#x27;DOMContentLoaded&#x27;, fn); }
+  ready(function () {
+    var cfg = document.getElementById(&#x27;pdb-reorder&#x27;);
+    var table = document.getElementById(&#x27;result_list&#x27;);
+    if (!cfg || !table) return;
+    var tbody = table.tBodies[0];
+
+    var toastEl;
+    function toast(text, isError) {
+      if (!toastEl) { toastEl = document.createElement(&#x27;div&#x27;); toastEl.className = &#x27;pdb-toast&#x27;; document.body.appendChild(toastEl); }
+      toastEl.textContent = text;
+      toastEl.classList.toggle(&#x27;is-error&#x27;, !!isError);
+      toastEl.classList.add(&#x27;is-visible&#x27;);
+      clearTimeout(toastEl._t);
+      toastEl._t = setTimeout(function () { toastEl.classList.remove(&#x27;is-visible&#x27;); }, 2200);
+    }
+    function info(tr) {
+      var h = tr.querySelector(&#x27;.pdb-drag&#x27;);
+      return h ? { id: h.dataset.id, parent: h.dataset.parent, level: +h.dataset.level } : null;
+    }
+    function rows() { return Array.prototype.slice.call(tbody.rows); }
+    function block(tr) {
+      var lvl = info(tr).level, out = [tr], r = tr.nextElementSibling;
+      while (r &amp;&amp; info(r) &amp;&amp; info(r).level &gt; lvl) { out.push(r); r = r.nextElementSibling; }
+      return out;
+    }
+    function siblings(tr) {
+      var i = info(tr);
+      return rows().filter(function (r) { var x = info(r); return x &amp;&amp; x.parent === i.parent &amp;&amp; x.level === i.level; });
+    }
+    function save(tr) {
+      var i = info(tr);
+      var ids = siblings(tr).map(function (r) { return +info(r).id; });
+      fetch(cfg.dataset.url, {
+        method: &#x27;POST&#x27;,
+        headers: { &#x27;Content-Type&#x27;: &#x27;application/json&#x27;, &#x27;X-CSRFToken&#x27;: cfg.dataset.csrf },
+        body: JSON.stringify({ parent: i.parent ? +i.parent : null, ids: ids }),
+        credentials: &#x27;same-origin&#x27;
+      }).then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || &#x27;Ошибка&#x27;); }); })
+        .then(function () { toast(&#x27;Порядок сохранён&#x27;); })
+        .catch(function (e) { toast(e.message + &#x27; — обновите страницу&#x27;, true); });
+    }
+    function moveBlock(tr, target, before) {
+      var mine = block(tr);
+      if (before) mine.forEach(function (r) { tbody.insertBefore(r, target); });
+      else {
+        var t = block(target), ref = t[t.length - 1].nextElementSibling;
+        mine.forEach(function (r) { tbody.insertBefore(r, ref); });
+      }
+      rows().forEach(function (r, k) { r.classList.remove(&#x27;row1&#x27;, &#x27;row2&#x27;); r.classList.add(k % 2 ? &#x27;row2&#x27; : &#x27;row1&#x27;); });
+      save(tr);
+    }
+
+    table.addEventListener(&#x27;click&#x27;, function (e) {
+      var b = e.target.closest(&#x27;.pdb-move&#x27;);
+      if (!b) return;
+      e.preventDefault();
+      var tr = b.closest(&#x27;tr&#x27;), sib = siblings(tr), k = sib.indexOf(tr), dir = +b.dataset.dir, target = sib[k + dir];
+      if (target) moveBlock(tr, target, dir &lt; 0);
+    });
+
+    var drag = null;
+    rows().forEach(function (r) { if (info(r)) r.setAttribute(&#x27;draggable&#x27;, &#x27;true&#x27;); });
+    tbody.addEventListener(&#x27;dragstart&#x27;, function (e) {
+      drag = e.target.closest(&#x27;tr&#x27;);
+      if (!drag || !info(drag)) { drag = null; return; }
+      drag.classList.add(&#x27;pdb-dragging&#x27;);
+      e.dataTransfer.effectAllowed = &#x27;move&#x27;;
+      try { e.dataTransfer.setData(&#x27;text/plain&#x27;, info(drag).id); } catch (err) {}
+    });
+    tbody.addEventListener(&#x27;dragover&#x27;, function (e) {
+      var over = e.target.closest(&#x27;tr&#x27;);
+      if (!drag || !over || over === drag || siblings(drag).indexOf(over) === -1) return;
+      e.preventDefault();
+      rows().forEach(function (r) { r.classList.remove(&#x27;pdb-drop-before&#x27;, &#x27;pdb-drop-after&#x27;); });
+      var rect = over.getBoundingClientRect();
+      over.classList.add(e.clientY &lt; rect.top + rect.height / 2 ? &#x27;pdb-drop-before&#x27; : &#x27;pdb-drop-after&#x27;);
+    });
+    tbody.addEventListener(&#x27;drop&#x27;, function (e) {
+      var over = e.target.closest(&#x27;tr&#x27;);
+      if (!drag || !over || siblings(drag).indexOf(over) === -1) return;
+      e.preventDefault();
+      moveBlock(drag, over, over.classList.contains(&#x27;pdb-drop-before&#x27;));
+    });
+    tbody.addEventListener(&#x27;dragend&#x27;, function () {
+      rows().forEach(function (r) { r.classList.remove(&#x27;pdb-dragging&#x27;, &#x27;pdb-drop-before&#x27;, &#x27;pdb-drop-after&#x27;); });
+      drag = null;
+    });
+  });
+})();</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/admin/podborki/tag-tree.js</code><span>Скрипт виджета-дерева</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>tag-tree.js</span><button type="button" class="copy-btn" data-target="pf19">Копировать</button></div>
+            <pre class="prompt__code" id="pf19">/* Виджет «Подборки» в карточке курса: дерево с чекбоксами, чипы выбранных, поиск. */
+(function () {
+  function ready(fn) { if (document.readyState !== &#x27;loading&#x27;) fn(); else document.addEventListener(&#x27;DOMContentLoaded&#x27;, fn); }
+  ready(function () {
+  document.querySelectorAll(&#x27;[data-tag-tree]&#x27;).forEach(function (tree) {
+  /* Карточка курса: дерево подборок */
+  {
+    var selected = tree.querySelector(&#x27;[data-tt-selected]&#x27;);
+    var checks = function () { return Array.prototype.slice.call(tree.querySelectorAll(&#x27;[data-tt-check]&#x27;)); };
+    function pathOf(input) {
+      var names = [];
+      var li = input.closest(&#x27;[data-tt-item]&#x27;);
+      while (li) {
+        var n = li.querySelector(&#x27;:scope &gt; .tt-row .tt-name&#x27;);
+        names.unshift(n.getAttribute(&#x27;data-short&#x27;) || n.textContent);
+        li = li.parentNode.closest(&#x27;[data-tt-item]&#x27;);
+      }
+      return names.join(&#x27; › &#x27;);
+    }
+    function refresh() {
+      checks().forEach(function (c) { c.indeterminate = false; });
+      checks().forEach(function (c) {
+        if (!c.checked) return;
+        var li = c.closest(&#x27;[data-tt-item]&#x27;).parentNode.closest(&#x27;[data-tt-item]&#x27;);
+        while (li) {
+          var pc = li.querySelector(&#x27;:scope &gt; .tt-row [data-tt-check]&#x27;);
+          if (!pc.checked) pc.indeterminate = true;
+          li = li.parentNode.closest(&#x27;[data-tt-item]&#x27;);
+        }
+      });
+      var on = checks().filter(function (c) { return c.checked; });
+      selected.innerHTML = on.length ? on.map(function (c) {
+        return &#x27;&lt;span class=&quot;tt-chip&quot;&gt;&#x27; + pathOf(c) + &#x27;&lt;button type=&quot;button&quot; aria-label=&quot;Убрать&quot; data-tt-remove=&quot;&#x27; + c.value + &#x27;&quot;&gt;×&lt;/button&gt;&lt;/span&gt;&#x27;;
+      }).join(&#x27;&#x27;) : &#x27;&lt;span class=&quot;tt-empty&quot;&gt;Подборки не выбраны — курс не попадёт ни в одну подборку&lt;/span&gt;&#x27;;
+    }
+    tree.addEventListener(&#x27;change&#x27;, refresh);
+    tree.addEventListener(&#x27;click&#x27;, function (e) {
+      var tg = e.target.closest(&#x27;[data-tt-toggle]&#x27;);
+      if (tg) {
+        var li = tg.closest(&#x27;[data-tt-item]&#x27;);
+        var open = !li.classList.contains(&#x27;is-open&#x27;);
+        li.classList.toggle(&#x27;is-open&#x27;, open);
+        tg.setAttribute(&#x27;aria-expanded&#x27;, String(open));
+      }
+      var rm = e.target.closest(&#x27;[data-tt-remove]&#x27;);
+      if (rm) {
+        var c = tree.querySelector(&#x27;[data-tt-check][value=&quot;&#x27; + rm.getAttribute(&#x27;data-tt-remove&#x27;) + &#x27;&quot;]&#x27;);
+        if (c) { c.checked = false; refresh(); }
+      }
+      if (e.target.closest(&#x27;[data-tt-expand]&#x27;) || e.target.closest(&#x27;[data-tt-collapse]&#x27;)) {
+        var ex = !!e.target.closest(&#x27;[data-tt-expand]&#x27;);
+        tree.querySelectorAll(&#x27;[data-tt-item]&#x27;).forEach(function (li2) {
+          if (li2.querySelector(&#x27;.tt-list&#x27;)) {
+            li2.classList.toggle(&#x27;is-open&#x27;, ex);
+            var t = li2.querySelector(&#x27;:scope &gt; .tt-row [data-tt-toggle]&#x27;);
+            if (t) t.setAttribute(&#x27;aria-expanded&#x27;, String(ex));
+          }
+        });
+      }
+    });
+    var search = tree.querySelector(&#x27;[data-tt-search]&#x27;);
+    search.addEventListener(&#x27;input&#x27;, function () {
+      var q = search.value.trim().toLowerCase().replace(/ё/g, &#x27;е&#x27;);
+      var items = Array.prototype.slice.call(tree.querySelectorAll(&#x27;[data-tt-item]&#x27;));
+      items.forEach(function (li) {
+        var name = li.querySelector(&#x27;:scope &gt; .tt-row .tt-name&#x27;);
+        if (!name.dataset.orig) name.dataset.orig = name.textContent;
+        name.textContent = name.dataset.orig;
+        li.classList.remove(&#x27;is-filtered-out&#x27;);
+      });
+      if (!q) return;
+      items.reverse().forEach(function (li) {
+        var name = li.querySelector(&#x27;:scope &gt; .tt-row .tt-name&#x27;);
+        var txt = name.dataset.orig;
+        var i = txt.toLowerCase().replace(/ё/g, &#x27;е&#x27;).indexOf(q);
+        var childVisible = li.querySelector(&#x27;.tt-list &gt; .tt-item:not(.is-filtered-out)&#x27;);
+        if (i &gt; -1) name.innerHTML = txt.slice(0, i) + &#x27;&lt;mark&gt;&#x27; + txt.slice(i, i + q.length) + &#x27;&lt;/mark&gt;&#x27; + txt.slice(i + q.length);
+        if (i === -1 &amp;&amp; !childVisible) li.classList.add(&#x27;is-filtered-out&#x27;);
+        else if (li.querySelector(&#x27;.tt-list&#x27;)) {
+          li.classList.add(&#x27;is-open&#x27;);
+          var t = li.querySelector(&#x27;:scope &gt; .tt-row [data-tt-toggle]&#x27;);
+          if (t) t.setAttribute(&#x27;aria-expanded&#x27;, &#x27;true&#x27;);
+        }
+      });
+    });
+    refresh();
+  }
+  });
+  });
+})();</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/admin/podborki/podborki-admin.css</code><span>Стили админки</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>podborki-admin.css</span><button type="button" class="copy-btn" data-target="pf20">Копировать</button></div>
+            <pre class="prompt__code" id="pf20">/* Админка подборок: дерево в списке, перетаскивание, замки, виджет дерева в курсе */
+.pdb-help { display: flex; flex-wrap: wrap; gap: 6px 24px; margin: 0 0 12px; padding: 8px 12px; border-radius: 4px; background: var(--darkened-bg, #f8f8f8); color: var(--body-quiet-color, #666); font-size: 13px; }
+.pdb-name { display: flex; align-items: center; gap: 6px; padding-left: calc(var(--lvl) * 24px); }
+.pdb-name a { font-weight: 600; }
+.pdb-path { padding-left: calc(var(--lvl) * 24px); color: #999; font: 11px ui-monospace, Menlo, monospace; }
+.pdb-level { padding: 0 6px; border-radius: 3px; background: #eef4f7; color: #417690; font-size: 11px; }
+.pdb-muted { color: #aaa; }
+.pdb-drag { display: inline-block; padding: 2px 4px; color: #bbb; cursor: grab; user-select: none; letter-spacing: -2px; }
+tr.pdb-dragging { opacity: .4; }
+tr.pdb-drop-before td { box-shadow: inset 0 2px 0 #417690; }
+tr.pdb-drop-after td { box-shadow: inset 0 -2px 0 #417690; }
+.pdb-move { width: 26px; height: 26px; margin-right: 2px; padding: 0; border: 1px solid transparent; border-radius: 4px; background: none; color: #888; cursor: pointer; }
+.pdb-move:hover { border-color: #ccc; background: #fff; }
+.pdb-act { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 4px; text-decoration: none !important; }
+.pdb-act:hover { background: #f0f0f0; }
+.pdb-act--del { color: #ba2121 !important; }
+.pdb-act--lock, .pdb-act--off { color: #bbb; cursor: not-allowed; }
+.pdb-tag { display: inline-block; margin: 1px 4px 1px 0; padding: 1px 8px; border-radius: 10px; background: #eef4f7; color: #417690; font-size: 12px; }
+.pdb-checks { margin: 12px 0; padding: 0; list-style: none; }
+.pdb-checks li { position: relative; margin: 6px 0; padding: 8px 12px 8px 36px; border-radius: 4px; list-style: none; }
+.pdb-checks li::before { position: absolute; left: 12px; font-weight: 700; }
+.pdb-checks .ok { background: #eef8ee; } .pdb-checks .ok::before { content: &quot;✓&quot;; color: #2d7a2d; }
+.pdb-checks .no { background: #ffefef; } .pdb-checks .no::before { content: &quot;✕&quot;; color: #ba2121; }
+.pdb-checks .info { background: #f4f8fb; color: #666; } .pdb-checks .info::before { content: &quot;i&quot;; color: #417690; font-style: italic; }
+.pdb-steps { margin-left: 20px; }
+.pdb-toast { position: fixed; right: 20px; bottom: 20px; z-index: 1000; padding: 10px 16px; border-radius: 4px; background: #333; color: #fff; font-size: 13px; opacity: 0; transition: opacity .2s; }
+.pdb-toast.is-visible { opacity: 1; }
+.pdb-toast.is-error { background: #ba2121; }
+
+.tt { max-width: 640px; }
+.tt-selected { display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; margin-bottom: 8px; }
+.tt-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 4px 3px 10px; border-radius: 14px; background: #e3eef4; color: #205067; font-size: 12px; font-weight: 600; }
+.tt-chip button { width: 20px; height: 20px; padding: 0; border: 0; border-radius: 50%; background: none; color: #205067; font-size: 15px; line-height: 1; cursor: pointer; }
+.tt-chip button:hover { background: #c9dde8; }
+.tt-empty { color: #999; font-size: 12px; padding: 5px 0; }
+.tt-box { border: 1px solid var(--border-color, #ccc); border-radius: 4px; }
+.tt-tools { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; border-bottom: 1px solid #eee; background: var(--darkened-bg, #fafafa); }
+.tt-search { flex: 1 1 200px; }
+.tt-scroll { max-height: 340px; overflow-y: auto; padding: 6px 4px; }
+.tt-list { margin: 0 !important; padding: 0 !important; list-style: none !important; }
+.tt-list .tt-list { display: none; padding-left: 22px !important; }
+.tt-item { list-style: none !important; }
+.tt-item.is-open &gt; .tt-list { display: block; }
+.tt-row { display: flex; align-items: center; gap: 2px; }
+.tt-toggle { display: inline-grid; place-items: center; flex: none; width: 22px; height: 22px; padding: 0; border: 0; background: none; color: #888; cursor: pointer; border-radius: 3px; transition: transform .15s; }
+.tt-toggle[aria-expanded=&quot;false&quot;] { transform: rotate(-90deg); }
+.tt-toggle--leaf { cursor: default; }
+.tt-label { display: flex !important; align-items: center; gap: 8px; flex: 1; width: auto !important; padding: 4px 8px 4px 4px !important; border-radius: 4px; cursor: pointer; font-weight: 400 !important; }
+.tt-label:hover { background: #f3f8fb; }
+.tt-list &gt; .tt-item &gt; .tt-row .tt-name { font-weight: 600; }
+.tt-list .tt-list &gt; .tt-item &gt; .tt-row .tt-name { font-weight: 400; }
+.tt-name { flex: 1; }
+.tt-count { color: #aaa; font-size: 12px; }
+.tt-off { padding: 0 6px; border-radius: 3px; background: #eee; color: #888; font-size: 11px; }
+.tt-item.is-inactive &gt; .tt-row .tt-name { color: #999; }
+.tt-label mark { background: #fff3a8; padding: 0; }
+.tt-item.is-filtered-out { display: none; }
+#result_list td.field-tree_name, #result_list th.column-tree_name { min-width: 340px; }
+#result_list td.field-tree_name .pdb-name a { white-space: normal; }
+#result_list td.field-drag { width: 20px; padding-right: 0; }
+#result_list td.field-order_col, #result_list td.field-actions_col { white-space: nowrap; }
+#result_list .pdb-path { white-space: nowrap; }
+@media (max-width: 1280px) { #changelist-filter { display: none; } #changelist .changelist-form-container { margin-right: 0 !important; } }</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/edukursy/css/podborki.css</code><span>Стили меню и страниц</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>podborki.css</span><button type="button" class="copy-btn" data-target="pf21">Копировать</button></div>
+            <pre class="prompt__code" id="pf21">/*
+  edukursy — меню «Подборки курсов» (до 3 уровней) и страницы подборок /podborki/.
+  Подключите ПОСЛЕ основного style.css (если полный style.css из пакета edukursy уже подключён —
+  в нём этот блок уже есть, отдельный файл не нужен).
+  Нужны: .main-nav, .page-head, .breadcrumbs, .catalog-grid, .catalog-card, .toolbar, .sort, .pagination из style.css.
+*/
+/* ============================================================
+   МЕНЮ «ПОДБОРКИ КУРСОВ» (до 3 уровней) — podborki.js
+   ============================================================ */
+.nav-drop {
+  position: relative;
+}
+.nav-drop__btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.nav-drop svg,
+.podb svg,
+.adm svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nav-drop__chev {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s;
+}
+.nav-drop.is-open .nav-drop__chev {
+  transform: rotate(180deg);
+}
+.nav-drop.is-active &gt; .nav-drop__btn,
+.nav-drop.is-open &gt; .nav-drop__btn {
+  color: var(--c-primary);
+}
+.nav-drop__menu {
+  display: none;
+}
+.nav-drop.is-open .nav-drop__menu {
+  display: block;
+}
+.tnav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.main-nav .tnav {
+  display: block;
+}
+.tnav li {
+  list-style: none;
+}
+.tnav a {
+  color: var(--c-text);
+  text-decoration: none;
+}
+.tnav__cnt {
+  margin-left: auto;
+  padding-left: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8a919e;
+}
+.tnav__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--c-primary);
+}
+.tnav__arr,
+.tnav__chev {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: #8a919e;
+}
+.tnav__item1 {
+  position: static;
+}
+.main-nav .tnav a.tnav__link1,
+.tnav__link1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.tnav__label {
+  flex: 1;
+  min-width: 0;
+}
+.tnav__item1.is-current &gt; .tnav__link1,
+.tnav a[aria-current=&quot;page&quot;] {
+  color: var(--c-primary);
+}
+.tnav__toggle {
+  display: none;
+}
+.main-nav .tnav a.tnav__all,
+.tnav__all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  font-weight: 700;
+  color: var(--c-primary);
+}
+.tnav__all span {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #eef3ff;
+  font-size: 13px;
+}
+.tnav__all .tnav__arr {
+  color: var(--c-primary);
+}
+.tnav__l2,
+.tnav__l3 {
+  margin: 0;
+  padding: 0;
+}
+.main-nav .tnav a.tnav__link2,
+.tnav__link2 {
+  display: flex;
+  align-items: baseline;
+  padding: 7px 0;
+  font-weight: 700;
+}
+.main-nav .tnav a.tnav__link3,
+.tnav__link3 {
+  display: flex;
+  align-items: baseline;
+  padding: 5px 0;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--c-muted);
+}
+.tnav__link2:hover,
+.tnav__link3:hover {
+  color: var(--c-primary) !important;
+}
+.main-nav .nav-drop__menu a.nav-drop__footer,
+.nav-drop__footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--c-primary);
+}
+.nav-drop__footer .tnav__arr {
+  color: var(--c-primary);
+}
+
+/* ----- Телефон и планшет: аккордеон ----- */
+@media (max-width: 1023.98px) {
+  .nav-drop__menu {
+    padding: 4px 0 8px;
+  }
+  .tnav__item1.has-children {
+    display: grid;
+    grid-template-columns: 1fr 44px;
+    align-items: center;
+  }
+  .tnav__item1.has-children &gt; .tnav__link1 .tnav__arr {
+    display: none;
+  }
+  .main-nav .tnav a.tnav__link1 {
+    padding: 10px 8px;
+  }
+  .tnav__toggle {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    color: var(--c-muted);
+    cursor: pointer;
+  }
+  .tnav__toggle[aria-expanded=&quot;true&quot;] .tnav__chev {
+    transform: rotate(180deg);
+  }
+  .tnav__panel {
+    display: none;
+    grid-column: 1 / -1;
+    margin: 0 0 8px 38px;
+    padding-left: 12px;
+    border-left: 2px solid var(--c-border);
+  }
+  .tnav__item1.is-hover &gt; .tnav__panel {
+    display: block;
+  }
+  .main-nav .tnav a.tnav__all {
+    padding: 6px 0 4px;
+    font-size: 15px;
+  }
+  .tnav__l3 {
+    padding-left: 14px;
+  }
+  .main-nav .nav-drop__menu a.nav-drop__footer {
+    padding: 12px 8px 4px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .nav-drop__menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    z-index: 105;
+    width: 380px;
+    max-height: calc(100vh - var(--header-h) - 24px);
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid var(--c-border);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 16px 40px rgba(20, 23, 28, 0.16);
+    transform: translateX(-50%);
+  }
+  .main-nav ul {
+    gap: 18px;
+  }
+}
+
+/* ----- Компьютер: мега-меню в две колонки ----- */
+@media (min-width: 1024px) {
+  .nav-drop__menu {
+    position: fixed;
+    top: var(--header-h);
+    left: 50%;
+    z-index: 105;
+    width: min(960px, calc(100vw - 32px));
+    min-height: 400px;
+    padding: 16px 16px 16px 16px;
+    border: 1px solid var(--c-border);
+    border-top: 0;
+    border-radius: 0 0 18px 18px;
+    background: #fff;
+    box-shadow: 0 24px 48px rgba(20, 23, 28, 0.16);
+    transform: translateX(-50%);
+  }
+  .nav-drop__menu::before {
+    content: &quot;&quot;;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 316px;
+    width: 1px;
+    background: var(--c-border);
+  }
+  .nav-drop .tnav {
+    width: 300px;
+  }
+  .tnav__link1:hover,
+  .tnav__item1.is-hover &gt; .tnav__link1 {
+    background: var(--c-bg-light);
+  }
+  .tnav__item1.is-hover &gt; .tnav__link1 .tnav__arr {
+    color: var(--c-primary);
+  }
+  .tnav__panel {
+    position: absolute;
+    top: 16px;
+    left: 317px;
+    right: 0;
+    bottom: 16px;
+    display: none;
+    overflow-y: auto;
+    padding: 8px 28px;
+  }
+  .tnav__item1.is-hover &gt; .tnav__panel {
+    display: block;
+  }
+  .tnav__l2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 32px;
+    margin-top: 18px;
+  }
+  .tnav__item2 {
+    padding: 4px 0;
+  }
+  .tnav__item2.has-children &gt; .tnav__link2 {
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--c-border);
+    margin-bottom: 4px;
+  }
+  .main-nav .nav-drop__menu a.nav-drop__footer {
+    width: 300px;
+    margin-top: 10px;
+    padding: 12px;
+    border-top: 1px solid var(--c-border);
+  }
+}
+
+/* ============================================================
+   СТРАНИЦЫ ПОДБОРОК /podborki/
+   ============================================================ */
+.podb-head {
+  padding-bottom: 24px;
+}
+.podb-head__desc {
+  max-width: 72ch;
+  margin-top: 10px;
+  font-size: 17px;
+  color: var(--c-muted);
+}
+.podb-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.podb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--c-text);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.podb-chip:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+.podb-chip span {
+  font-size: 13px;
+  font-weight: 500;
+  color: #8a919e;
+}
+.podb-chip[aria-current=&quot;page&quot;] {
+  border-color: var(--c-primary);
+  background: var(--c-primary);
+  color: #fff;
+}
+.podb-chip[aria-current=&quot;page&quot;] span {
+  color: rgba(255, 255, 255, 0.8);
+}
+.podb-chip--up {
+  border-style: dashed;
+}
+.podb-chip--up svg {
+  width: 16px;
+  height: 16px;
+}
+.podb-tree {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+.podb-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  background: #fff;
+}
+.podb-card__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--c-text);
+  text-decoration: none;
+}
+.podb-card__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #eef3ff;
+  color: var(--c-primary);
+}
+.podb-card__icon svg {
+  width: 22px;
+  height: 22px;
+}
+.podb-card__title {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+.podb-card__head:hover .podb-card__title {
+  color: var(--c-primary);
+}
+.podb-card__count {
+  font-size: 14px;
+  color: var(--c-muted);
+}
+.podb-card__desc {
+  margin-top: 12px;
+  font-size: 15px;
+  color: var(--c-muted);
+}
+.podb-card__list {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--c-border);
+}
+.podb-card__list a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 0;
+  color: var(--c-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+.podb-card__list a:hover {
+  color: var(--c-primary);
+}
+.podb-card__list a span {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8a919e;
+}
+.podb-card__list ul {
+  margin: 0 0 6px 14px;
+  padding-left: 12px;
+  border-left: 2px solid var(--c-border);
+}
+.podb-card__list ul a {
+  font-weight: 400;
+  color: var(--c-muted);
+  font-size: 15px;
+}
+.podb-empty {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  border: 1px dashed var(--c-border);
+  border-radius: 16px;
+  text-align: center;
+}
+.podb-empty p {
+  margin: 10px 0 20px;
+  color: var(--c-muted);
+}
+.podb-empty .btn {
+  padding: 12px 22px;
+}
+.podb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+.podb-tag {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #eef3ff;
+  color: var(--c-primary-dark);
+  font-size: 12px;
+  font-weight: 600;
+}
+.main-nav .tnav__l2,
+.main-nav .tnav__l3 {
+  display: block;
+  gap: 0;
+}
+@media (min-width: 1024px) {
+  .main-nav .tnav__l2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 36px;
+  }
+}
+.podb-list {
+  padding-top: 28px;
+}
+.podb-card svg,
+.podb-chip svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}</pre>
+          </div>
+        </details>
+      </section>
+
       <section class="ins-step" id="step-9">
         <h2 class="ins-step__title">Шаг 9. Блог: лента и статья</h2>
         <div class="prompt">
@@ -3760,6 +6357,8 @@ class SuggestTests(TestCase):
   </footer>
 
   <script src="../script.js"></script>
+  <!-- PODBORKI: выпадающее меню подборок -->
+  <script src="../podborki.js"></script>
   <script>
     document.querySelectorAll('.copy-btn').forEach(function (b) {
       b.addEventListener('click', function () {

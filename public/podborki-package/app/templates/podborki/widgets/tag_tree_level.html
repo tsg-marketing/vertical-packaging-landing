@@ -1,0 +1,15 @@
+<ul class="tt-list">
+{% for n in nodes %}
+  <li class="tt-item{% if n.partial or n.checked %} is-open{% endif %}{% if not n.active %} is-inactive{% endif %}" data-tt-item>
+    <div class="tt-row">
+      {% if n.children %}<button type="button" class="tt-toggle" aria-expanded="{% if n.partial or n.checked %}true{% else %}false{% endif %}" data-tt-toggle>▾</button>{% else %}<span class="tt-toggle tt-toggle--leaf"></span>{% endif %}
+      <label class="tt-label">
+        <input type="checkbox" name="{{ name }}" value="{{ n.id }}"{% if n.checked %} checked{% endif %}{% if n.partial %} data-partial{% endif %} data-tt-check data-path="{{ n.path }}">
+        <span class="tt-name" data-short="{{ n.short }}">{{ n.name }}</span>{% if not n.active %} <span class="tt-off">скрыта</span>{% endif %}
+        <span class="tt-count">{{ n.count }}</span>
+      </label>
+    </div>
+    {% if n.children %}{% include "podborki/widgets/tag_tree_level.html" with nodes=n.children name=name %}{% endif %}
+  </li>
+{% endfor %}
+</ul>

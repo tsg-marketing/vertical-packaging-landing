@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Макет админки: подборки курсов — edukursy.ru</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="admin-demo.css">
+</head>
+<body class="adm">
+  <!-- МАКЕТ АДМИНКИ DJANGO для подборок (CourseTag). Цвета и шапка — стандартные Django admin.
+       Три экрана: список подборок, форма подборки, поле «Подборки» в карточке курса.
+       + состояния удаления: разрешено / запрещено. -->
+  <header class="adm-header">
+    <div class="adm-brand">Администрирование edukursy</div>
+    <div class="adm-user">Добро пожаловать, <strong>admin</strong>. <a href="#">Открыть сайт</a> / <a href="#">Сменить пароль</a> / <a href="#">Выйти</a></div>
+  </header>
+
+  <nav class="adm-demo-tabs" aria-label="Экраны макета">
+    <span class="adm-demo-tabs__label">Экраны макета:</span>
+    <a href="#list" data-tab="list" class="is-active">1. Список подборок</a>
+    <a href="#form" data-tab="form">2. Форма подборки</a>
+    <a href="#course" data-tab="course">3. Подборки в карточке курса</a>
+    <a href="#delete-ok" data-tab="delete-ok">4. Удаление — можно</a>
+    <a href="#delete-no" data-tab="delete-no">5. Удаление — нельзя</a>
+  </nav>
+
+  <!-- ================= 1. СПИСОК ================= -->
+  <section class="adm-screen is-active" data-screen="list">
+    <div class="adm-crumbs"><a href="#">Начало</a> › <a href="#">Каталог</a> › Подборки курсов</div>
+    <ul class="adm-messages"><li class="adm-msg adm-msg--ok">Порядок подборок сохранён.</li></ul>
+    <div class="adm-content">
+      <div class="adm-titlebar">
+        <h1>Подборки курсов</h1>
+        <a href="#form" data-tab-link="form" class="adm-btn adm-btn--add"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Добавить подборку</a>
+      </div>
+
+      <div class="adm-toolbar">
+        <form class="adm-search" onsubmit="return false"><input type="search" placeholder="Поиск по названию или slug" aria-label="Поиск"><button type="submit" class="adm-btn">Найти</button></form>
+        <div class="adm-filters-inline">
+          <label>Уровень <select><option>Все</option><option>1</option><option>2</option><option>3</option></select></label>
+          <label>Статус <select><option>Все</option><option>Активные</option><option>Скрытые</option></select></label>
+          <label>Курсы <select><option>Все</option><option>Без курсов</option><option>С курсами</option></select></label>
+        </div>
+      </div>
+
+      <form class="adm-changelist" onsubmit="return false">
+        <div class="adm-actions">
+          <label>Действие: <select><option>---------</option><option>Удалить выбранные (только без курсов и вложенных)</option><option>Сделать активными</option><option>Скрыть</option><option>Показать в меню</option><option>Убрать из меню</option></select></label>
+          <button type="button" class="adm-btn">Выполнить</button>
+          <span class="adm-muted">Выбрано 0 из 23</span>
+          <span class="adm-hint"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg> Перетащите строку, чтобы изменить порядок внутри уровня</span>
+        </div>
+        <div class="adm-table-wrap">
+        <table class="adm-table" data-sortable-tree>
+          <thead>
+            <tr>
+              <th class="adm-c-drag"></th>
+              <th class="adm-c-check"><input type="checkbox" aria-label="Выбрать все"></th>
+              <th>Подборка</th>
+              <th>В меню как</th>
+              <th class="adm-c-num" title="Курсы, привязанные к этой подборке напрямую">Курсов</th>
+              <th class="adm-c-num" title="Вместе с вложенными подборками — столько увидит посетитель">Всего</th>
+              <th class="adm-c-center">В меню</th>
+              <th>Статус</th>
+              <th>Порядок</th>
+              <th class="adm-c-acts">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr class="adm-row adm-row--l0" data-level="0" data-path="s-trudoustrojstvom" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:0"><button type="button" class="adm-tree-toggle" aria-expanded="true" data-tree-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><a href="#form" data-tab-link="form" class="adm-name__link">Курсы с трудоустройством</a><span class="adm-level">ур. 1</span></div><div class="adm-slug" style="--lvl:0">/podborki/s-trudoustrojstvom/</div></td>
+            <td class="adm-c-menu">С трудоустройством</td>
+            <td class="adm-c-num">3</td>
+            <td class="adm-c-num"><strong>111</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 3 курсам; есть вложенные подборки (3)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 3 курсам; есть вложенные подборки (3)</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l1" data-level="1" data-path="s-trudoustrojstvom/srazu" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:1"><button type="button" class="adm-tree-toggle" aria-expanded="true" data-tree-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><a href="#form" data-tab-link="form" class="adm-name__link">Курсы с трудоустройством сразу</a><span class="adm-level">ур. 2</span></div><div class="adm-slug" style="--lvl:1">/podborki/s-trudoustrojstvom/srazu/</div></td>
+            <td class="adm-c-menu">Трудоустройство сразу</td>
+            <td class="adm-c-num">8</td>
+            <td class="adm-c-num"><strong>49</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 8 курсам; есть вложенные подборки (2)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 8 курсам; есть вложенные подборки (2)</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l2" data-level="2" data-path="s-trudoustrojstvom/srazu/v-it" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:2"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Курсы с трудоустройством сразу в IT</a><span class="adm-level">ур. 3</span></div><div class="adm-slug" style="--lvl:2">/podborki/s-trudoustrojstvom/srazu/v-it/</div></td>
+            <td class="adm-c-menu">В IT</td>
+            <td class="adm-c-num">26</td>
+            <td class="adm-c-num"><strong>26</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><span class="adm-act adm-act--ghost" title="Максимум 3 уровня"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 26 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 26 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l2" data-level="2" data-path="s-trudoustrojstvom/srazu/ne-v-it" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:2"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Курсы с трудоустройством сразу не в IT</a><span class="adm-level">ур. 3</span></div><div class="adm-slug" style="--lvl:2">/podborki/s-trudoustrojstvom/srazu/ne-v-it/</div></td>
+            <td class="adm-c-menu">Не в IT</td>
+            <td class="adm-c-num">15</td>
+            <td class="adm-c-num"><strong>15</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><span class="adm-act adm-act--ghost" title="Максимум 3 уровня"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 15 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 15 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l1" data-level="1" data-path="s-trudoustrojstvom/posle-stazhirovki" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:1"><button type="button" class="adm-tree-toggle" aria-expanded="true" data-tree-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><a href="#form" data-tab-link="form" class="adm-name__link">Курсы с трудоустройством после стажировки</a><span class="adm-level">ур. 2</span></div><div class="adm-slug" style="--lvl:1">/podborki/s-trudoustrojstvom/posle-stazhirovki/</div></td>
+            <td class="adm-c-menu">После стажировки</td>
+            <td class="adm-c-num">3</td>
+            <td class="adm-c-num"><strong>59</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 3 курсам; есть вложенные подборки (2)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 3 курсам; есть вложенные подборки (2)</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l2" data-level="2" data-path="s-trudoustrojstvom/posle-stazhirovki/v-it" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:2"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Курсы со стажировкой в IT</a><span class="adm-level">ур. 3</span></div><div class="adm-slug" style="--lvl:2">/podborki/s-trudoustrojstvom/posle-stazhirovki/v-it/</div></td>
+            <td class="adm-c-menu">В IT</td>
+            <td class="adm-c-num">47</td>
+            <td class="adm-c-num"><strong>47</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><span class="adm-act adm-act--ghost" title="Максимум 3 уровня"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 47 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 47 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l2" data-level="2" data-path="s-trudoustrojstvom/posle-stazhirovki/ne-v-it" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:2"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Курсы со стажировкой не в IT</a><span class="adm-level">ур. 3</span></div><div class="adm-slug" style="--lvl:2">/podborki/s-trudoustrojstvom/posle-stazhirovki/ne-v-it/</div></td>
+            <td class="adm-c-menu">Не в IT</td>
+            <td class="adm-c-num">9</td>
+            <td class="adm-c-num"><strong>9</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><span class="adm-act adm-act--ghost" title="Максимум 3 уровня"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 9 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 9 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l1" data-level="1" data-path="s-trudoustrojstvom/s-garantiej" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" ></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:1"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Курсы с гарантией трудоустройства</a><span class="adm-level">ур. 2</span></div><div class="adm-slug" style="--lvl:1">/podborki/s-trudoustrojstvom/s-garantiej/</div></td>
+            <td class="adm-c-menu">С гарантией в договоре</td>
+            <td class="adm-c-num"><span class="adm-muted">0</span></td>
+            <td class="adm-c-num"><strong>0</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><a href="#delete-ok" class="adm-act adm-act--del" data-tab-link="delete-ok" title="Удалить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span class="vh">Удалить</span></a></td>
+          </tr>
+          <tr class="adm-row adm-row--l0" data-level="0" data-path="dlya-nachinayushchih" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:0"><button type="button" class="adm-tree-toggle" aria-expanded="true" data-tree-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><a href="#form" data-tab-link="form" class="adm-name__link">Курсы для начинающих</a><span class="adm-level">ур. 1</span></div><div class="adm-slug" style="--lvl:0">/podborki/dlya-nachinayushchih/</div></td>
+            <td class="adm-c-menu">Для начинающих</td>
+            <td class="adm-c-num">5</td>
+            <td class="adm-c-num"><strong>77</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 5 курсам; есть вложенные подборки (3)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 5 курсам; есть вложенные подборки (3)</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l1" data-level="1" data-path="dlya-nachinayushchih/it-bez-opyta" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:1"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Курсы в IT без опыта</a><span class="adm-level">ур. 2</span></div><div class="adm-slug" style="--lvl:1">/podborki/dlya-nachinayushchih/it-bez-opyta/</div></td>
+            <td class="adm-c-menu">IT без опыта</td>
+            <td class="adm-c-num">29</td>
+            <td class="adm-c-num"><strong>29</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 29 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 29 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l1" data-level="1" data-path="dlya-nachinayushchih/dlya-gumanitariev" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:1"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Курсы для гуманитариев</a><span class="adm-level">ур. 2</span></div><div class="adm-slug" style="--lvl:1">/podborki/dlya-nachinayushchih/dlya-gumanitariev/</div></td>
+            <td class="adm-c-menu">Для гуманитариев</td>
+            <td class="adm-c-num">43</td>
+            <td class="adm-c-num"><strong>43</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 43 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 43 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l1" data-level="1" data-path="dlya-nachinayushchih/posle-40" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" ></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:1"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Курсы для смены профессии после 40</a><span class="adm-level">ур. 2</span></div><div class="adm-slug" style="--lvl:1">/podborki/dlya-nachinayushchih/posle-40/</div></td>
+            <td class="adm-c-menu">После 40 лет</td>
+            <td class="adm-c-num"><span class="adm-muted">0</span></td>
+            <td class="adm-c-num"><strong>0</strong></td>
+            <td class="adm-c-center"><input type="checkbox" aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--off"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.9 4.2A10 10 0 0 1 12 4c7 0 10 8 10 8a13 13 0 0 1-1.7 2.7"/><path d="M6.6 6.6A13 13 0 0 0 2 12s3 8 10 8a9.7 9.7 0 0 0 5.4-1.6"/><path d="m2 2 20 20"/></svg>Скрыта</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><a href="#delete-ok" class="adm-act adm-act--del" data-tab-link="delete-ok" title="Удалить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span class="vh">Удалить</span></a></td>
+          </tr>
+          <tr class="adm-row adm-row--l0" data-level="0" data-path="dlya-detej" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:0"><button type="button" class="adm-tree-toggle" aria-expanded="true" data-tree-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><a href="#form" data-tab-link="form" class="adm-name__link">Курсы для детей</a><span class="adm-level">ур. 1</span></div><div class="adm-slug" style="--lvl:0">/podborki/dlya-detej/</div></td>
+            <td class="adm-c-menu">Для детей</td>
+            <td class="adm-c-num">8</td>
+            <td class="adm-c-num"><strong>93</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 8 курсам; есть вложенные подборки (3)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 8 курсам; есть вложенные подборки (3)</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l1" data-level="1" data-path="dlya-detej/7-10-let" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:1"><button type="button" class="adm-tree-toggle" aria-expanded="true" data-tree-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><a href="#form" data-tab-link="form" class="adm-name__link">Курсы для детей 7–10 лет</a><span class="adm-level">ур. 2</span></div><div class="adm-slug" style="--lvl:1">/podborki/dlya-detej/7-10-let/</div></td>
+            <td class="adm-c-menu">7–10 лет</td>
+            <td class="adm-c-num">8</td>
+            <td class="adm-c-num"><strong>27</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 8 курсам; есть вложенные подборки (2)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 8 курсам; есть вложенные подборки (2)</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l2" data-level="2" data-path="dlya-detej/7-10-let/programmirovanie" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:2"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Программирование для детей 7–10 лет</a><span class="adm-level">ур. 3</span></div><div class="adm-slug" style="--lvl:2">/podborki/dlya-detej/7-10-let/programmirovanie/</div></td>
+            <td class="adm-c-menu">Программирование</td>
+            <td class="adm-c-num">8</td>
+            <td class="adm-c-num"><strong>8</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><span class="adm-act adm-act--ghost" title="Максимум 3 уровня"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 8 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 8 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l2" data-level="2" data-path="dlya-detej/7-10-let/risovanie" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:2"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Рисование и дизайн для детей 7–10 лет</a><span class="adm-level">ур. 3</span></div><div class="adm-slug" style="--lvl:2">/podborki/dlya-detej/7-10-let/risovanie/</div></td>
+            <td class="adm-c-menu">Рисование и дизайн</td>
+            <td class="adm-c-num">11</td>
+            <td class="adm-c-num"><strong>11</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><span class="adm-act adm-act--ghost" title="Максимум 3 уровня"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 11 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 11 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l1" data-level="1" data-path="dlya-detej/11-14-let" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:1"><button type="button" class="adm-tree-toggle" aria-expanded="true" data-tree-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><a href="#form" data-tab-link="form" class="adm-name__link">Курсы для детей 11–14 лет</a><span class="adm-level">ур. 2</span></div><div class="adm-slug" style="--lvl:1">/podborki/dlya-detej/11-14-let/</div></td>
+            <td class="adm-c-menu">11–14 лет</td>
+            <td class="adm-c-num">5</td>
+            <td class="adm-c-num"><strong>47</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 5 курсам; есть вложенные подборки (2)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 5 курсам; есть вложенные подборки (2)</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l2" data-level="2" data-path="dlya-detej/11-14-let/programmirovanie" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:2"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Программирование для детей 11–14 лет</a><span class="adm-level">ур. 3</span></div><div class="adm-slug" style="--lvl:2">/podborki/dlya-detej/11-14-let/programmirovanie/</div></td>
+            <td class="adm-c-menu">Программирование</td>
+            <td class="adm-c-num">32</td>
+            <td class="adm-c-num"><strong>32</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><span class="adm-act adm-act--ghost" title="Максимум 3 уровня"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 32 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 32 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l2" data-level="2" data-path="dlya-detej/11-14-let/razrabotka-igr" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:2"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Разработка игр для детей 11–14 лет</a><span class="adm-level">ур. 3</span></div><div class="adm-slug" style="--lvl:2">/podborki/dlya-detej/11-14-let/razrabotka-igr/</div></td>
+            <td class="adm-c-menu">Разработка игр</td>
+            <td class="adm-c-num">10</td>
+            <td class="adm-c-num"><strong>10</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><span class="adm-act adm-act--ghost" title="Максимум 3 уровня"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 10 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 10 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l1" data-level="1" data-path="dlya-detej/ege-oge" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:1"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Подготовка к ЕГЭ и ОГЭ</a><span class="adm-level">ур. 2</span></div><div class="adm-slug" style="--lvl:1">/podborki/dlya-detej/ege-oge/</div></td>
+            <td class="adm-c-menu">ЕГЭ и ОГЭ</td>
+            <td class="adm-c-num">11</td>
+            <td class="adm-c-num"><strong>11</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 11 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 11 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l0" data-level="0" data-path="besplatnye" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:0"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Бесплатные курсы</a><span class="adm-level">ур. 1</span></div><div class="adm-slug" style="--lvl:0">/podborki/besplatnye/</div></td>
+            <td class="adm-c-menu">Бесплатные</td>
+            <td class="adm-c-num">9</td>
+            <td class="adm-c-num"><strong>9</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 9 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 9 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l0" data-level="0" data-path="v-rassrochku" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:0"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Курсы в рассрочку</a><span class="adm-level">ур. 1</span></div><div class="adm-slug" style="--lvl:0">/podborki/v-rassrochku/</div></td>
+            <td class="adm-c-menu">В рассрочку</td>
+            <td class="adm-c-num">42</td>
+            <td class="adm-c-num"><strong>42</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 42 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 42 курсам</span></span></td>
+          </tr>
+          <tr class="adm-row adm-row--l0" data-level="0" data-path="korotkie" draggable="true">
+            <td class="adm-c-drag"><span class="adm-drag" title="Перетащите, чтобы изменить порядок"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></span></td>
+            <td class="adm-c-check"><input type="checkbox" aria-label="Выбрать" disabled title="Нельзя удалить"></td>
+            <td class="adm-c-name"><div class="adm-name" style="--lvl:0"><span class="adm-tree-toggle adm-tree-toggle--leaf"></span><a href="#form" data-tab-link="form" class="adm-name__link">Короткие курсы до 3 месяцев</a><span class="adm-level">ур. 1</span></div><div class="adm-slug" style="--lvl:0">/podborki/korotkie/</div></td>
+            <td class="adm-c-menu">Короткие, до 3 месяцев</td>
+            <td class="adm-c-num">13</td>
+            <td class="adm-c-num"><strong>13</strong></td>
+            <td class="adm-c-center"><input type="checkbox" checked aria-label="В меню"></td>
+            <td><span class="adm-badge adm-badge--on">Активна</span></td>
+            <td class="adm-c-order"><button type="button" class="adm-move" title="Выше"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button><button type="button" class="adm-move" title="Ниже"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></td>
+            <td class="adm-c-acts"><a href="#form" class="adm-act" data-tab-link="form" title="Изменить"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span class="vh">Изменить</span></a><a href="#form" class="adm-act" data-tab-link="form" title="Добавить вложенную"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span class="vh">Добавить вложенную</span></a><span class="adm-act adm-act--locked" tabindex="0" title="Нельзя удалить: привязан к 13 курсам"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="adm-tip">Нельзя удалить: привязан к 13 курсам</span></span></td>
+          </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="adm-paginator">23 подборок · <span class="adm-muted"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> — удалить нельзя: к подборке привязаны курсы или у неё есть вложенные подборки. Наведите на замок, чтобы увидеть причину.</span></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= 2. ФОРМА ================= -->
+  <section class="adm-screen" data-screen="form">
+    <div class="adm-crumbs"><a href="#">Начало</a> › <a href="#">Каталог</a> › <a href="#list" data-tab-link="list">Подборки курсов</a> › Курсы с трудоустройством сразу</div>
+    <div class="adm-content">
+      <div class="adm-titlebar">
+        <h1>Изменить подборку</h1>
+        <div class="adm-titlebar__links"><a href="#" class="adm-btn adm-btn--ghost">История</a><a href="../podborki/s-trudoustrojstvom/srazu/index.html" target="_blank" class="adm-btn adm-btn--ghost">Смотреть на сайте ↗</a></div>
+      </div>
+      <form class="adm-form" onsubmit="return false">
+        <fieldset class="adm-fieldset">
+          <h2>Основное</h2>
+          <div class="adm-field adm-field--req"><label for="f-name">Название</label><div><input id="f-name" type="text" value="Курсы с трудоустройством сразу" class="adm-input adm-input--wide"><p class="adm-help">Заголовок страницы подборки (H1).</p></div></div>
+          <div class="adm-field adm-field--req"><label for="f-menu">Название в меню</label><div><input id="f-menu" type="text" value="Трудоустройство сразу" class="adm-input"><p class="adm-help">Короткий вариант для выпадающего меню. Если пусто — берётся «Название».</p></div></div>
+          <div class="adm-field adm-field--req"><label for="f-slug">Slug</label><div><input id="f-slug" type="text" value="srazu" class="adm-input"><p class="adm-help">Часть адреса. Итоговый адрес: <code>/podborki/s-trudoustrojstvom/<strong>srazu</strong>/</code>. Уникален внутри родителя.</p></div></div>
+          <div class="adm-field"><label for="f-parent">Родительская подборка</label><div><select id="f-parent" class="adm-input adm-input--wide"><option value="">— Нет (1-й уровень) —</option><option value="s-trudoustrojstvom" selected>Курсы с трудоустройством</option><option value="s-trudoustrojstvom/srazu">— Курсы с трудоустройством сразу</option><option value="s-trudoustrojstvom/posle-stazhirovki">— Курсы с трудоустройством после стажировки</option><option value="s-trudoustrojstvom/s-garantiej">— Курсы с гарантией трудоустройства</option><option value="dlya-nachinayushchih">Курсы для начинающих</option><option value="dlya-nachinayushchih/it-bez-opyta">— Курсы в IT без опыта</option><option value="dlya-nachinayushchih/dlya-gumanitariev">— Курсы для гуманитариев</option><option value="dlya-nachinayushchih/posle-40">— Курсы для смены профессии после 40</option><option value="dlya-detej">Курсы для детей</option><option value="dlya-detej/7-10-let">— Курсы для детей 7–10 лет</option><option value="dlya-detej/11-14-let">— Курсы для детей 11–14 лет</option><option value="dlya-detej/ege-oge">— Подготовка к ЕГЭ и ОГЭ</option><option value="besplatnye">Бесплатные курсы</option><option value="v-rassrochku">Курсы в рассрочку</option><option value="korotkie">Короткие курсы до 3 месяцев</option></select><p class="adm-help">В списке только подборки 1-го и 2-го уровня — глубже 3 уровней вложить нельзя. Саму подборку и её вложенные выбрать нельзя.</p></div></div>
+          <div class="adm-field"><label for="f-desc">Описание</label><div><textarea id="f-desc" rows="3" class="adm-input adm-input--wide">Школа начинает подбирать вакансии ещё во время обучения и помогает пройти собеседования сразу после выпуска.</textarea><p class="adm-help">Текст под заголовком на странице подборки.</p></div></div>
+          <div class="adm-field"><label for="f-icon">Иконка</label><div><select id="f-icon" class="adm-input"><option>briefcase — портфель</option><option>sprout — росток</option><option>smile — смайл</option><option>gift — подарок</option><option>wallet — кошелёк</option><option>timer — таймер</option></select><p class="adm-help">Только для 1-го уровня — показывается в меню.</p></div></div>
+        </fieldset>
+        <fieldset class="adm-fieldset">
+          <h2>Показ</h2>
+          <div class="adm-field adm-field--check"><label><input type="checkbox" checked> Активна</label><p class="adm-help">Скрытая подборка не видна на сайте и в меню, её страница отдаёт 404. Привязка к курсам сохраняется.</p></div>
+          <div class="adm-field adm-field--check"><label><input type="checkbox" checked> Показывать в меню</label><p class="adm-help">Можно убрать из меню, но оставить страницу (для SEO-подборок).</p></div>
+          <div class="adm-field"><label for="f-order">Порядок</label><div><input id="f-order" type="number" value="10" class="adm-input adm-input--num"><p class="adm-help">Меньше — выше. Удобнее менять перетаскиванием в списке.</p></div></div>
+        </fieldset>
+        <fieldset class="adm-fieldset adm-fieldset--collapse">
+          <h2>SEO <span class="adm-muted">(необязательно)</span></h2>
+          <div class="adm-field"><label for="f-st">SEO title</label><div><input id="f-st" type="text" placeholder="Курсы с трудоустройством сразу — edukursy.ru" class="adm-input adm-input--wide"></div></div>
+          <div class="adm-field"><label for="f-sd">Meta description</label><div><textarea id="f-sd" rows="2" class="adm-input adm-input--wide" placeholder="Если пусто — берётся описание"></textarea></div></div>
+        </fieldset>
+        <fieldset class="adm-fieldset">
+          <h2>Курсы в подборке <span class="adm-muted">(только просмотр)</span></h2>
+          <p class="adm-text">Привязано напрямую: <strong>8</strong> · вместе с вложенными: <strong>49</strong>. Курсы добавляются в карточке курса, поле «Подборки». <a href="#">Открыть список курсов с этой подборкой →</a></p>
+        </fieldset>
+        <div class="adm-submit">
+          <span class="adm-submit__del adm-act--locked" tabindex="0"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Удалить нельзя<span class="adm-tip">Есть вложенные подборки: «В IT», «Не в IT». Сначала перенесите или удалите их.</span></span>
+          <button type="button" class="adm-btn">Сохранить и добавить другую</button>
+          <button type="button" class="adm-btn">Сохранить и продолжить</button>
+          <button type="button" class="adm-btn adm-btn--primary">Сохранить</button>
+        </div>
+        <ul class="adm-errors-demo">
+          <li><strong>Пример ошибок валидации:</strong></li>
+          <li class="adm-err">Нельзя вложить глубже 3 уровней: у «Курсы с трудоустройством сразу в IT» уже 3-й уровень.</li>
+          <li class="adm-err">Подборка с адресом «srazu» уже есть у этого родителя.</li>
+          <li class="adm-err">Нельзя выбрать родителем саму подборку или её вложенную.</li>
+        </ul>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= 3. КАРТОЧКА КУРСА ================= -->
+  <section class="adm-screen" data-screen="course">
+    <div class="adm-crumbs"><a href="#">Начало</a> › <a href="#">Каталог</a> › <a href="#">Курсы</a> › Python-разработчик с нуля</div>
+    <div class="adm-content">
+      <div class="adm-titlebar"><h1>Изменить курс</h1></div>
+      <form class="adm-form" onsubmit="return false">
+        <fieldset class="adm-fieldset">
+          <h2>Основное</h2>
+          <div class="adm-field"><label>Название</label><div><input type="text" value="Python-разработчик с нуля" class="adm-input adm-input--wide"></div></div>
+          <div class="adm-field"><label>Школа</label><div><select class="adm-input"><option>Школа 1</option></select></div></div>
+          <p class="adm-text adm-muted">… остальные поля курса без изменений …</p>
+        </fieldset>
+        <fieldset class="adm-fieldset">
+          <h2>Подборки</h2>
+          <!-- PODBORKI: виджет TagTreeWidget для ManyToMany Course.tags.
+               Дерево с чекбоксами, поиск, выбранные — чипами сверху.
+               Отметка дочерней подборки показывает родителей «частично» (полоска), но в базу пишется только отмеченное.
+               Курс попадает на страницы родителей автоматически — отмечать родителей не нужно. -->
+          <div class="adm-field adm-field--top">
+            <label>Подборки</label>
+            <div class="tt" data-tag-tree>
+              <div class="tt-selected" data-tt-selected><span class="tt-chip">С трудоустройством › Трудоустройство сразу › В IT<button type="button" aria-label="Убрать">×</button></span><span class="tt-chip">Для начинающих › IT без опыта<button type="button" aria-label="Убрать">×</button></span><span class="tt-chip">В рассрочку<button type="button" aria-label="Убрать">×</button></span></div>
+              <div class="tt-box">
+                <div class="tt-tools">
+                  <input type="search" class="adm-input tt-search" placeholder="Найти подборку…" data-tt-search aria-label="Найти подборку">
+                  <button type="button" class="adm-btn adm-btn--ghost" data-tt-expand>Развернуть все</button>
+                  <button type="button" class="adm-btn adm-btn--ghost" data-tt-collapse>Свернуть</button>
+                </div>
+                <div class="tt-scroll"><ul class="tt-list"><li class="tt-item is-open" data-tt-item><div class="tt-row"><button type="button" class="tt-toggle" aria-expanded="true" data-tt-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><label class="tt-label"><input type="checkbox" name="tags" value="s-trudoustrojstvom" data-partial data-tt-check><span class="tt-name" data-short="С трудоустройством">Курсы с трудоустройством</span><span class="tt-count">111</span></label></div><ul class="tt-list"><li class="tt-item is-open" data-tt-item><div class="tt-row"><button type="button" class="tt-toggle" aria-expanded="true" data-tt-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><label class="tt-label"><input type="checkbox" name="tags" value="s-trudoustrojstvom/srazu" data-partial data-tt-check><span class="tt-name" data-short="Трудоустройство сразу">Курсы с трудоустройством сразу</span><span class="tt-count">49</span></label></div><ul class="tt-list"><li class="tt-item is-open" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="s-trudoustrojstvom/srazu/v-it" checked data-tt-check><span class="tt-name" data-short="В IT">Курсы с трудоустройством сразу в IT</span><span class="tt-count">26</span></label></div></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="s-trudoustrojstvom/srazu/ne-v-it" data-tt-check><span class="tt-name" data-short="Не в IT">Курсы с трудоустройством сразу не в IT</span><span class="tt-count">15</span></label></div></li></ul></li><li class="tt-item" data-tt-item><div class="tt-row"><button type="button" class="tt-toggle" aria-expanded="false" data-tt-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><label class="tt-label"><input type="checkbox" name="tags" value="s-trudoustrojstvom/posle-stazhirovki" data-tt-check><span class="tt-name" data-short="После стажировки">Курсы с трудоустройством после стажировки</span><span class="tt-count">59</span></label></div><ul class="tt-list"><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="s-trudoustrojstvom/posle-stazhirovki/v-it" data-tt-check><span class="tt-name" data-short="В IT">Курсы со стажировкой в IT</span><span class="tt-count">47</span></label></div></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="s-trudoustrojstvom/posle-stazhirovki/ne-v-it" data-tt-check><span class="tt-name" data-short="Не в IT">Курсы со стажировкой не в IT</span><span class="tt-count">9</span></label></div></li></ul></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="s-trudoustrojstvom/s-garantiej" data-tt-check><span class="tt-name" data-short="С гарантией в договоре">Курсы с гарантией трудоустройства</span><span class="tt-count">0</span></label></div></li></ul></li><li class="tt-item is-open" data-tt-item><div class="tt-row"><button type="button" class="tt-toggle" aria-expanded="true" data-tt-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><label class="tt-label"><input type="checkbox" name="tags" value="dlya-nachinayushchih" data-partial data-tt-check><span class="tt-name" data-short="Для начинающих">Курсы для начинающих</span><span class="tt-count">77</span></label></div><ul class="tt-list"><li class="tt-item is-open" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="dlya-nachinayushchih/it-bez-opyta" checked data-tt-check><span class="tt-name" data-short="IT без опыта">Курсы в IT без опыта</span><span class="tt-count">29</span></label></div></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="dlya-nachinayushchih/dlya-gumanitariev" data-tt-check><span class="tt-name" data-short="Для гуманитариев">Курсы для гуманитариев</span><span class="tt-count">43</span></label></div></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="dlya-nachinayushchih/posle-40" data-tt-check><span class="tt-name" data-short="После 40 лет">Курсы для смены профессии после 40</span><span class="tt-count">0</span></label></div></li></ul></li><li class="tt-item" data-tt-item><div class="tt-row"><button type="button" class="tt-toggle" aria-expanded="false" data-tt-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><label class="tt-label"><input type="checkbox" name="tags" value="dlya-detej" data-tt-check><span class="tt-name" data-short="Для детей">Курсы для детей</span><span class="tt-count">93</span></label></div><ul class="tt-list"><li class="tt-item" data-tt-item><div class="tt-row"><button type="button" class="tt-toggle" aria-expanded="false" data-tt-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><label class="tt-label"><input type="checkbox" name="tags" value="dlya-detej/7-10-let" data-tt-check><span class="tt-name" data-short="7–10 лет">Курсы для детей 7–10 лет</span><span class="tt-count">27</span></label></div><ul class="tt-list"><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="dlya-detej/7-10-let/programmirovanie" data-tt-check><span class="tt-name" data-short="Программирование">Программирование для детей 7–10 лет</span><span class="tt-count">8</span></label></div></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="dlya-detej/7-10-let/risovanie" data-tt-check><span class="tt-name" data-short="Рисование и дизайн">Рисование и дизайн для детей 7–10 лет</span><span class="tt-count">11</span></label></div></li></ul></li><li class="tt-item" data-tt-item><div class="tt-row"><button type="button" class="tt-toggle" aria-expanded="false" data-tt-toggle><svg class="ic ic--chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><label class="tt-label"><input type="checkbox" name="tags" value="dlya-detej/11-14-let" data-tt-check><span class="tt-name" data-short="11–14 лет">Курсы для детей 11–14 лет</span><span class="tt-count">47</span></label></div><ul class="tt-list"><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="dlya-detej/11-14-let/programmirovanie" data-tt-check><span class="tt-name" data-short="Программирование">Программирование для детей 11–14 лет</span><span class="tt-count">32</span></label></div></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="dlya-detej/11-14-let/razrabotka-igr" data-tt-check><span class="tt-name" data-short="Разработка игр">Разработка игр для детей 11–14 лет</span><span class="tt-count">10</span></label></div></li></ul></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="dlya-detej/ege-oge" data-tt-check><span class="tt-name" data-short="ЕГЭ и ОГЭ">Подготовка к ЕГЭ и ОГЭ</span><span class="tt-count">11</span></label></div></li></ul></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="besplatnye" data-tt-check><span class="tt-name" data-short="Бесплатные">Бесплатные курсы</span><span class="tt-count">9</span></label></div></li><li class="tt-item is-open" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="v-rassrochku" checked data-tt-check><span class="tt-name" data-short="В рассрочку">Курсы в рассрочку</span><span class="tt-count">42</span></label></div></li><li class="tt-item" data-tt-item><div class="tt-row"><span class="tt-toggle tt-toggle--leaf"></span><label class="tt-label"><input type="checkbox" name="tags" value="korotkie" data-tt-check><span class="tt-name" data-short="Короткие, до 3 месяцев">Короткие курсы до 3 месяцев</span><span class="tt-count">13</span></label></div></li></ul></div>
+              </div>
+              <p class="adm-help">Отмечайте самую точную подборку. Курс автоматически появится и на страницах родительских подборок: отметили «С трудоустройством › Сразу › В IT» — курс будет и в «Сразу», и в «С трудоустройством». Скрытые подборки показаны серым.</p>
+            </div>
+          </div>
+        </fieldset>
+        <div class="adm-submit"><button type="button" class="adm-btn">Сохранить и продолжить</button><button type="button" class="adm-btn adm-btn--primary">Сохранить</button></div>
+      </form>
+
+      <h2 class="adm-subtitle">Список курсов: колонка и фильтр по подборкам</h2>
+      <div class="adm-table-wrap">
+      <table class="adm-table adm-table--simple">
+        <thead><tr><th>Курс</th><th>Школа</th><th>Подборки</th><th>Цена</th></tr></thead>
+        <tbody>
+          <tr><td><a href="#">Python-разработчик с нуля</a></td><td>Школа 1</td><td><span class="adm-tag">Сразу › В IT</span><span class="adm-tag">IT без опыта</span><span class="adm-tag">В рассрочку</span></td><td>98 000 ₽</td></tr>
+          <tr><td><a href="#">SMM-менеджер</a></td><td>Школа 2</td><td><span class="adm-tag">Сразу › Не в IT</span><span class="adm-tag">Для гуманитариев</span></td><td>45 000 ₽</td></tr>
+          <tr><td><a href="#">Scratch для детей</a></td><td>Школа 3</td><td><span class="adm-tag">7–10 лет › Программирование</span></td><td>18 900 ₽</td></tr>
+          <tr><td><a href="#">Git и командная разработка</a></td><td>Школа 3</td><td><span class="adm-muted">—</span></td><td>9 900 ₽</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="adm-help">Справа в списке курсов — фильтр «Подборка» (дерево с отступами) и действие «Добавить в подборку…» для выбранных курсов.</p>
+    </div>
+  </section>
+
+  <!-- ================= 4. УДАЛЕНИЕ — МОЖНО ================= -->
+  <section class="adm-screen" data-screen="delete-ok">
+    <div class="adm-crumbs"><a href="#">Начало</a> › <a href="#">Каталог</a> › <a href="#list" data-tab-link="list">Подборки курсов</a> › Курсы с гарантией трудоустройства › Удалить</div>
+    <div class="adm-content">
+      <h1>Вы уверены?</h1>
+      <p class="adm-text">Удалить подборку «<strong>Курсы с гарантией трудоустройства</strong>»?</p>
+      <ul class="adm-check-list">
+        <li class="ok">К подборке не привязан ни один курс</li>
+        <li class="ok">Нет вложенных подборок</li>
+        <li class="info">Пункт исчезнет из меню, адрес /podborki/s-trudoustrojstvom/s-garantiej/ начнёт отдавать 404</li>
+      </ul>
+      <div class="adm-submit adm-submit--left"><button type="button" class="adm-btn adm-btn--danger">Да, удалить</button><a href="#list" data-tab-link="list" class="adm-btn">Нет, вернуться</a></div>
+    </div>
+  </section>
+
+  <!-- ================= 5. УДАЛЕНИЕ — НЕЛЬЗЯ ================= -->
+  <section class="adm-screen" data-screen="delete-no">
+    <div class="adm-crumbs"><a href="#">Начало</a> › <a href="#">Каталог</a> › <a href="#list" data-tab-link="list">Подборки курсов</a> › Курсы для детей › Удалить</div>
+    <div class="adm-content">
+      <h1>Удалить нельзя</h1>
+      <p class="adm-text">Подборку «<strong>Подготовка к ЕГЭ и ОГЭ</strong>» нельзя удалить:</p>
+      <ul class="adm-check-list">
+        <li class="no">К подборке привязано <strong>11 курсов</strong>: <a href="#">Информатика: ЕГЭ на 90+</a>, <a href="#">Математика: ОГЭ</a> и ещё 9. <a href="#">Открыть список →</a></li>
+      </ul>
+      <p class="adm-text">Что можно сделать:</p>
+      <ol class="adm-steps">
+        <li>Снять подборку с курсов (в списке курсов: выбрать → действие «Убрать из подборки»), затем удалить.</li>
+        <li>Или просто <strong>скрыть</strong> подборку — снять «Активна». Курсы останутся привязаны, страница пропадёт с сайта.</li>
+      </ol>
+      <div class="adm-submit adm-submit--left"><a href="#form" data-tab-link="form" class="adm-btn adm-btn--primary">Скрыть подборку</a><a href="#list" data-tab-link="list" class="adm-btn">Вернуться к списку</a></div>
+      <ul class="adm-messages"><li class="adm-msg adm-msg--err">Массовое удаление: удалено 2 подборки. Пропущено 3 — к ним привязаны курсы или есть вложенные: «Для детей», «7–10 лет», «Подготовка к ЕГЭ и ОГЭ».</li></ul>
+    </div>
+  </section>
+
+  <script src="admin-demo.js"></script>
+</body>
+</html>

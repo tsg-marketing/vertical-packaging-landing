@@ -1,0 +1,10 @@
+{% extends "admin/delete_confirmation.html" %}
+{% comment %}Показывается, только если удалить МОЖНО (иначе — delete_blocked.html).{% endcomment %}
+{% block content %}
+<ul class="pdb-checks">
+  <li class="ok">К подборке не привязан ни один курс</li>
+  <li class="ok">Нет вложенных подборок</li>
+  <li class="info">Пункт исчезнет из меню, адрес {{ object.get_absolute_url }} начнёт отдавать 404</li>
+</ul>
+{{ block.super }}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "edukursy/base.html" %}
+{% load podborki_tags %}
+{% block title %}Подборки курсов — edukursy.ru{% endblock %}
+{% block meta_description %}Подборки онлайн-курсов: с трудоустройством, для начинающих, для детей, бесплатные и в рассрочку.{% endblock %}
+
+{% block content %}
+<section class="page-head podb-head">
+  <nav class="breadcrumbs" aria-label="Хлебные крошки">
+    <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="1"></li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" aria-current="page">Подборки курсов</span><meta itemprop="position" content="2"></li>
+    </ol>
+  </nav>
+  <h1 class="page-head__title">Подборки курсов</h1>
+  <p class="podb-head__desc">Готовые подборки онлайн-курсов под вашу задачу.</p>
+</section>
+
+<section class="section section--light">
+  <div class="podb-tree">
+    {% for n in tree %}
+    <article class="podb-card">
+      <a href="{{ n.url }}" class="podb-card__head">
+        {% if n.icon %}<span class="podb-card__icon">{% include "edukursy/partials/podborki_icon.html" with name=n.icon cls="" %}</span>{% endif %}
+        <span><span class="podb-card__title">{{ n.name }}</span><br><span class="podb-card__count">{{ n.count }} {{ n.count|ru_plural:"курс,курса,курсов" }}</span></span>
+      </a>
+      {% if n.description %}<p class="podb-card__desc">{{ n.description|truncatechars:160 }}</p>{% endif %}
+      {% if n.children %}
+      <div class="podb-card__list">
+        <ul style="margin:0;padding:0;border:0">
+          {% for c in n.children %}
+          <li><a href="{{ c.url }}">{{ c.menu_name }}<span>{{ c.count }}</span></a>
+            {% if c.children %}<ul>{% for g in c.children %}<li><a href="{{ g.url }}">{{ g.menu_name }}<span>{{ g.count }}</span></a></li>{% endfor %}</ul>{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

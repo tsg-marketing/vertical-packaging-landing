@@ -1,0 +1,17 @@
+{% comment %}Виджет TagTreeWidget: дерево подборок с чекбоксами для Course.tags.{% endcomment %}
+<div class="tt" data-tag-tree>
+  <div class="tt-selected" data-tt-selected>
+    {% for t in widget.selected_items %}<span class="tt-chip">{{ t.path }}<button type="button" aria-label="Убрать" data-tt-remove="{{ t.pk }}">×</button></span>{% empty %}<span class="tt-empty">Подборки не выбраны — курс не попадёт ни в одну подборку</span>{% endfor %}
+  </div>
+  <div class="tt-box">
+    <div class="tt-tools">
+      <input type="search" class="vTextField tt-search" placeholder="Найти подборку…" data-tt-search aria-label="Найти подборку">
+      <button type="button" class="button" data-tt-expand>Развернуть все</button>
+      <button type="button" class="button" data-tt-collapse>Свернуть</button>
+    </div>
+    <div class="tt-scroll">
+      {% include "podborki/widgets/tag_tree_level.html" with nodes=widget.tree name=widget.name %}
+    </div>
+  </div>
+  <p class="help">Отмечайте самую точную подборку. Курс автоматически появится и на страницах родительских подборок. Скрытые подборки показаны серым.</p>
+</div>

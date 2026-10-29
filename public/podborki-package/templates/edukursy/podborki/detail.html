@@ -1,0 +1,83 @@
+{% extends "edukursy/base.html" %}
+{% load podborki_tags %}
+{% comment %}
+Страница подборки: курсы этой подборки И всех вложенных. Разметка 1:1 с mockups/podborki/.../index.html.
+Карточка курса — ваш partial каталога (замените include, если имя другое).
+{% endcomment %}
+{% block title %}{{ tag.seo_title|default:tag.name }}{% if page_obj.number > 1 %} — страница {{ page_obj.number }}{% endif %} — edukursy.ru{% endblock %}
+{% block meta_description %}{{ tag.seo_description|default:tag.description|truncatechars:160 }}{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ tag.get_absolute_url }}{% if page_obj.number > 1 %}?page={{ page_obj.number }}{% endif %}">{% endblock %}
+
+{% block content %}
+<section class="page-head podb-head">
+  <nav class="breadcrumbs" aria-label="Хлебные крошки">
+    <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="1"></li>
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{% url 'podborki' %}" itemprop="item"><span itemprop="name">Подборки курсов</span></a><meta itemprop="position" content="2"></li>
+      {% for a in ancestors %}
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="{{ a.get_absolute_url }}" itemprop="item"><span itemprop="name">{{ a.name }}</span></a><meta itemprop="position" content="{{ forloop.counter|add:2 }}"></li>
+      {% endfor %}
+      <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" aria-current="page">{{ tag.name }}</span><meta itemprop="position" content="{{ ancestors|length|add:3 }}"></li>
+    </ol>
+  </nav>
+  <h1 class="page-head__title">{{ tag.name }}</h1>
+  {% if tag.description %}<p class="podb-head__desc">{{ tag.description }}</p>{% endif %}
+
+  {% if children %}
+  <nav class="podb-chips" aria-label="Уточнить подборку">
+    <a href="{{ tag.get_absolute_url }}" class="podb-chip" aria-current="page">Все <span>{{ total }}</span></a>
+    {% for c in children %}<a href="{{ c.url }}" class="podb-chip">{{ c.menu_name }} <span>{{ c.count }}</span></a>{% endfor %}
+  </nav>
+  {% elif parent_node %}
+  <nav class="podb-chips" aria-label="Соседние подборки">
+    <a href="{{ parent_node.url }}" class="podb-chip podb-chip--up"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Все: {{ parent_node.menu_name }} <span>{{ parent_node.count }}</span></a>
+    {% for c in siblings %}<a href="{{ c.url }}" class="podb-chip"{% if c.id == tag.id %} aria-current="page"{% endif %}>{{ c.menu_name }} <span>{{ c.count }}</span></a>{% endfor %}
+  </nav>
+  {% endif %}
+</section>
+
+<section class="section catalog-main podb-list" aria-label="Курсы подборки">
+  <div class="toolbar">
+    <p class="toolbar__count">Найдено <span class="results-count">{{ total }} {{ total|ru_plural:"курс,курса,курсов" }}</span></p>
+    {% if total > 1 %}
+    <form class="sort" method="get">
+      <label for="sort" class="sort__label">Сортировка</label>
+      <select id="sort" name="sort" class="sort__select" onchange="this.form.submit()">
+        <option value="popular"{% if sort == "popular" %} selected{% endif %}>Популярные</option>
+        <option value="price_asc"{% if sort == "price_asc" %} selected{% endif %}>Сначала дешёвые</option>
+        <option value="price_desc"{% if sort == "price_desc" %} selected{% endif %}>Сначала дорогие</option>
+        <option value="new"{% if sort == "new" %} selected{% endif %}>Новые</option>
+      </select>
+      <noscript><button type="submit" class="btn btn--outline">ОК</button></noscript>
+    </form>
+    {% endif %}
+  </div>
+
+  {% if page_obj.object_list %}
+  <div class="catalog-grid catalog-grid--wide">
+    {% for course in page_obj.object_list %}
+      {% include "edukursy/partials/cards/course_card.html" with course=course %}
+    {% endfor %}
+  </div>
+  {% if page_obj.has_other_pages %}
+  <nav class="pagination" aria-label="Страницы подборки">
+    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}{% if sort != 'popular' %}&amp;sort={{ sort }}{% endif %}" class="pagination__link pagination__link--nav">← Назад</a>{% else %}<span class="pagination__link pagination__link--nav pagination__link--disabled" aria-disabled="true">← Назад</span>{% endif %}
+    <ul class="pagination__list">
+      {% for p in page_obj.paginator.page_range %}
+        {% if p == page_obj.number %}<li><span class="pagination__link is-current" aria-current="page">{{ p }}</span></li>
+        {% elif p == 1 or p == page_obj.paginator.num_pages or p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}<li><a href="?page={{ p }}{% if sort != 'popular' %}&amp;sort={{ sort }}{% endif %}" class="pagination__link">{{ p }}</a></li>
+        {% elif p == page_obj.number|add:-3 or p == page_obj.number|add:3 %}<li><span class="pagination__gap">…</span></li>{% endif %}
+      {% endfor %}
+    </ul>
+    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}{% if sort != 'popular' %}&amp;sort={{ sort }}{% endif %}" class="pagination__link pagination__link--nav">Дальше →</a>{% else %}<span class="pagination__link pagination__link--nav pagination__link--disabled" aria-disabled="true">Дальше →</span>{% endif %}
+  </nav>
+  {% endif %}
+  {% else %}
+  <div class="podb-empty">
+    <h2 class="section__title">В подборке пока нет курсов</h2>
+    <p>Мы скоро добавим подходящие программы. А пока посмотрите весь каталог.</p>
+    <a href="{% url 'courses' %}" class="btn btn--primary">Все курсы</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

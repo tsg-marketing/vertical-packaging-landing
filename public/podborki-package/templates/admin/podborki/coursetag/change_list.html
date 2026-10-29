@@ -1,0 +1,13 @@
+{% extends "admin/change_list.html" %}
+{% comment %}
+Список подборок деревом. Перетаскивание строк (за ⋮⋮) и стрелки ↑↓ меняют порядок внутри одного родителя —
+сохраняется сразу через POST {{ reorder_url }}.
+{% endcomment %}
+{% block content %}
+  <div class="pdb-help">
+    <span>⋮⋮ Перетащите строку или нажмите ↑↓, чтобы изменить порядок внутри уровня. Порядок сохраняется сразу.</span>
+    <span>🔒 — удалить нельзя: к подборке привязаны курсы или у неё есть вложенные. Наведите на замок, чтобы увидеть причину.</span>
+  </div>
+  <div id="pdb-reorder" data-url="{{ reorder_url }}" data-csrf="{{ csrf_token }}" hidden></div>
+  {{ block.super }}
+{% endblock %}
