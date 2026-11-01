@@ -1,0 +1,14 @@
+{% comment %}Факты со страницы школы (source_facts) — цитаты, на которых построен разбор.{% endcomment %}
+{% if cpage.source_facts %}
+<section class="section" id="course-source">
+  <details class="cp-source" open>
+    <summary class="cp-source__head">
+      <span><span class="cp-source__title">Что говорит школа</span><span class="cp-source__sub">Цитаты со страницы курса{% if cpage.source_domain %} на {{ cpage.source_domain }}{% endif %}</span></span>
+    </summary>
+    <dl class="cp-source__list">
+      {% for f in cpage.source_facts %}<div><dt>{{ f.label }}</dt><dd>«{{ f.text }}»</dd></div>{% endfor %}
+    </dl>
+    {% if cpage.source_url and cpage.show_source_link %}<a href="{{ cpage.source_url }}" class="cp-source__link" rel="nofollow noopener" target="_blank">{% include "edukursy/courses/blocks/icon.html" with name="link" %}Открыть страницу курса</a>{% endif %}
+  </details>
+</section>
+{% endif %}

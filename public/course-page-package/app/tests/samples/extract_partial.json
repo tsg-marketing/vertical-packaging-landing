@@ -1,0 +1,41 @@
+{
+  "source_url": "https://school-2.ru/c/sql",
+  "extraction_status": "partial",
+  "course_title": "SQL для начинающих",
+  "school_name": "Школа 2",
+  "course_category": "SQL",
+  "level": null,
+  "format": [
+    "online",
+    "self-paced"
+  ],
+  "duration_text": "1 месяц",
+  "price_text": "14 900 ₽",
+  "installment_text": null,
+  "certificate": null,
+  "employment_support": false,
+  "short_summary": "Короткий курс по основам SQL: запросы, фильтрация и объединение таблиц.",
+  "for_whom": [],
+  "not_for_whom": [],
+  "what_you_learn": [
+    "SELECT, WHERE, ORDER BY",
+    "JOIN и группировка",
+    "Подзапросы"
+  ],
+  "course_features": [],
+  "pros": [],
+  "cons": [
+    "На странице не указан формат обратной связи"
+  ],
+  "prerequisites": [],
+  "faq": [],
+  "editorial_verdict": null,
+  "source_facts": {
+    "description_excerpt": null,
+    "pricing_excerpt": "14 900 ₽",
+    "duration_excerpt": null,
+    "format_excerpt": null,
+    "employment_excerpt": null,
+    "certificate_excerpt": null
+  }
+}

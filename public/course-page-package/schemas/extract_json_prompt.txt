@@ -1,0 +1,219 @@
+Return JSON using exactly this schema:
+
+{
+  "source_url": "string",
+  "extraction_status": "ok | partial | failed",
+  "course_title": "string | null",
+  "school_name": "string | null",
+  "course_category": "string | null",
+  "level": "beginner | beginner_plus | intermediate | advanced | mixed | null",
+  "format": ["online", "recorded", "live", "mentoring", "self-paced"],
+  "duration_text": "string | null",
+  "price_text": "string | null",
+  "installment_text": "string | null",
+  "certificate": "true | false | null",
+  "employment_support": "true | false | null",
+  "short_summary": "string | null",
+  "for_whom": [],
+  "not_for_whom": [],
+  "what_you_learn": [],
+  "course_features": [],
+  "pros": [],
+  "cons": [],
+  "prerequisites": [],
+  "faq": [
+    {
+      "question": "string",
+      "answer": "string"
+    }
+  ],
+  "editorial_verdict": "string | null",
+  "source_facts": {
+    "description_excerpt": "string | null",
+    "pricing_excerpt": "string | null",
+    "duration_excerpt": "string | null",
+    "format_excerpt": "string | null",
+    "employment_excerpt": "string | null",
+    "certificate_excerpt": "string | null"
+  }
+}
+
+Field rules:
+
+1. source_url
+- Set to the input URL exactly.
+
+2. extraction_status
+- "ok" if the page was accessed and most important fields were extracted.
+- "partial" if the page was accessed but only part of the important fields could be extracted.
+- "failed" if the page could not be accessed, parsed, or reliably understood.
+
+3. course_title
+- Exact or near-exact course title from the page.
+- null if not found.
+
+4. school_name
+- Provider/school name from the page.
+- null if not found.
+
+5. course_category
+- A short normalized category such as:
+  - "Python"
+  - "Frontend"
+  - "JavaScript"
+  - "Web Development"
+  - "Backend"
+  - "Java"
+- null if unclear.
+
+6. level
+- "beginner" if the page clearly says the course is for absolute beginners / from scratch / no experience needed.
+- "beginner_plus" if suitable after some basic familiarity.
+- "intermediate" if not for complete beginners and requires some prior knowledge.
+- "advanced" if clearly advanced.
+- "mixed" if the page targets several levels.
+- null if unclear.
+
+7. format
+- Return an array with only applicable values from this fixed set:
+  - "online"
+  - "recorded"
+  - "live"
+  - "mentoring"
+  - "self-paced"
+- If nothing is confirmed, return [].
+
+8. duration_text
+- Exact wording for duration if present.
+- null if not found.
+
+9. price_text
+- Exact wording for price if present.
+- null if not found.
+
+10. installment_text
+- Exact wording for installment / payment plan if present.
+- null if not found.
+
+11. certificate
+Use three-state logic:
+- true if the page explicitly states that a certificate / diploma / completion document is provided.
+- false if the page explicitly states that no certificate / diploma / completion document is provided.
+- null if not mentioned or unclear.
+
+12. employment_support
+Use three-state logic:
+- true if the page explicitly states there is employment help / career support / job assistance.
+- false if the page explicitly states there is no employment help / no career support.
+- null if not mentioned or unclear.
+
+13. short_summary
+- 2 to 4 sentences.
+- Neutral rewritten overview of the course.
+- Must not include invented claims.
+- null only if extraction failed badly enough that no summary can be written safely.
+
+14. for_whom
+- Array of specific audience types clearly supported by the page.
+- Examples:
+  - "Для новичков без опыта"
+  - "Для тех, кто хочет начать изучать Python с нуля"
+- Return [] if not enough evidence.
+
+15. not_for_whom
+- Array of cautious editorial statements only if clearly supported by the page content, level, or structure.
+- Examples:
+  - "Может не подойти тем, кто уже уверенно владеет основами Python"
+  - "Может быть не лучшим выбором для тех, кто ищет только короткий интенсив"
+- Return [] if unclear.
+
+16. what_you_learn
+- Array of concrete topics, tools, or skills named on the page.
+- Return [] if not found.
+
+17. course_features
+- Array of notable structural features explicitly stated on the page, such as:
+  - mentor support
+  - projects
+  - homework review
+  - portfolio
+  - flexible schedule
+  - live webinars
+- Return [] if not found.
+
+18. pros
+- Array of concise strengths based only on explicit source details.
+- No hype.
+- Return [] if not enough evidence.
+
+19. cons
+- Array of concise limitations, caveats, or missing clarity.
+- Use conservative wording.
+- Good examples:
+  - "На странице ограниченно раскрыты детали практической части."
+  - "Информация о формате обратной связи указана не полностью."
+- Return [] only if there is truly nothing cautious and useful to say based on the page.
+
+20. prerequisites
+- Array of explicit prerequisites if stated.
+- Return [] if none are stated.
+
+21. faq
+- Return 3 to 6 items if enough source information exists.
+- Questions and answers must be grounded in the page content.
+- If not enough information exists, return fewer items or [].
+
+22. editorial_verdict
+- 1 to 3 neutral sentences.
+- Summarize who this course may suit and any important reservation.
+- null only if insufficient information was extracted.
+
+23. source_facts
+- Fill with short supporting excerpts from the page when available.
+- If not available, use null for that excerpt field.
+- Do not fabricate excerpts.
+
+Consistency rules:
+- Keep all keys present in the output, even if values are null or [].
+- Do not add extra keys.
+- Do not remove keys.
+- Do not wrap booleans in quotes. Use actual JSON values: true, false, null.
+- Do not wrap null in quotes.
+- Arrays must always be arrays.
+- Strings must be plain JSON strings.
+
+Fallback output:
+If the page cannot be accessed or extraction fails, return exactly this structure with the URL inserted:
+
+{
+  "source_url": "<INPUT_URL>",
+  "extraction_status": "failed",
+  "course_title": null,
+  "school_name": null,
+  "course_category": null,
+  "level": null,
+  "format": [],
+  "duration_text": null,
+  "price_text": null,
+  "installment_text": null,
+  "certificate": null,
+  "employment_support": null,
+  "short_summary": null,
+  "for_whom": [],
+  "not_for_whom": [],
+  "what_you_learn": [],
+  "course_features": [],
+  "pros": [],
+  "cons": [],
+  "prerequisites": [],
+  "faq": [],
+  "editorial_verdict": null,
+  "source_facts": {
+    "description_excerpt": null,
+    "pricing_excerpt": null,
+    "duration_excerpt": null,
+    "format_excerpt": null,
+    "employment_excerpt": null,
+    "certificate_excerpt": null
+  }
+}

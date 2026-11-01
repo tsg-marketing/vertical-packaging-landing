@@ -1,0 +1,10 @@
+<div class="cp-json-wrap" data-cp-json data-kind="{{ widget.kind }}">
+  <div class="cp-json-tools">
+    <button type="button" class="button" data-cp-format>Форматировать</button>
+    <button type="button" class="button" data-cp-template>Вставить пустой шаблон</button>
+    <button type="button" class="button" data-cp-clear>Очистить</button>
+    <span class="cp-json-status" data-cp-status aria-live="polite"></span>
+  </div>
+  <textarea name="{{ widget.name }}"{% for k, v in widget.attrs.items %}{% if v is not False %} {{ k }}{% if v is not True %}="{{ v }}"{% endif %}{% endif %}{% endfor %}>{% if widget.value %}{{ widget.value }}{% endif %}</textarea>
+  <template data-cp-template-json>{{ widget.template_json }}</template>
+</div>

@@ -1,0 +1,10 @@
+{% comment %}Запасной блок цены: в курсе нет числовой цены, но в extract_json есть price_text / installment_text.{% endcomment %}
+{% if cpage.price_text or cpage.installment_text %}
+<aside class="price-box cp-price-text" aria-label="Стоимость курса">
+  {% if cpage.price_text %}<p class="price-box__label">Стоимость курса</p><p class="price-box__price">{{ cpage.price_text }}</p>{% endif %}
+  {% if cpage.installment_text %}<p class="cp-price-text__inst">{% include "edukursy/courses/blocks/icon.html" with name="wallet" %}<span>{{ cpage.installment_text }}</span></p>{% endif %}
+  {% if partner_url %}<a href="{{ partner_url }}" class="btn btn--primary btn--lg btn--block" rel="sponsored noopener" target="_blank">Перейти на сайт школы</a>{% endif %}
+  {% include "edukursy/partials/compare/button.html" with course=course variant="block" label_off="Добавить к сравнению" label_on="Добавлен к сравнению" %}
+  <p class="price-box__checked">Цена указана со страницы школы — уточняйте актуальную</p>
+</aside>
+{% endif %}

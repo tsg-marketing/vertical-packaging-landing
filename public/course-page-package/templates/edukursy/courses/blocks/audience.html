@@ -1,0 +1,19 @@
+{% if cpage.for_whom or cpage.not_for_whom %}
+<section class="section" id="course-audience">
+  <h2 class="section__title">Кому подойдёт курс</h2>
+  <div class="cp-audience{% if cpage.for_whom and cpage.not_for_whom %} cp-audience--two{% endif %}">
+    {% if cpage.for_whom %}
+    <div class="cp-card cp-card--yes">
+      <h3 class="cp-card__title">{% include "edukursy/courses/blocks/icon.html" with name="user-check" %}Подойдёт</h3>
+      <ul class="cp-list cp-list--yes">{% for x in cpage.for_whom %}<li>{% include "edukursy/courses/blocks/icon.html" with name="check" %}<span>{{ x }}</span></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    {% if cpage.not_for_whom %}
+    <div class="cp-card cp-card--no">
+      <h3 class="cp-card__title">{% include "edukursy/courses/blocks/icon.html" with name="user-x" %}Может не подойти</h3>
+      <ul class="cp-list cp-list--no">{% for x in cpage.not_for_whom %}<li>{% include "edukursy/courses/blocks/icon.html" with name="x" %}<span>{{ x }}</span></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}

@@ -1,0 +1,32 @@
+{% comment %}Мнение редакции: плюсы, минусы, вердикт. Каждая часть — только если есть данные.{% endcomment %}
+{% if cpage.pros or cpage.cons or cpage.verdict %}
+<section class="section" id="course-review">
+  <div class="section-head">
+    <h2 class="section__title">Мнение редакции</h2>
+    <p class="section-head__meta cp-badge-ed">{% include "edukursy/courses/blocks/icon.html" with name="search" %}Разбор на основе страницы школы</p>
+  </div>
+  {% if cpage.pros or cpage.cons %}
+  <div class="cp-proscons{% if cpage.pros and cpage.cons %} cp-proscons--two{% endif %}">
+    {% if cpage.pros %}
+    <div class="cp-pc cp-pc--pros">
+      <h3 class="cp-pc__title"><span class="cp-pc__badge">{% include "edukursy/courses/blocks/icon.html" with name="plus" %}</span>Плюсы</h3>
+      <ul>{% for x in cpage.pros %}<li>{{ x }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    {% if cpage.cons %}
+    <div class="cp-pc cp-pc--cons">
+      <h3 class="cp-pc__title"><span class="cp-pc__badge">{% include "edukursy/courses/blocks/icon.html" with name="minus" %}</span>Минусы и оговорки</h3>
+      <ul>{% for x in cpage.cons %}<li>{{ x }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% if cpage.verdict %}
+  <figure class="cp-verdict">
+    {% include "edukursy/courses/blocks/icon.html" with name="quote" cls="cp-verdict__quote" %}
+    <blockquote class="cp-verdict__text">{{ cpage.verdict }}</blockquote>
+    <figcaption class="cp-verdict__by">Вердикт редакции edukursy.ru</figcaption>
+  </figure>
+  {% endif %}
+</section>
+{% endif %}

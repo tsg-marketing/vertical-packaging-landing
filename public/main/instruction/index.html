@@ -77,6 +77,7 @@
             <li><a href="#step-compare-btn">Шаг 8.5. Сравнение без ограничений</a></li>
             <li><a href="#step-search">Шаг 8.6. Строка поиска</a></li>
             <li><a href="#step-podborki">Шаг 8.7. Подборки курсов</a></li>
+            <li><a href="#step-course-json">Шаг 8.8. Страница курса из JSON</a></li>
             <li><a href="#step-9">Шаг 9. Блог: лента и статья</a></li>
             <li><a href="#step-home">Шаг 9.5. Главная страница</a></li>
             <li><a href="#step-10">Шаг 10. Карта сайта, редиректы, финальная проверка</a></li>
@@ -6231,6 +6232,2205 @@ tr.pdb-drop-after td { box-shadow: inset 0 -2px 0 #417690; }
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}</pre>
+          </div>
+        </details>
+      </section>
+
+      <section class="ins-step" id="step-course-json">
+        <h2 class="ins-step__title">Шаг 8.8. Страница курса: лендинг + разбор редакции из JSON</h2>
+        <p>Страница курса собирается из двух частей. Лендинг — как сейчас, из полей курса. Разбор редакции заполняется в админке двумя полями: <code>extract_json</code> (факты со страницы школы) и <code>editorial_json</code> (текст редакции). <strong>Блок выводится, только если в JSON есть данные по ключу</strong>: если ключа нет или в нём null, пустая строка или пустой список, блок пропускается вместе с заголовком и пунктом навигации.</p>
+        <p>Как это выглядит: <a href="/main/courses/kurs-json/index.html" target="_blank">все блоки</a> (полные JSON) и <a href="/main/courses/kurs-json-partial/index.html" target="_blank">часть данных</a> (лишние блоки пропущены). Шаблон собран на основе вашего detail.html и base.html.</p>
+
+        <div class="ins-download">
+          <a href="/course-page-package.zip" class="btn btn--primary btn--lg" download>Скачать пакет страницы курса (ZIP, 165 КБ)</a>
+          <p>Шаблоны, код, админка, образцы JSON, ваши схемы, макеты и промпт. В проекте: <code>public/course-page-package/</code></p>
+        </div>
+
+        <div class="ins-cards">
+          <div class="ins-card"><p class="ins-card__tag ins-card__tag--ok">9 блоков</p><p>Факты, о курсе, навыки, кому подойдёт, обучение, плюсы и минусы, вердикт, что уточнить, цитаты школы — плюс FAQ.</p></div>
+          <div class="ins-card"><p class="ins-card__tag">пропуск</p><p>Нет данных по ключу — нет блока. Статус failed — JSON игнорируется целиком. Битые типы не ломают страницу.</p></div>
+          <div class="ins-card"><p class="ins-card__tag">слияние</p><p>Где ключ есть в обоих JSON, берётся текст редакции. Вопросы FAQ не повторяют те, что заведены в админке.</p></div>
+          <div class="ins-card"><p class="ins-card__tag ins-card__tag--new">админка</p><p>Проверка JSON на лету и при сохранении, кнопки «Форматировать» и «Шаблон», отчёт «что выведется», фильтр в списке.</p></div>
+        </div>
+
+        <h3 class="ins-sub">Какой блок из какого ключа</h3>
+        <div class="ins-table-wrap">
+        <table class="ins-table">
+          <thead><tr><th>Блок</th><th>Ключи JSON</th><th>Если пусто</th></tr></thead>
+          <tbody><tr><td><strong>Описание под заголовком</strong></td><td><code>editorial_intro → short_summary</code></td><td>описание курса из админки</td></tr><tr><td><strong>Плашки фактов</strong></td><td><code>level, format, duration_text, certificate, employment_support</code></td><td>старые факты</td></tr><tr><td><strong>Цена текстом</strong></td><td><code>price_text, installment_text</code></td><td>только если у курса нет цены</td></tr><tr><td><strong>О курсе</strong></td><td><code>editorial_summary → short_summary + course_category, level, format</code></td><td>—</td></tr><tr><td><strong>Чему вы научитесь</strong></td><td><code>what_you_learn</code></td><td>поле features курса</td></tr><tr><td><strong>Кому подойдёт / не подойдёт</strong></td><td><code>for_whom, not_for_whom (редакция → extract)</code></td><td>поле audience_text</td></tr><tr><td><strong>Как проходит обучение</strong></td><td><code>course_features + prerequisites</code></td><td>—</td></tr><tr><td><strong>Мнение редакции</strong></td><td><code>pros, cons, editorial_verdict (редакция → extract)</code></td><td>—</td></tr><tr><td><strong>Что уточнить перед покупкой</strong></td><td><code>what_to_check_before_buying</code></td><td>—</td></tr><tr><td><strong>Что говорит школа</strong></td><td><code>source_facts.*</code></td><td>—</td></tr><tr><td><strong>Вопросы</strong></td><td><code>FAQ из админки + editorial.faq + extract.faq без повторов</code></td><td>—</td></tr></tbody>
+        </table>
+        </div>
+        <p class="ins-note">Преимущества, программа, «О школе», похожие курсы и реклама остаются как в вашем шаблоне — они берутся из полей курса, а не из JSON.</p>
+
+        <h3 class="ins-sub">Что будет в админке курса</h3>
+        <ul class="ins-list ins-list--dots">
+          <li><strong>Раздел «Разбор курса (JSON)»</strong> — два больших поля. Ответ нейросети можно вставлять целиком, вместе с <code>```json</code>.</li>
+          <li><strong>Проверка на лету:</strong> «JSON корректный · ключей 23, заполнено 21 · статус ok» или «Ошибка … (строка 5)», рамка зелёная или красная. Кнопки «Форматировать», «Вставить пустой шаблон», «Очистить».</li>
+          <li><strong>При сохранении</strong> битый JSON и неверные типы не сохраняются, и показывается понятная ошибка: например, «certificate: ожидается true, false или null». Лишние или пропущенные ключи и статус failed сохраняются с предупреждением.</li>
+          <li><strong>«Что выведется на странице»</strong> — список всех 15 блоков: какие покажутся, какие пропущены и из какого ключа взяты.</li>
+          <li><strong>В списке курсов</strong> — колонка «Разбор» с бейджами E/R (ok, partial, failed, нет) и фильтр «Разбор (JSON)».</li>
+        </ul>
+
+        <h3 class="ins-sub">Перед запуском</h3>
+        <ol class="ins-list">
+          <li>Сделайте коммит в git и резервную копию базы.</li>
+          <li>Распакуйте архив, папку <code>course-page-package/</code> положите в корень Django-проекта как <code>_design/course-page-package/</code>.</li>
+          <li>Отправьте агенту часть 1, проверьте админку, затем отправьте часть 2. Режим Plan → Act.</li>
+        </ol>
+        <p class="ins-note">Если поля <code>extract_json</code> и <code>editorial_json</code> у вас текстовые, агент не будет менять их тип без вашего согласия: сначала покажет, сколько записей с невалидным JSON, и предложит перенос.</p>
+
+        <h3 class="ins-sub">Промпты для агента</h3>
+        <h4 class="ins-sub ins-sub--small">Часть 1 из 2 — данные и админка</h4>
+        <div class="prompt">
+          <div class="prompt__bar"><span>Часть 1 из 2 — данные и админка</span><button type="button" class="copy-btn" data-target="p-cj0">Копировать</button></div>
+          <pre class="prompt__code" id="p-cj0">Задача: страница курса = лендинг (текущие поля курса) + разбор редакции из двух JSON-полей курса: extract_json и editorial_json. Готовые файлы — в _design/course-page-package/, сначала прочитай README.md целиком. Используй файлы пакета, не пиши с нуля. В этой части — только модель, логика и админка. Шаблоны сайта не трогай.
+
+1. Изучи и покажи кратко:
+   - модель Course (приложение — назову &lt;app&gt;): есть ли уже поля extract_json и editorial_json, какого они типа (JSONField или TextField), null/blank/default;
+   - как зарегистрирован CourseAdmin: fields/fieldsets, list_display, list_filter, свои formfield_for_dbfield / save_model / get_readonly_fields;
+   - view страницы курса (рендерит edukursy/courses/detail.html): что кладёт в контекст (course, faqs, facts, usps, modules, partner_url, price_month, similar…);
+   - СУБД (PostgreSQL или SQLite).
+
+2. Поля:
+   - Если полей нет — добавь в Course:
+       extract_json = models.JSONField(&quot;Факты со страницы школы (extract_json)&quot;, default=dict, blank=True)
+       editorial_json = models.JSONField(&quot;Текст редакции (editorial_json)&quot;, default=dict, blank=True)
+     и сделай миграцию.
+   - Если поля есть и это TextField со строками JSON — НЕ меняй тип без моего согласия. Покажи, сколько курсов с непустым значением и сколько из них невалидный JSON (python manage.py shell, parse_json из course_json.py). Предложи миграцию TextField → JSONField с переносом данных (RunPython: parse_json, при ошибке — {} и вывод id курса в консоль) и жди моего «да».
+   - Если это уже JSONField — ничего не меняй.
+
+3. Логика: app/course_json.py → &lt;app&gt;/course_json.py, app/templatetags/course_json.py → &lt;app&gt;/templatetags/ (создай __init__.py, если нет). Не переименовывай ключи — они совпадают с моими промптами-схемами в _design/course-page-package/schemas/.
+
+4. Админка:
+   - app/admin_course_json.py → &lt;app&gt;/; app/templates/course_page/ → &lt;app&gt;/templates/course_page/; static/admin/course_page/ → static/admin/course_page/.
+   - В CourseAdmin: CourseJsonAdminMixin ПЕРВЫМ в наследовании; CourseJsonAdminMixin.json_fieldset — в fieldsets после основных полей (если используются fields — переведи на fieldsets, сохранив порядок); &quot;json_status_col&quot; — в list_display; JsonStatusFilter — в list_filter.
+   - Если у CourseAdmin свои formfield_for_dbfield, save_model или get_readonly_fields — объедини через super(), покажи diff.
+   - Если extract_json/editorial_json — TextField (я не согласился на миграцию), поле формы всё равно должно работать: JsonDictField возвращает dict — для TextField сохраняй json.dumps(..., ensure_ascii=False). Покажи, как сделал.
+   - JsonStatusFilter использует __has_key — на SQLite он работает с Django 4.2+. Если у меня ниже — скажи.
+
+5. Тесты: app/tests/test_course_json.py и app/tests/samples/ → &lt;app&gt;/tests/. Запусти python manage.py test &lt;app&gt;.tests.test_course_json — 16 из 16.
+
+6. Проверь в админке и покажи скриншоты:
+   - в карточке курса раздел «Разбор курса (JSON)»: вставь samples/extract_full.json и samples/editorial_full.json → «JSON корректный…», «Форматировать» работает;
+   - вставь JSON в обёртке ```json … ``` — сохраняется без обёртки;
+   - вставь {&quot;certificate&quot;:&quot;да&quot;, } — не сохраняется, понятная ошибка со строкой и позицией;
+   - вставь {&quot;certificate&quot;:&quot;да&quot;} — не сохраняется: «ожидается true, false или null»;
+   - после сохранения «Что выведется на странице» — «Блоков на странице: 15 из 15»; с extract_partial/editorial_partial — меньше, у пропущенных «—»;
+   - в списке курсов колонка «Разбор» с бейджами и фильтр «Разбор (JSON)».</pre>
+        </div>
+        <h4 class="ins-sub ins-sub--small">Часть 2 из 2 — шаблон страницы курса</h4>
+        <div class="prompt">
+          <div class="prompt__bar"><span>Часть 2 из 2 — шаблон страницы курса</span><button type="button" class="copy-btn" data-target="p-cj1">Копировать</button></div>
+          <pre class="prompt__code" id="p-cj1">Часть 2: шаблон страницы курса. Эталон — _design/course-page-package/mockups/courses/kurs-json/index.html (все блоки) и mockups/courses/kurs-json-partial/index.html (часть данных).
+
+1. templates/edukursy/courses/detail.html из пакета — это МОЙ текущий detail.html, в который встроены блоки из JSON. Сравни его с моим действующим templates/edukursy/courses/detail.html (diff). Если мой изменился после того, как я отправил его тебе, — перенеси мои изменения в новую версию, ничего не теряя. Покажи итоговый diff перед сохранением.
+2. templates/edukursy/courses/blocks/ → в шаблоны (10 файлов).
+3. static/edukursy/css/course-page.css → в статику, подключи в base.html ПОСЛЕ podborki.css: &lt;link rel=&quot;stylesheet&quot; href=&quot;{% static &#x27;edukursy/css/course-page.css&#x27; %}&quot;&gt;
+4. View страницы курса: добавь в контекст cpage = course_page_for(course, faqs) (from &lt;app&gt;.course_json import course_page_for), где faqs — тот же список, что уже передаётся в шаблон. Если faqs нет в контексте — передай None. Тег {% course_page %} в шаблоне — запасной вариант, если cpage не передан.
+5. Шаблон использует мои теги и фильтры: {% load edukursy %}, rub, plural, scope_css, banner, partials compare/button.html, compare/link.html, breadcrumbs.html, cards/course_card.html — проверь, что все существуют, ничего нового не придумывай.
+6. FAQ: вопросы из JSON выводятся после FAQ из админки; вопросы, совпадающие с админскими, не повторяются. Скрипт раскрытия FAQ у меня уже работает по .faq-item__btn — проверь, что раскрываются и новые.
+7. SEO: meta description берёт editorial_intro / short_summary, если они есть (до 158 символов), иначе — как было. Микроразметка Course и FAQPage должна остаться валидной.
+8. Проверь на 4 курсах и покажи скриншоты при 1440 и 390 px:
+   - курс с samples/extract_full.json + editorial_full.json → все блоки как в mockups/courses/kurs-json/index.html, в навигации есть «О курсе», «Чему вы научитесь», «Кому подойдёт», «Обучение», «Мнение редакции», «Что уточнить», «Вопросы»;
+   - курс с extract_partial + editorial_partial → нет блоков «О курсе», «Как проходит обучение», плюсов, вердикта, FAQ — и их пунктов в навигации; если у курса нет цены — справа «Стоимость курса 14 900 ₽» из price_text;
+   - курс без JSON → страница выглядит ровно как раньше (сравни HTML до и после — разница только в подключении course-page.css);
+   - курс с extraction_status &quot;failed&quot; → блоки из extract не выводятся;
+   - нет пустых заголовков, пустых &lt;ul&gt; и пустых секций; нет ошибок в консоли браузера; число SQL-запросов на странице не выросло.</pre>
+        </div>
+
+        <h3 class="ins-sub">Если что-то пошло не так</h3>
+        <ul class="ins-list ins-list--dots">
+          <li><strong>TemplateSyntaxError: &#x27;course_json&#x27; is not a registered tag library</strong> — «Положи templatetags/course_json.py в &lt;app&gt;/templatetags/, проверь __init__.py и перезапусти сервер.»</li>
+          <li><strong>В админке обычное поле JSON без кнопок и проверки</strong> — «CourseJsonAdminMixin должен стоять первым в наследовании CourseAdmin, а свой formfield_for_dbfield — вызывать super().»</li>
+          <li><strong>Ошибка «Неверный формат» на JSON, который отдала нейросеть</strong> — «Покажи текст ошибки: если это булево в кавычках (&quot;true&quot;) или level не из списка — поправь промпт нейросети по схеме из schemas/, а не проверку.»</li>
+          <li><strong>Блок не появляется, хотя данные есть</strong> — «Открой «Что выведется на странице»</li>
+          <li><strong>Вёрстка блоков «съехала»</strong> — «Проверь, что course-page.css подключён после style.css и что в style.css есть .section, .section-head, .prose, .page-tabs.»</li>
+          <li><strong>Повторяются вопросы в FAQ</strong> — «Передай в course_page_for тот же список faqs, что выводится в шаблоне.»</li>
+        </ul>
+
+        <h3 class="ins-sub">Код файлов</h3>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/detail.html</code><span>Ваш detail.html + блоки из JSON</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>detail.html</span><button type="button" class="copy-btn" data-target="cj0">Копировать</button></div>
+            <pre class="prompt__code" id="cj0">{% extends &quot;edukursy/base.html&quot; %}
+{% load edukursy course_json %}
+{% comment %}
+Страница курса = лендинг (поля курса из админки) + разбор редакции (extract_json и editorial_json).
+Блоки из JSON — в templates/edukursy/courses/blocks/. Каждый выводится, только если в JSON есть данные по ключу.
+Порядок: шапка → навигация → О курсе → Чему научитесь → Кому подойдёт → Как проходит обучение → Преимущества →
+Программа → Мнение редакции → Что уточнить → CTA → О школе → Что говорит школа → Похожие → Реклама → Вопросы.
+
+Данные блоков — переменная cpage. Лучше положить её в контекст во view: context[&quot;cpage&quot;] = course_page_for(course, faqs).
+Если view не трогать — тег {% course_page %} соберёт её сам (внутри блоков: теги вне {% block %} Django игнорирует).
+{% endcomment %}
+{% block title %}{{ course.title }} — {{ course.school.name }}: цена, программа, длительность — edukursy.ru{% endblock %}
+{% block meta_description %}{% course_page course faqs as cpage %}{% if cpage.lead %}{{ cpage.lead|truncatechars:158 }}{% else %}Курс «{{ course.title }}»{% if course.duration_months %}: длительность {{ course.duration_months }} {{ course.duration_months|plural:&quot;месяц,месяца,месяцев&quot; }}{% endif %}. Сравните с другими курсами профессии.{% endif %}{% endblock %}
+{% block canonical %}&lt;link rel=&quot;canonical&quot; href=&quot;https://{{ request.get_host }}{{ course.get_absolute_url }}&quot;&gt;{% endblock %}
+
+{% block content %}
+{% if not cpage %}{% course_page course faqs as cpage %}{% endif %}
+&lt;div itemscope itemtype=&quot;https://schema.org/Course&quot;&gt;
+
+  &lt;section class=&quot;page-head course-hero&quot;&gt;
+    {% include &quot;edukursy/partials/breadcrumbs.html&quot; %}
+
+    &lt;div class=&quot;course-hero__grid&quot;&gt;
+      &lt;div class=&quot;course-hero__info&quot;&gt;
+        &lt;a href=&quot;{{ course.school.get_absolute_url }}&quot; class=&quot;course-hero__school&quot; itemprop=&quot;provider&quot; itemscope itemtype=&quot;https://schema.org/EducationalOrganization&quot;&gt;
+          {% if course.school.logo %}&lt;img src=&quot;{{ course.school.logo.url }}&quot; alt=&quot;&quot; width=&quot;28&quot; height=&quot;28&quot;&gt;{% endif %}
+          &lt;span itemprop=&quot;name&quot;&gt;{{ course.school.name }}&lt;/span&gt;
+          {% if course.school.rating %}&lt;span class=&quot;course-hero__school-rating&quot;&gt;{{ course.school.rating }}&lt;/span&gt;{% endif %}
+        &lt;/a&gt;
+        &lt;h1 class=&quot;page-head__title course-hero__title&quot; itemprop=&quot;name&quot;&gt;{{ course.title }}&lt;/h1&gt;
+        {% if course.content %}
+        {% if course.content_css %}&lt;style&gt;{{ course.content_css|scope_css:&quot;.course-hero__content&quot; }}&lt;/style&gt;{% endif %}
+        &lt;div class=&quot;course-hero__content prose&quot;&gt;{{ course.content|safe }}&lt;/div&gt;
+        {% else %}
+        {% if cpage.lead %}&lt;p class=&quot;course-hero__lead&quot; itemprop=&quot;description&quot;&gt;{{ cpage.lead }}&lt;/p&gt;
+        {% elif course.description %}&lt;p class=&quot;course-hero__lead&quot; itemprop=&quot;description&quot;&gt;{{ course.description }}&lt;/p&gt;{% endif %}
+        {% if course.usp_text %}&lt;p class=&quot;course-hero__usp&quot;&gt;{{ course.usp_text }}&lt;/p&gt;{% endif %}
+
+        {% if course.keywords.all %}
+        &lt;ul class=&quot;course-tags&quot;&gt;
+          {% for tag in course.keywords.all %}&lt;li&gt;{{ tag.name }}&lt;/li&gt;{% endfor %}
+        &lt;/ul&gt;
+        {% endif %}
+
+        {% if cpage.facts %}
+          {% include &quot;edukursy/courses/blocks/facts.html&quot; %}
+        {% elif facts %}
+        &lt;dl class=&quot;course-facts&quot;&gt;
+          {% for label, value, iso in facts %}
+          &lt;div&gt;&lt;dt&gt;{{ label }}&lt;/dt&gt;&lt;dd{% if iso %} itemprop=&quot;timeRequired&quot; content=&quot;{{ iso }}&quot;{% endif %}&gt;{{ value }}&lt;/dd&gt;&lt;/div&gt;
+          {% endfor %}
+        &lt;/dl&gt;
+        {% endif %}
+        {% endif %}
+      &lt;/div&gt;
+
+      {% if course.has_price %}
+      &lt;aside class=&quot;price-box&quot; aria-label=&quot;Цена и запись на курс&quot; itemprop=&quot;offers&quot; itemscope itemtype=&quot;https://schema.org/Offer&quot;&gt;
+        &lt;p class=&quot;price-box__label&quot;&gt;Стоимость курса&lt;/p&gt;
+        &lt;p class=&quot;price-box__price&quot;&gt;&lt;span itemprop=&quot;price&quot; content=&quot;{{ course.price }}&quot;&gt;{{ course.price|rub }}&lt;/span&gt;&lt;meta itemprop=&quot;priceCurrency&quot; content=&quot;RUB&quot;&gt;&lt;/p&gt;
+        {% if course.old_price and discount_percent %}
+        &lt;p class=&quot;price-box__old&quot;&gt;&lt;s&gt;{{ course.old_price|rub }}&lt;/s&gt; &lt;span class=&quot;price-box__discount&quot;&gt;−{{ discount_percent }}%&lt;/span&gt;&lt;/p&gt;
+        {% endif %}
+        {% if price_month %}
+        &lt;p class=&quot;price-box__month&quot;&gt;или &lt;strong&gt;{{ price_month|rub }}/мес&lt;/strong&gt;{% if course.installment_months %} в рассрочку на {{ course.installment_months }} месяцев{% endif %}&lt;/p&gt;
+        {% elif cpage.installment_text %}
+        &lt;p class=&quot;price-box__month&quot;&gt;{{ cpage.installment_text }}&lt;/p&gt;
+        {% endif %}
+
+        {% if partner_url %}
+        &lt;a href=&quot;{{ partner_url }}&quot; class=&quot;btn btn--primary btn--lg btn--block&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot; itemprop=&quot;url&quot;&gt;Перейти на сайт школы&lt;/a&gt;
+        &lt;a href=&quot;{{ partner_url }}&quot; class=&quot;btn btn--outline btn--block&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot;&gt;Бесплатный вводный урок&lt;/a&gt;
+        {% endif %}
+        {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;block&quot; label_off=&quot;Добавить к сравнению&quot; label_on=&quot;Добавлен к сравнению&quot; %}
+        {% include &quot;edukursy/partials/compare/link.html&quot; %}
+
+        &lt;ul class=&quot;price-box__notes&quot;&gt;
+          &lt;li&gt;Оплата и договор — напрямую со школой&lt;/li&gt;
+          &lt;li&gt;Возврат за непройденную часть&lt;/li&gt;
+          {% if course.tax_deduction %}&lt;li&gt;Налоговый вычет 13%&lt;/li&gt;{% endif %}
+        &lt;/ul&gt;
+        {% if course.checked_at %}&lt;p class=&quot;price-box__checked&quot;&gt;Цена проверена {{ course.checked_at }}&lt;/p&gt;{% endif %}
+      &lt;/aside&gt;
+      {% else %}
+        {% include &quot;edukursy/courses/blocks/price_text.html&quot; %}
+      {% endif %}
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  {% if cpage.summary or cpage.learn or course.features or cpage.has_audience or course.audience_text or cpage.features or usps or modules or cpage.has_review or cpage.check or partner_url or similar or faqs or cpage.faq %}
+  &lt;nav class=&quot;page-tabs&quot; aria-label=&quot;Разделы страницы курса&quot;&gt;
+    &lt;ul&gt;
+      {% if cpage.summary %}&lt;li&gt;&lt;a href=&quot;#course-about&quot;&gt;О курсе&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if cpage.learn or course.features and not course.content %}&lt;li&gt;&lt;a href=&quot;#course-skills&quot;&gt;Чему вы научитесь&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if cpage.has_audience or course.audience_text and not course.content %}&lt;li&gt;&lt;a href=&quot;#course-audience&quot;&gt;Кому подойдёт&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if cpage.features or cpage.prerequisites %}&lt;li&gt;&lt;a href=&quot;#course-format&quot;&gt;Обучение&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if usps and not course.content %}&lt;li&gt;&lt;a href=&quot;#course-usp&quot;&gt;Преимущества&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if modules and not course.content %}&lt;li&gt;&lt;a href=&quot;#course-program&quot;&gt;Программа&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if cpage.has_review %}&lt;li&gt;&lt;a href=&quot;#course-review&quot;&gt;Мнение редакции&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if cpage.check %}&lt;li&gt;&lt;a href=&quot;#course-check&quot;&gt;Что уточнить&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if not course.content %}&lt;li&gt;&lt;a href=&quot;#course-school&quot;&gt;О школе&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if similar %}&lt;li&gt;&lt;a href=&quot;#course-similar&quot;&gt;Похожие курсы&lt;/a&gt;&lt;/li&gt;{% endif %}
+      {% if faqs or cpage.faq %}&lt;li&gt;&lt;a href=&quot;#course-faq&quot;&gt;Вопросы&lt;/a&gt;&lt;/li&gt;{% endif %}
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  {% endif %}
+
+  {# ===== Разбор: О курсе (editorial_summary / short_summary) ===== #}
+  {% include &quot;edukursy/courses/blocks/about.html&quot; %}
+
+  {# ===== Чему научитесь: what_you_learn, иначе — поле курса features ===== #}
+  {% if cpage.learn %}
+    {% include &quot;edukursy/courses/blocks/learn.html&quot; %}
+  {% elif course.features and not course.content %}
+  &lt;section class=&quot;section&quot; id=&quot;course-skills&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;Чему вы научитесь&lt;/h2&gt;
+    &lt;ul class=&quot;skills&quot;&gt;
+      {% for f in course.features %}
+      &lt;li class=&quot;skill&quot;&gt;
+        &lt;svg class=&quot;skill__icon&quot; aria-hidden=&quot;true&quot; width=&quot;20&quot; height=&quot;20&quot; viewBox=&quot;0 0 20 20&quot;&gt;&lt;circle cx=&quot;10&quot; cy=&quot;10&quot; r=&quot;10&quot; fill=&quot;#e2f5ec&quot;/&gt;&lt;path d=&quot;M6 10.5l2.5 2.5L14 7.5&quot; stroke=&quot;#1f8a5b&quot; stroke-width=&quot;2&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;/&gt;&lt;/svg&gt;
+        &lt;span class=&quot;skill__text&quot;&gt;{{ f }}&lt;/span&gt;
+      &lt;/li&gt;
+      {% endfor %}
+    &lt;/ul&gt;
+  &lt;/section&gt;
+  {% endif %}
+
+  {# ===== Кому подойдёт: for_whom / not_for_whom, иначе — поле audience_text ===== #}
+  {% if cpage.has_audience %}
+    {% include &quot;edukursy/courses/blocks/audience.html&quot; %}
+  {% elif course.audience_text and not course.content %}
+  &lt;section class=&quot;section section--light&quot; id=&quot;course-audience&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;Кому подойдёт&lt;/h2&gt;
+    &lt;div class=&quot;prose prose--wide&quot;&gt;{{ course.audience_text|linebreaksbr }}&lt;/div&gt;
+  &lt;/section&gt;
+  {% endif %}
+
+  {# ===== Как проходит обучение: course_features + prerequisites ===== #}
+  {% include &quot;edukursy/courses/blocks/format.html&quot; %}
+
+  {% if not course.content %}
+  {% if usps %}
+  &lt;section class=&quot;section&quot; id=&quot;course-usp&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;Почему стоит выбрать этот курс&lt;/h2&gt;
+    &lt;ul class=&quot;usp-grid&quot;&gt;
+      {% for u in usps %}
+      &lt;li class=&quot;usp&quot;&gt;
+        {% if u.icon %}&lt;span class=&quot;usp__icon&quot; aria-hidden=&quot;true&quot;&gt;{{ u.icon }}&lt;/span&gt;{% endif %}
+        &lt;h3 class=&quot;usp__title&quot;&gt;{{ u.title }}&lt;/h3&gt;
+        {% if u.text %}&lt;p class=&quot;usp__text&quot;&gt;{{ u.text }}&lt;/p&gt;{% endif %}
+      &lt;/li&gt;
+      {% endfor %}
+    &lt;/ul&gt;
+  &lt;/section&gt;
+  {% endif %}
+
+  {% if modules %}
+  &lt;section class=&quot;section section--light&quot; id=&quot;course-program&quot;&gt;
+    &lt;div class=&quot;section-head&quot;&gt;
+      &lt;h2 class=&quot;section__title&quot;&gt;Программа курса&lt;/h2&gt;
+      {% if modules_count %}&lt;p class=&quot;section-head__meta&quot;&gt;{{ modules_count }} {{ modules_count|plural:&quot;модуль,модуля,модулей&quot; }}{% if hours_total %} · {{ hours_total }} часов{% endif %}&lt;/p&gt;{% endif %}
+    &lt;/div&gt;
+    &lt;ol class=&quot;modules&quot;&gt;
+      {% for m in modules %}
+      &lt;li class=&quot;module&quot;&gt;
+        &lt;details{% if forloop.first %} open{% endif %}&gt;
+          &lt;summary class=&quot;module__head&quot;&gt;&lt;span class=&quot;module__num&quot;&gt;{{ forloop.counter|stringformat:&quot;02d&quot; }}&lt;/span&gt;&lt;span class=&quot;module__title&quot;&gt;{{ m.title }}&lt;/span&gt;{% if m.duration %}&lt;span class=&quot;module__dur&quot;&gt;{{ m.duration }}&lt;/span&gt;{% endif %}&lt;/summary&gt;
+          {% if m.description %}&lt;p class=&quot;module__text&quot;&gt;{{ m.description }}&lt;/p&gt;{% endif %}
+        &lt;/details&gt;
+      &lt;/li&gt;
+      {% endfor %}
+    &lt;/ol&gt;
+  &lt;/section&gt;
+  {% endif %}
+  {% endif %}
+
+  {# ===== Мнение редакции: pros / cons / editorial_verdict ===== #}
+  {% include &quot;edukursy/courses/blocks/review.html&quot; %}
+
+  {# ===== Что уточнить перед покупкой: what_to_check_before_buying ===== #}
+  {% include &quot;edukursy/courses/blocks/check.html&quot; %}
+
+  {% if partner_url %}
+  &lt;section class=&quot;course-cta&quot;&gt;
+    &lt;div class=&quot;course-cta__text&quot;&gt;
+      &lt;p class=&quot;course-cta__title&quot;&gt;{{ course.title }} &lt;span&gt;· {{ course.school.name }}&lt;/span&gt;&lt;/p&gt;
+      &lt;p class=&quot;course-cta__sub&quot;&gt;{% if course.has_price %}{{ course.price|rub }}{% if price_month %} или {{ price_month|rub }}/мес{% endif %}{% elif cpage.price_text %}{{ cpage.price_text }}{% endif %}{% if course.start_date %} · старт {{ course.start_date }}{% endif %}&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;a href=&quot;{{ partner_url }}&quot; class=&quot;btn btn--light btn--lg&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot;&gt;Перейти на сайт школы&lt;/a&gt;
+  &lt;/section&gt;
+  {% endif %}
+
+  {% if not course.content %}
+  &lt;section class=&quot;section&quot; id=&quot;course-school&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;О школе&lt;/h2&gt;
+    &lt;div class=&quot;school-about&quot;&gt;
+      &lt;div class=&quot;course-school&quot;&gt;
+        &lt;div class=&quot;course-school__head&quot;&gt;
+          {% if course.school.logo %}&lt;img src=&quot;{{ course.school.logo.url }}&quot; alt=&quot;&quot; class=&quot;course-school__logo&quot; width=&quot;64&quot; height=&quot;64&quot;&gt;{% endif %}
+          &lt;div&gt;
+            &lt;h3 class=&quot;course-school__name&quot;&gt;{{ course.school.name }}&lt;/h3&gt;
+            &lt;p class=&quot;school-tile__rating&quot;&gt;{% if course.school.rating %}&lt;span class=&quot;school-tile__stars&quot;&gt;{{ course.school.rating }}&lt;/span&gt;{% endif %}{% if course.school.year_founded %} · на рынке с {{ course.school.year_founded }} года{% endif %}&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        {% if course.school.short_description %}&lt;p class=&quot;course-school__text&quot;&gt;{{ course.school.short_description }}&lt;/p&gt;{% endif %}
+        &lt;div class=&quot;course-school__actions&quot;&gt;
+          &lt;a href=&quot;{{ course.school.get_absolute_url }}&quot; class=&quot;btn btn--outline&quot;&gt;Все курсы школы{% if school_courses_count %} ({{ school_courses_count }}){% endif %}&lt;/a&gt;
+          {% if course.school.official_url %}&lt;a href=&quot;{{ course.school.official_url }}&quot; class=&quot;btn btn--primary&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot;&gt;Сайт школы&lt;/a&gt;{% endif %}
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;dl class=&quot;school-details&quot;&gt;
+        {% if course.school.license %}&lt;div&gt;&lt;dt&gt;Лицензия&lt;/dt&gt;&lt;dd&gt;Есть&lt;/dd&gt;&lt;/div&gt;{% endif %}
+        {% if course.school.certificate %}&lt;div&gt;&lt;dt&gt;Документ&lt;/dt&gt;&lt;dd&gt;{{ course.school.certificate }}&lt;/dd&gt;&lt;/div&gt;{% endif %}
+        {% if course.school.refund %}&lt;div&gt;&lt;dt&gt;Возврат&lt;/dt&gt;&lt;dd&gt;{{ course.school.refund }}&lt;/dd&gt;&lt;/div&gt;{% endif %}
+        {% if course.school.installment %}&lt;div&gt;&lt;dt&gt;Рассрочка&lt;/dt&gt;&lt;dd&gt;{{ course.school.installment }}&lt;/dd&gt;&lt;/div&gt;{% endif %}
+        {% if course.school.legal_name %}&lt;div&gt;&lt;dt&gt;Юрлицо&lt;/dt&gt;&lt;dd&gt;{{ course.school.legal_name }}&lt;/dd&gt;&lt;/div&gt;{% endif %}
+      &lt;/dl&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+  {% endif %}
+
+  {# ===== Что говорит школа: source_facts ===== #}
+  {% include &quot;edukursy/courses/blocks/source.html&quot; %}
+
+  {% if similar %}
+  &lt;section class=&quot;section section--light&quot; id=&quot;course-similar&quot;&gt;
+    &lt;div class=&quot;section-head&quot;&gt;
+      &lt;h2 class=&quot;section__title&quot;&gt;Похожие курсы других школ&lt;/h2&gt;
+      {% if profession %}&lt;a href=&quot;{{ profession.get_absolute_url }}&quot; class=&quot;link-arrow&quot;&gt;Все курсы профессии →&lt;/a&gt;{% endif %}
+    &lt;/div&gt;
+    &lt;div class=&quot;catalog-grid catalog-grid--similar&quot;&gt;
+      {% for c in similar %}
+        {% include &quot;edukursy/partials/cards/course_card.html&quot; with course=c %}
+      {% endfor %}
+    &lt;/div&gt;
+  &lt;/section&gt;
+  {% endif %}
+
+  {% banner request.path &quot;inline&quot; &quot;inline&quot; %}
+
+  {# ===== Вопросы: FAQ из админки + faq из editorial_json и extract_json (без повторов) ===== #}
+  {% if faqs or cpage.faq %}
+  &lt;section class=&quot;section faq-section&quot; id=&quot;course-faq&quot; itemscope itemtype=&quot;https://schema.org/FAQPage&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;Часто задаваемые вопросы&lt;/h2&gt;
+    &lt;div class=&quot;faq faq--wide&quot;&gt;
+      {% for f in faqs %}
+      &lt;div class=&quot;faq-item&quot; itemscope itemprop=&quot;mainEntity&quot; itemtype=&quot;https://schema.org/Question&quot;&gt;
+        &lt;h3 class=&quot;faq-item__q&quot;&gt;
+          &lt;button type=&quot;button&quot; class=&quot;faq-item__btn&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;faq-a-{{ f.id }}&quot; id=&quot;faq-q-{{ f.id }}&quot;&gt;
+            {% if f.icon %}&lt;span class=&quot;faq-item__icon&quot; aria-hidden=&quot;true&quot;&gt;{{ f.icon }}&lt;/span&gt;{% endif %}
+            &lt;span itemprop=&quot;name&quot;&gt;{{ f.question }}&lt;/span&gt;
+          &lt;/button&gt;
+        &lt;/h3&gt;
+        &lt;div class=&quot;faq-item__a&quot; id=&quot;faq-a-{{ f.id }}&quot; role=&quot;region&quot; aria-labelledby=&quot;faq-q-{{ f.id }}&quot; hidden itemscope itemprop=&quot;acceptedAnswer&quot; itemtype=&quot;https://schema.org/Answer&quot;&gt;
+          &lt;div itemprop=&quot;text&quot;&gt;{{ f.answer|linebreaks }}&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      {% endfor %}
+      {% for f in cpage.faq %}
+      &lt;div class=&quot;faq-item&quot; itemscope itemprop=&quot;mainEntity&quot; itemtype=&quot;https://schema.org/Question&quot;&gt;
+        &lt;h3 class=&quot;faq-item__q&quot;&gt;
+          &lt;button type=&quot;button&quot; class=&quot;faq-item__btn&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;faq-a-j{{ forloop.counter }}&quot; id=&quot;faq-q-j{{ forloop.counter }}&quot;&gt;
+            &lt;span itemprop=&quot;name&quot;&gt;{{ f.question }}&lt;/span&gt;
+          &lt;/button&gt;
+        &lt;/h3&gt;
+        &lt;div class=&quot;faq-item__a&quot; id=&quot;faq-a-j{{ forloop.counter }}&quot; role=&quot;region&quot; aria-labelledby=&quot;faq-q-j{{ forloop.counter }}&quot; hidden itemscope itemprop=&quot;acceptedAnswer&quot; itemtype=&quot;https://schema.org/Answer&quot;&gt;
+          &lt;div itemprop=&quot;text&quot;&gt;{{ f.answer|linebreaks }}&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      {% endfor %}
+    &lt;/div&gt;
+  &lt;/section&gt;
+  {% endif %}
+
+&lt;/div&gt;
+
+&lt;div class=&quot;sticky-cta&quot;&gt;
+  &lt;p class=&quot;sticky-cta__price&quot;&gt;{% if course.has_price %}{{ course.price|rub }} {% if price_month %}&lt;span&gt;или {{ price_month|rub }}/мес&lt;/span&gt;{% endif %}{% elif cpage.price_text %}{{ cpage.price_text }}{% endif %}&lt;/p&gt;
+  {% if partner_url %}&lt;div class=&quot;sticky-cta__actions&quot;&gt;{% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;icon&quot; %}&lt;a href=&quot;{{ partner_url }}&quot; class=&quot;btn btn--primary&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot;&gt;На сайт школы&lt;/a&gt;&lt;/div&gt;{% endif %}
+&lt;/div&gt;
+
+{% endblock %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/facts.html</code><span>Плашки фактов под заголовком</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>facts.html</span><button type="button" class="copy-btn" data-target="cj1">Копировать</button></div>
+            <pre class="prompt__code" id="cj1">{% comment %}Факты под заголовком: уровень, формат, длительность, документ, трудоустройство. Только то, что есть в extract_json.{% endcomment %}
+{% if cpage.facts %}
+&lt;ul class=&quot;cp-facts&quot; aria-label=&quot;Коротко о курсе&quot;&gt;
+  {% for f in cpage.facts %}
+  &lt;li class=&quot;cp-fact{% if f.tone %} cp-fact--{{ f.tone }}{% endif %}&quot;&gt;
+    &lt;span class=&quot;cp-fact__icon&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=f.icon %}&lt;/span&gt;
+    &lt;span class=&quot;cp-fact__text&quot;&gt;&lt;span class=&quot;cp-fact__label&quot;&gt;{{ f.label }}&lt;/span&gt;&lt;span class=&quot;cp-fact__value&quot;{% if f.key == &quot;duration&quot; %} itemprop=&quot;timeRequired&quot;{% endif %}&gt;{{ f.value }}&lt;/span&gt;&lt;/span&gt;
+  &lt;/li&gt;
+  {% endfor %}
+&lt;/ul&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/about.html</code><span>О курсе</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>about.html</span><button type="button" class="copy-btn" data-target="cj2">Копировать</button></div>
+            <pre class="prompt__code" id="cj2">{% if cpage.summary %}
+&lt;section class=&quot;section&quot; id=&quot;course-about&quot;&gt;
+  &lt;div class=&quot;cp-about&quot;&gt;
+    &lt;div class=&quot;cp-about__text&quot;&gt;
+      &lt;h2 class=&quot;section__title&quot;&gt;О курсе&lt;/h2&gt;
+      &lt;div class=&quot;prose&quot;&gt;&lt;p&gt;{{ cpage.summary|linebreaksbr }}&lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    {% if cpage.category or cpage.level or cpage.formats %}
+    &lt;dl class=&quot;cp-about__meta&quot;&gt;
+      {% if cpage.category %}&lt;div&gt;&lt;dt&gt;Направление&lt;/dt&gt;&lt;dd&gt;{{ cpage.category }}&lt;/dd&gt;&lt;/div&gt;{% endif %}
+      {% if cpage.level %}&lt;div&gt;&lt;dt&gt;Уровень&lt;/dt&gt;&lt;dd&gt;&lt;span class=&quot;cp-level cp-level--{{ cpage.level_code }}&quot; aria-hidden=&quot;true&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/span&gt;{{ cpage.level }}&lt;/dd&gt;&lt;/div&gt;{% endif %}
+      {% if cpage.formats %}&lt;div&gt;&lt;dt&gt;Формат&lt;/dt&gt;&lt;dd&gt;&lt;ul class=&quot;cp-chips&quot;&gt;{% for f in cpage.formats %}&lt;li&gt;{{ f }}&lt;/li&gt;{% endfor %}&lt;/ul&gt;&lt;/dd&gt;&lt;/div&gt;{% endif %}
+    &lt;/dl&gt;
+    {% endif %}
+  &lt;/div&gt;
+&lt;/section&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/learn.html</code><span>Чему вы научитесь</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>learn.html</span><button type="button" class="copy-btn" data-target="cj3">Копировать</button></div>
+            <pre class="prompt__code" id="cj3">{% if cpage.learn %}
+&lt;section class=&quot;section section--light&quot; id=&quot;course-skills&quot;&gt;
+  &lt;div class=&quot;section-head&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;Чему вы научитесь&lt;/h2&gt;
+    &lt;p class=&quot;section-head__meta&quot;&gt;{{ cpage.learn|length }} {% if cpage.learn|length == 1 %}навык{% elif cpage.learn|length &lt; 5 %}навыка{% else %}навыков{% endif %}&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;ul class=&quot;cp-learn&quot;&gt;
+    {% for item in cpage.learn %}
+    &lt;li class=&quot;cp-learn__item&quot;&gt;&lt;span class=&quot;cp-learn__num&quot;&gt;{{ forloop.counter|stringformat:&quot;02d&quot; }}&lt;/span&gt;&lt;span&gt;{{ item }}&lt;/span&gt;&lt;/li&gt;
+    {% endfor %}
+  &lt;/ul&gt;
+&lt;/section&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/audience.html</code><span>Кому подойдёт / не подойдёт</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>audience.html</span><button type="button" class="copy-btn" data-target="cj4">Копировать</button></div>
+            <pre class="prompt__code" id="cj4">{% if cpage.for_whom or cpage.not_for_whom %}
+&lt;section class=&quot;section&quot; id=&quot;course-audience&quot;&gt;
+  &lt;h2 class=&quot;section__title&quot;&gt;Кому подойдёт курс&lt;/h2&gt;
+  &lt;div class=&quot;cp-audience{% if cpage.for_whom and cpage.not_for_whom %} cp-audience--two{% endif %}&quot;&gt;
+    {% if cpage.for_whom %}
+    &lt;div class=&quot;cp-card cp-card--yes&quot;&gt;
+      &lt;h3 class=&quot;cp-card__title&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;user-check&quot; %}Подойдёт&lt;/h3&gt;
+      &lt;ul class=&quot;cp-list cp-list--yes&quot;&gt;{% for x in cpage.for_whom %}&lt;li&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;check&quot; %}&lt;span&gt;{{ x }}&lt;/span&gt;&lt;/li&gt;{% endfor %}&lt;/ul&gt;
+    &lt;/div&gt;
+    {% endif %}
+    {% if cpage.not_for_whom %}
+    &lt;div class=&quot;cp-card cp-card--no&quot;&gt;
+      &lt;h3 class=&quot;cp-card__title&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;user-x&quot; %}Может не подойти&lt;/h3&gt;
+      &lt;ul class=&quot;cp-list cp-list--no&quot;&gt;{% for x in cpage.not_for_whom %}&lt;li&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;x&quot; %}&lt;span&gt;{{ x }}&lt;/span&gt;&lt;/li&gt;{% endfor %}&lt;/ul&gt;
+    &lt;/div&gt;
+    {% endif %}
+  &lt;/div&gt;
+&lt;/section&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/format.html</code><span>Как проходит обучение</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>format.html</span><button type="button" class="copy-btn" data-target="cj5">Копировать</button></div>
+            <pre class="prompt__code" id="cj5">{% if cpage.features or cpage.prerequisites %}
+&lt;section class=&quot;section section--light&quot; id=&quot;course-format&quot;&gt;
+  &lt;h2 class=&quot;section__title&quot;&gt;Как проходит обучение&lt;/h2&gt;
+  {% if cpage.features %}
+  &lt;ul class=&quot;cp-features&quot;&gt;
+    {% for f in cpage.features %}
+    &lt;li class=&quot;cp-feature&quot;&gt;&lt;span class=&quot;cp-feature__icon&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=f.icon %}&lt;/span&gt;&lt;span class=&quot;cp-feature__text&quot;&gt;{{ f.text }}&lt;/span&gt;&lt;/li&gt;
+    {% endfor %}
+  &lt;/ul&gt;
+  {% endif %}
+  {% if cpage.prerequisites %}
+  &lt;div class=&quot;cp-prereq&quot;&gt;
+    &lt;h3 class=&quot;cp-prereq__title&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;key&quot; %}Что нужно для старта&lt;/h3&gt;
+    &lt;ul class=&quot;cp-chips cp-chips--lg&quot;&gt;{% for p in cpage.prerequisites %}&lt;li&gt;{{ p }}&lt;/li&gt;{% endfor %}&lt;/ul&gt;
+  &lt;/div&gt;
+  {% endif %}
+&lt;/section&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/review.html</code><span>Плюсы, минусы, вердикт</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>review.html</span><button type="button" class="copy-btn" data-target="cj6">Копировать</button></div>
+            <pre class="prompt__code" id="cj6">{% comment %}Мнение редакции: плюсы, минусы, вердикт. Каждая часть — только если есть данные.{% endcomment %}
+{% if cpage.pros or cpage.cons or cpage.verdict %}
+&lt;section class=&quot;section&quot; id=&quot;course-review&quot;&gt;
+  &lt;div class=&quot;section-head&quot;&gt;
+    &lt;h2 class=&quot;section__title&quot;&gt;Мнение редакции&lt;/h2&gt;
+    &lt;p class=&quot;section-head__meta cp-badge-ed&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;search&quot; %}Разбор на основе страницы школы&lt;/p&gt;
+  &lt;/div&gt;
+  {% if cpage.pros or cpage.cons %}
+  &lt;div class=&quot;cp-proscons{% if cpage.pros and cpage.cons %} cp-proscons--two{% endif %}&quot;&gt;
+    {% if cpage.pros %}
+    &lt;div class=&quot;cp-pc cp-pc--pros&quot;&gt;
+      &lt;h3 class=&quot;cp-pc__title&quot;&gt;&lt;span class=&quot;cp-pc__badge&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;plus&quot; %}&lt;/span&gt;Плюсы&lt;/h3&gt;
+      &lt;ul&gt;{% for x in cpage.pros %}&lt;li&gt;{{ x }}&lt;/li&gt;{% endfor %}&lt;/ul&gt;
+    &lt;/div&gt;
+    {% endif %}
+    {% if cpage.cons %}
+    &lt;div class=&quot;cp-pc cp-pc--cons&quot;&gt;
+      &lt;h3 class=&quot;cp-pc__title&quot;&gt;&lt;span class=&quot;cp-pc__badge&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;minus&quot; %}&lt;/span&gt;Минусы и оговорки&lt;/h3&gt;
+      &lt;ul&gt;{% for x in cpage.cons %}&lt;li&gt;{{ x }}&lt;/li&gt;{% endfor %}&lt;/ul&gt;
+    &lt;/div&gt;
+    {% endif %}
+  &lt;/div&gt;
+  {% endif %}
+  {% if cpage.verdict %}
+  &lt;figure class=&quot;cp-verdict&quot;&gt;
+    {% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;quote&quot; cls=&quot;cp-verdict__quote&quot; %}
+    &lt;blockquote class=&quot;cp-verdict__text&quot;&gt;{{ cpage.verdict }}&lt;/blockquote&gt;
+    &lt;figcaption class=&quot;cp-verdict__by&quot;&gt;Вердикт редакции edukursy.ru&lt;/figcaption&gt;
+  &lt;/figure&gt;
+  {% endif %}
+&lt;/section&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/check.html</code><span>Что уточнить перед покупкой</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>check.html</span><button type="button" class="copy-btn" data-target="cj7">Копировать</button></div>
+            <pre class="prompt__code" id="cj7">{% if cpage.check %}
+&lt;section class=&quot;section section--light&quot; id=&quot;course-check&quot;&gt;
+  &lt;div class=&quot;cp-check&quot;&gt;
+    &lt;div class=&quot;cp-check__head&quot;&gt;
+      &lt;h2 class=&quot;section__title&quot;&gt;Что уточнить перед покупкой&lt;/h2&gt;
+      &lt;p class=&quot;cp-check__sub&quot;&gt;Задайте эти вопросы менеджеру школы — ответы помогут избежать разочарований.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;ol class=&quot;cp-check__list&quot;&gt;
+      {% for x in cpage.check %}&lt;li&gt;&lt;label&gt;&lt;input type=&quot;checkbox&quot;&gt;&lt;span&gt;{{ x }}&lt;/span&gt;&lt;/label&gt;&lt;/li&gt;{% endfor %}
+    &lt;/ol&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/source.html</code><span>Что говорит школа</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>source.html</span><button type="button" class="copy-btn" data-target="cj8">Копировать</button></div>
+            <pre class="prompt__code" id="cj8">{% comment %}Факты со страницы школы (source_facts) — цитаты, на которых построен разбор.{% endcomment %}
+{% if cpage.source_facts %}
+&lt;section class=&quot;section&quot; id=&quot;course-source&quot;&gt;
+  &lt;details class=&quot;cp-source&quot; open&gt;
+    &lt;summary class=&quot;cp-source__head&quot;&gt;
+      &lt;span&gt;&lt;span class=&quot;cp-source__title&quot;&gt;Что говорит школа&lt;/span&gt;&lt;span class=&quot;cp-source__sub&quot;&gt;Цитаты со страницы курса{% if cpage.source_domain %} на {{ cpage.source_domain }}{% endif %}&lt;/span&gt;&lt;/span&gt;
+    &lt;/summary&gt;
+    &lt;dl class=&quot;cp-source__list&quot;&gt;
+      {% for f in cpage.source_facts %}&lt;div&gt;&lt;dt&gt;{{ f.label }}&lt;/dt&gt;&lt;dd&gt;«{{ f.text }}»&lt;/dd&gt;&lt;/div&gt;{% endfor %}
+    &lt;/dl&gt;
+    {% if cpage.source_url and cpage.show_source_link %}&lt;a href=&quot;{{ cpage.source_url }}&quot; class=&quot;cp-source__link&quot; rel=&quot;nofollow noopener&quot; target=&quot;_blank&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;link&quot; %}Открыть страницу курса&lt;/a&gt;{% endif %}
+  &lt;/details&gt;
+&lt;/section&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/price_text.html</code><span>Цена текстом</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>price_text.html</span><button type="button" class="copy-btn" data-target="cj9">Копировать</button></div>
+            <pre class="prompt__code" id="cj9">{% comment %}Запасной блок цены: в курсе нет числовой цены, но в extract_json есть price_text / installment_text.{% endcomment %}
+{% if cpage.price_text or cpage.installment_text %}
+&lt;aside class=&quot;price-box cp-price-text&quot; aria-label=&quot;Стоимость курса&quot;&gt;
+  {% if cpage.price_text %}&lt;p class=&quot;price-box__label&quot;&gt;Стоимость курса&lt;/p&gt;&lt;p class=&quot;price-box__price&quot;&gt;{{ cpage.price_text }}&lt;/p&gt;{% endif %}
+  {% if cpage.installment_text %}&lt;p class=&quot;cp-price-text__inst&quot;&gt;{% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;wallet&quot; %}&lt;span&gt;{{ cpage.installment_text }}&lt;/span&gt;&lt;/p&gt;{% endif %}
+  {% if partner_url %}&lt;a href=&quot;{{ partner_url }}&quot; class=&quot;btn btn--primary btn--lg btn--block&quot; rel=&quot;sponsored noopener&quot; target=&quot;_blank&quot;&gt;Перейти на сайт школы&lt;/a&gt;{% endif %}
+  {% include &quot;edukursy/partials/compare/button.html&quot; with course=course variant=&quot;block&quot; label_off=&quot;Добавить к сравнению&quot; label_on=&quot;Добавлен к сравнению&quot; %}
+  &lt;p class=&quot;price-box__checked&quot;&gt;Цена указана со страницы школы — уточняйте актуальную&lt;/p&gt;
+&lt;/aside&gt;
+{% endif %}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>templates/edukursy/courses/blocks/icon.html</code><span>SVG-иконки блоков</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>icon.html</span><button type="button" class="copy-btn" data-target="cj10">Копировать</button></div>
+            <pre class="prompt__code" id="cj10">{% comment %}Иконки блоков страницы курса (lucide, stroke). {% include &quot;edukursy/courses/blocks/icon.html&quot; with name=&quot;check&quot; %}{% endcomment %}&lt;svg class=&quot;cp-ic{% if cls %} {{ cls }}{% endif %}&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot; width=&quot;20&quot; height=&quot;20&quot;&gt;{% if name == &quot;check&quot; %}&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;{% elif name == &quot;x&quot; %}&lt;path d=&quot;M18 6 6 18&quot;/&gt;&lt;path d=&quot;m6 6 12 12&quot;/&gt;{% elif name == &quot;plus&quot; %}&lt;path d=&quot;M5 12h14&quot;/&gt;&lt;path d=&quot;M12 5v14&quot;/&gt;{% elif name == &quot;minus&quot; %}&lt;path d=&quot;M5 12h14&quot;/&gt;{% elif name == &quot;level&quot; %}&lt;path d=&quot;M2 20h.01&quot;/&gt;&lt;path d=&quot;M7 20v-4&quot;/&gt;&lt;path d=&quot;M12 20v-8&quot;/&gt;&lt;path d=&quot;M17 20V8&quot;/&gt;&lt;path d=&quot;M22 4v16&quot;/&gt;{% elif name == &quot;format&quot; %}&lt;rect width=&quot;20&quot; height=&quot;14&quot; x=&quot;2&quot; y=&quot;3&quot; rx=&quot;2&quot;/&gt;&lt;path d=&quot;M8 21h8&quot;/&gt;&lt;path d=&quot;M12 17v4&quot;/&gt;{% elif name == &quot;clock&quot; %}&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;path d=&quot;M12 6v6l4 2&quot;/&gt;{% elif name == &quot;doc&quot; %}&lt;path d=&quot;M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z&quot;/&gt;&lt;path d=&quot;M14 2v4a2 2 0 0 0 2 2h4&quot;/&gt;&lt;path d=&quot;m9 15 2 2 4-4&quot;/&gt;{% elif name == &quot;career&quot; %}&lt;path d=&quot;M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16&quot;/&gt;&lt;rect width=&quot;20&quot; height=&quot;14&quot; x=&quot;2&quot; y=&quot;6&quot; rx=&quot;2&quot;/&gt;{% elif name == &quot;mentor&quot; %}&lt;path d=&quot;M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;9&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;path d=&quot;m16 11 2 2 4-4&quot;/&gt;{% elif name == &quot;project&quot; %}&lt;path d=&quot;M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9L9.6 3.9A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z&quot;/&gt;&lt;path d=&quot;M12 10v6&quot;/&gt;&lt;path d=&quot;M9 13h6&quot;/&gt;{% elif name == &quot;video&quot; %}&lt;path d=&quot;m16 13 5.2 3.5a.5.5 0 0 0 .8-.4V7.9a.5.5 0 0 0-.8-.4L16 11&quot;/&gt;&lt;rect x=&quot;2&quot; y=&quot;6&quot; width=&quot;14&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;{% elif name == &quot;chat&quot; %}&lt;path d=&quot;M7.9 20A9 9 0 1 0 4 16.1L2 22Z&quot;/&gt;{% elif name == &quot;search&quot; %}&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;8&quot;/&gt;&lt;path d=&quot;m21 21-4.3-4.3&quot;/&gt;{% elif name == &quot;quote&quot; %}&lt;path d=&quot;M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z&quot;/&gt;&lt;path d=&quot;M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z&quot;/&gt;{% elif name == &quot;user-check&quot; %}&lt;path d=&quot;M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;9&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;path d=&quot;m16 11 2 2 4-4&quot;/&gt;{% elif name == &quot;user-x&quot; %}&lt;path d=&quot;M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;9&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;path d=&quot;m17 8 5 5&quot;/&gt;&lt;path d=&quot;m22 8-5 5&quot;/&gt;{% elif name == &quot;key&quot; %}&lt;path d=&quot;m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4&quot;/&gt;&lt;path d=&quot;m21 2-9.6 9.6&quot;/&gt;&lt;circle cx=&quot;7.5&quot; cy=&quot;15.5&quot; r=&quot;5.5&quot;/&gt;{% elif name == &quot;link&quot; %}&lt;path d=&quot;M15 3h6v6&quot;/&gt;&lt;path d=&quot;M10 14 21 3&quot;/&gt;&lt;path d=&quot;M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6&quot;/&gt;{% elif name == &quot;wallet&quot; %}&lt;path d=&quot;M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1&quot;/&gt;&lt;path d=&quot;M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4&quot;/&gt;{% else %}&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;{% endif %}&lt;/svg&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/course_json.py</code><span>Сборка блоков, слияние, проверка схем</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>course_json.py</span><button type="button" class="copy-btn" data-target="cj11">Копировать</button></div>
+            <pre class="prompt__code" id="cj11">&quot;&quot;&quot;
+Страница курса из двух JSON: extract_json (факты со страницы школы) и editorial_json (текст редакции).
+
+Главное правило: блок выводится, только если в JSON есть ключ и в нём есть данные
+(не null, не &quot;&quot;, не [] и не {}). Иначе блок молча пропускается.
+
+    page = build_course_page(course)          # в view
+    {% if page.learn %}...{% endif %}         # в шаблоне
+
+Если extraction_status / draft_status == &quot;failed&quot; — этот JSON целиком игнорируется.
+Если в обоих JSON есть одинаковый по смыслу блок (for_whom, pros, cons, faq, verdict),
+берётся вариант редакции (editorial_json), а extract_json — запасной.
+&quot;&quot;&quot;
+import json
+import re
+from dataclasses import dataclass, field
+from urllib.parse import urlparse
+
+# ---------- схемы (для проверки в админке) ----------
+EXTRACT_KEYS = {
+    &quot;source_url&quot;: &quot;str&quot;, &quot;extraction_status&quot;: &quot;enum:ok,partial,failed&quot;,
+    &quot;course_title&quot;: &quot;str&quot;, &quot;school_name&quot;: &quot;str&quot;, &quot;course_category&quot;: &quot;str&quot;,
+    &quot;level&quot;: &quot;enum:beginner,beginner_plus,intermediate,advanced,mixed&quot;,
+    &quot;format&quot;: &quot;list_enum:online,recorded,live,mentoring,self-paced&quot;,
+    &quot;duration_text&quot;: &quot;str&quot;, &quot;price_text&quot;: &quot;str&quot;, &quot;installment_text&quot;: &quot;str&quot;,
+    &quot;certificate&quot;: &quot;bool&quot;, &quot;employment_support&quot;: &quot;bool&quot;, &quot;short_summary&quot;: &quot;str&quot;,
+    &quot;for_whom&quot;: &quot;list_str&quot;, &quot;not_for_whom&quot;: &quot;list_str&quot;, &quot;what_you_learn&quot;: &quot;list_str&quot;,
+    &quot;course_features&quot;: &quot;list_str&quot;, &quot;pros&quot;: &quot;list_str&quot;, &quot;cons&quot;: &quot;list_str&quot;,
+    &quot;prerequisites&quot;: &quot;list_str&quot;, &quot;faq&quot;: &quot;faq&quot;, &quot;editorial_verdict&quot;: &quot;str&quot;,
+    &quot;source_facts&quot;: &quot;facts&quot;,
+}
+SOURCE_FACT_KEYS = [&quot;description_excerpt&quot;, &quot;pricing_excerpt&quot;, &quot;duration_excerpt&quot;, &quot;format_excerpt&quot;, &quot;employment_excerpt&quot;, &quot;certificate_excerpt&quot;]
+EDITORIAL_KEYS = {
+    &quot;source_url&quot;: &quot;str&quot;, &quot;draft_status&quot;: &quot;enum:ok,partial,failed&quot;,
+    &quot;course_title&quot;: &quot;str&quot;, &quot;school_name&quot;: &quot;str&quot;,
+    &quot;editorial_intro&quot;: &quot;str&quot;, &quot;editorial_summary&quot;: &quot;str&quot;,
+    &quot;for_whom&quot;: &quot;list_str&quot;, &quot;not_for_whom&quot;: &quot;list_str&quot;, &quot;pros&quot;: &quot;list_str&quot;, &quot;cons&quot;: &quot;list_str&quot;,
+    &quot;what_to_check_before_buying&quot;: &quot;list_str&quot;, &quot;faq&quot;: &quot;faq&quot;, &quot;editorial_verdict&quot;: &quot;str&quot;,
+}
+
+LEVELS = {
+    &quot;beginner&quot;: &quot;С нуля&quot;,
+    &quot;beginner_plus&quot;: &quot;Для начинающих с базой&quot;,
+    &quot;intermediate&quot;: &quot;Средний уровень&quot;,
+    &quot;advanced&quot;: &quot;Продвинутый уровень&quot;,
+    &quot;mixed&quot;: &quot;Для разных уровней&quot;,
+}
+FORMATS = {
+    &quot;online&quot;: &quot;Онлайн&quot;,
+    &quot;recorded&quot;: &quot;Уроки в записи&quot;,
+    &quot;live&quot;: &quot;Живые занятия&quot;,
+    &quot;mentoring&quot;: &quot;С наставником&quot;,
+    &quot;self-paced&quot;: &quot;В своём темпе&quot;,
+}
+SOURCE_FACT_LABELS = {
+    &quot;description_excerpt&quot;: &quot;О курсе&quot;,
+    &quot;pricing_excerpt&quot;: &quot;Стоимость&quot;,
+    &quot;duration_excerpt&quot;: &quot;Длительность&quot;,
+    &quot;format_excerpt&quot;: &quot;Формат&quot;,
+    &quot;employment_excerpt&quot;: &quot;Трудоустройство&quot;,
+    &quot;certificate_excerpt&quot;: &quot;Документ&quot;,
+}
+
+# Иконка для пункта «Как устроено обучение» — по ключевым словам
+FEATURE_ICONS = [
+    (&quot;mentor&quot;, (&quot;наставник&quot;, &quot;ментор&quot;, &quot;куратор&quot;, &quot;mentor&quot;, &quot;проверк&quot;)),
+    (&quot;project&quot;, (&quot;проект&quot;, &quot;портфолио&quot;, &quot;кейс&quot;, &quot;project&quot;, &quot;portfolio&quot;)),
+    (&quot;clock&quot;, (&quot;график&quot;, &quot;темп&quot;, &quot;запис&quot;, &quot;в любое время&quot;, &quot;schedule&quot;, &quot;self&quot;)),
+    (&quot;video&quot;, (&quot;вебинар&quot;, &quot;живы&quot;, &quot;онлайн-занят&quot;, &quot;трансляц&quot;, &quot;live&quot;, &quot;webinar&quot;)),
+    (&quot;career&quot;, (&quot;карьер&quot;, &quot;резюме&quot;, &quot;трудоустр&quot;, &quot;собеседован&quot;, &quot;ваканс&quot;, &quot;career&quot;, &quot;job&quot;)),
+    (&quot;doc&quot;, (&quot;диплом&quot;, &quot;сертификат&quot;, &quot;удостоверен&quot;, &quot;документ&quot;, &quot;certificate&quot;)),
+    (&quot;chat&quot;, (&quot;чат&quot;, &quot;сообщество&quot;, &quot;комьюнити&quot;, &quot;community&quot;)),
+]
+
+
+# ---------- разбор входных данных ----------
+FENCE_RE = re.compile(r&quot;^\s*```(?:json)?\s*|\s*```\s*$&quot;, re.I)
+
+
+def parse_json(value):
+    &quot;&quot;&quot;dict из JSONField / строки / строки с ```json ... ```. Ошибка → ValueError.&quot;&quot;&quot;
+    if value in (None, &quot;&quot;, b&quot;&quot;):
+        return {}
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, (bytes, bytearray)):
+        value = value.decode(&quot;utf-8&quot;)
+    if isinstance(value, str):
+        text = FENCE_RE.sub(&quot;&quot;, value.strip()).strip()
+        if not text:
+            return {}
+        data = json.loads(text)
+        if data is None:
+            return {}
+        if not isinstance(data, dict):
+            raise ValueError(&quot;Ожидается JSON-объект { ... }, а не список или строка.&quot;)
+        return data
+    raise ValueError(&quot;Неподдерживаемый тип данных JSON.&quot;)
+
+
+def _safe(value):
+    try:
+        return parse_json(value)
+    except (ValueError, TypeError):
+        return {}
+
+
+def has(data, key):
+    &quot;&quot;&quot;Ключ есть и в нём есть данные.&quot;&quot;&quot;
+    if key not in data:
+        return False
+    v = data[key]
+    if v is None:
+        return False
+    if isinstance(v, str):
+        return bool(v.strip())
+    if isinstance(v, (list, dict)):
+        return bool(v)
+    return True
+
+
+def text(data, key):
+    if not has(data, key) or not isinstance(data[key], str):
+        return &quot;&quot;
+    return data[key].strip()
+
+
+def str_list(data, key):
+    if not has(data, key) or not isinstance(data[key], list):
+        return []
+    out, seen = [], set()
+    for item in data[key]:
+        if isinstance(item, str) and item.strip():
+            norm = item.strip().lower().rstrip(&quot;.&quot;)
+            if norm not in seen:
+                seen.add(norm)
+                out.append(item.strip())
+    return out
+
+
+def faq_list(data):
+    if not has(data, &quot;faq&quot;) or not isinstance(data[&quot;faq&quot;], list):
+        return []
+    out = []
+    for item in data[&quot;faq&quot;]:
+        if isinstance(item, dict):
+            q, a = str(item.get(&quot;question&quot;) or &quot;&quot;).strip(), str(item.get(&quot;answer&quot;) or &quot;&quot;).strip()
+            if q and a:
+                out.append({&quot;question&quot;: q, &quot;answer&quot;: a})
+    return out
+
+
+def tri_state(data, key):
+    &quot;&quot;&quot;True / False / None. Строки &quot;true&quot;/&quot;false&quot; тоже понимаем.&quot;&quot;&quot;
+    if key not in data:
+        return None
+    v = data[key]
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, str) and v.strip().lower() in (&quot;true&quot;, &quot;false&quot;):
+        return v.strip().lower() == &quot;true&quot;
+    return None
+
+
+def _norm_q(q):
+    return re.sub(r&quot;[^\w]+&quot;, &quot; &quot;, q.lower().replace(&quot;ё&quot;, &quot;е&quot;)).strip()
+
+
+def feature_icon(label):
+    low = label.lower()
+    for icon, words in FEATURE_ICONS:
+        if any(w in low for w in words):
+            return icon
+    return &quot;dot&quot;
+
+
+# ---------- результат ----------
+@dataclass
+class Fact:
+    key: str
+    label: str
+    value: str
+    icon: str
+    tone: str = &quot;&quot;
+
+
+@dataclass
+class CoursePage:
+    extract_ok: bool = False
+    editorial_ok: bool = False
+    extract_status: str = &quot;&quot;
+    editorial_status: str = &quot;&quot;
+
+    lead: str = &quot;&quot;
+    lead_source: str = &quot;&quot;
+    category: str = &quot;&quot;
+    level: str = &quot;&quot;
+    level_code: str = &quot;&quot;
+    formats: list = field(default_factory=list)
+    facts: list = field(default_factory=list)
+    price_text: str = &quot;&quot;
+    installment_text: str = &quot;&quot;
+
+    summary: str = &quot;&quot;
+    learn: list = field(default_factory=list)
+    for_whom: list = field(default_factory=list)
+    not_for_whom: list = field(default_factory=list)
+    features: list = field(default_factory=list)
+    prerequisites: list = field(default_factory=list)
+    pros: list = field(default_factory=list)
+    cons: list = field(default_factory=list)
+    check: list = field(default_factory=list)
+    verdict: str = &quot;&quot;
+    verdict_source: str = &quot;&quot;
+    faq: list = field(default_factory=list)
+    source_facts: list = field(default_factory=list)
+    source_url: str = &quot;&quot;
+    source_domain: str = &quot;&quot;
+    show_source_link: bool = False
+
+    @property
+    def has_audience(self):
+        return bool(self.for_whom or self.not_for_whom)
+
+    @property
+    def has_review(self):
+        return bool(self.pros or self.cons or self.verdict)
+
+    @property
+    def is_empty(self):
+        return not any([self.lead, self.facts, self.summary, self.learn, self.has_audience, self.features,
+                        self.prerequisites, self.has_review, self.check, self.faq, self.source_facts])
+
+    def tabs(self, extra=None):
+        &quot;&quot;&quot;Пункты навигации по странице — только для выводимых блоков.&quot;&quot;&quot;
+        items = []
+        if self.summary:
+            items.append((&quot;course-about&quot;, &quot;О курсе&quot;))
+        if self.learn:
+            items.append((&quot;course-skills&quot;, &quot;Чему научитесь&quot;))
+        if self.has_audience:
+            items.append((&quot;course-audience&quot;, &quot;Кому подойдёт&quot;))
+        if self.features:
+            items.append((&quot;course-format&quot;, &quot;Как проходит обучение&quot;))
+        if self.has_review:
+            items.append((&quot;course-review&quot;, &quot;Мнение редакции&quot;))
+        if self.check:
+            items.append((&quot;course-check&quot;, &quot;Что уточнить&quot;))
+        return items + list(extra or [])
+
+    def report(self):
+        &quot;&quot;&quot;Для админки: какие блоки выведутся и откуда взяты данные.&quot;&quot;&quot;
+        rows = [
+            (&quot;Описание под заголовком&quot;, bool(self.lead), self.lead_source or &quot;editorial_intro → short_summary&quot;),
+            (&quot;Факты: уровень, формат, длительность…&quot;, bool(self.facts), &quot;level, format, duration_text, certificate, employment_support, installment_text&quot;),
+            (&quot;Цена текстом (если в курсе нет цены)&quot;, bool(self.price_text), &quot;price_text&quot;),
+            (&quot;О курсе&quot;, bool(self.summary), &quot;editorial_summary → short_summary&quot;),
+            (&quot;Чему вы научитесь&quot;, bool(self.learn), &quot;what_you_learn&quot;),
+            (&quot;Кому подойдёт&quot;, bool(self.for_whom), &quot;editorial.for_whom → extract.for_whom&quot;),
+            (&quot;Кому может не подойти&quot;, bool(self.not_for_whom), &quot;editorial.not_for_whom → extract.not_for_whom&quot;),
+            (&quot;Как проходит обучение&quot;, bool(self.features), &quot;course_features&quot;),
+            (&quot;Что нужно для старта&quot;, bool(self.prerequisites), &quot;prerequisites&quot;),
+            (&quot;Плюсы&quot;, bool(self.pros), &quot;editorial.pros → extract.pros&quot;),
+            (&quot;Минусы&quot;, bool(self.cons), &quot;editorial.cons → extract.cons&quot;),
+            (&quot;Вердикт редакции&quot;, bool(self.verdict), self.verdict_source or &quot;editorial.editorial_verdict → extract.editorial_verdict&quot;),
+            (&quot;Что уточнить перед покупкой&quot;, bool(self.check), &quot;what_to_check_before_buying&quot;),
+            (&quot;Факты со страницы школы&quot;, bool(self.source_facts), &quot;source_facts.*&quot;),
+            (&quot;Вопросы и ответы&quot;, bool(self.faq), f&quot;editorial.faq + extract.faq ({len(self.faq)})&quot;),
+        ]
+        return rows
+
+
+def build_course_page(course=None, extract=None, editorial=None, skip_questions=(), max_faq=8):
+    &quot;&quot;&quot;
+    course — объект курса с полями extract_json / editorial_json (или передайте extract/editorial напрямую).
+    skip_questions — вопросы, которые уже есть в FAQ из админки (чтобы не дублировать).
+    &quot;&quot;&quot;
+    ex = _safe(extract if extract is not None else getattr(course, &quot;extract_json&quot;, None))
+    ed = _safe(editorial if editorial is not None else getattr(course, &quot;editorial_json&quot;, None))
+    page = CoursePage()
+
+    page.extract_status = str(ex.get(&quot;extraction_status&quot;) or &quot;&quot;)
+    page.editorial_status = str(ed.get(&quot;draft_status&quot;) or &quot;&quot;)
+    if page.extract_status == &quot;failed&quot;:
+        ex = {}
+    if page.editorial_status == &quot;failed&quot;:
+        ed = {}
+    page.extract_ok = bool(ex)
+    page.editorial_ok = bool(ed)
+
+    # Лид под заголовком
+    if text(ed, &quot;editorial_intro&quot;):
+        page.lead, page.lead_source = text(ed, &quot;editorial_intro&quot;), &quot;editorial_intro&quot;
+    elif text(ex, &quot;short_summary&quot;):
+        page.lead, page.lead_source = text(ex, &quot;short_summary&quot;), &quot;short_summary&quot;
+
+    # О курсе — без повтора лида
+    summary = text(ed, &quot;editorial_summary&quot;)
+    if not summary and page.lead_source != &quot;short_summary&quot;:
+        summary = text(ex, &quot;short_summary&quot;)
+    page.summary = summary
+
+    # Факты
+    page.category = text(ex, &quot;course_category&quot;)
+    level = text(ex, &quot;level&quot;)
+    if level in LEVELS:
+        page.level, page.level_code = LEVELS[level], level
+        page.facts.append(Fact(&quot;level&quot;, &quot;Уровень&quot;, LEVELS[level], &quot;level&quot;))
+    page.formats = [FORMATS[f] for f in (ex.get(&quot;format&quot;) or []) if isinstance(f, str) and f in FORMATS]
+    if page.formats:
+        page.facts.append(Fact(&quot;format&quot;, &quot;Формат&quot;, &quot;, &quot;.join(page.formats), &quot;format&quot;))
+    if text(ex, &quot;duration_text&quot;):
+        page.facts.append(Fact(&quot;duration&quot;, &quot;Длительность&quot;, text(ex, &quot;duration_text&quot;), &quot;clock&quot;))
+    cert = tri_state(ex, &quot;certificate&quot;)
+    if cert is not None:
+        page.facts.append(Fact(&quot;certificate&quot;, &quot;Документ&quot;, &quot;Выдаётся&quot; if cert else &quot;Не выдаётся&quot;, &quot;doc&quot;, &quot;&quot; if cert else &quot;muted&quot;))
+    job = tri_state(ex, &quot;employment_support&quot;)
+    if job is not None:
+        page.facts.append(Fact(&quot;employment&quot;, &quot;Трудоустройство&quot;, &quot;Помощь заявлена&quot; if job else &quot;Помощь не заявлена&quot;, &quot;career&quot;, &quot;&quot; if job else &quot;muted&quot;))
+    page.price_text = text(ex, &quot;price_text&quot;)
+    page.installment_text = text(ex, &quot;installment_text&quot;)
+
+    # Списки
+    page.learn = str_list(ex, &quot;what_you_learn&quot;)
+    page.features = [{&quot;text&quot;: f, &quot;icon&quot;: feature_icon(f)} for f in str_list(ex, &quot;course_features&quot;)]
+    page.prerequisites = str_list(ex, &quot;prerequisites&quot;)
+    page.for_whom = str_list(ed, &quot;for_whom&quot;) or str_list(ex, &quot;for_whom&quot;)
+    page.not_for_whom = str_list(ed, &quot;not_for_whom&quot;) or str_list(ex, &quot;not_for_whom&quot;)
+    page.pros = str_list(ed, &quot;pros&quot;) or str_list(ex, &quot;pros&quot;)
+    page.cons = str_list(ed, &quot;cons&quot;) or str_list(ex, &quot;cons&quot;)
+    page.check = str_list(ed, &quot;what_to_check_before_buying&quot;)
+
+    if text(ed, &quot;editorial_verdict&quot;):
+        page.verdict, page.verdict_source = text(ed, &quot;editorial_verdict&quot;), &quot;editorial.editorial_verdict&quot;
+    elif text(ex, &quot;editorial_verdict&quot;):
+        page.verdict, page.verdict_source = text(ex, &quot;editorial_verdict&quot;), &quot;extract.editorial_verdict&quot;
+
+    # FAQ: редакция → факты, без дублей (в т.ч. с FAQ из админки)
+    seen = {_norm_q(q) for q in skip_questions if q}
+    for item in faq_list(ed) + faq_list(ex):
+        key = _norm_q(item[&quot;question&quot;])
+        if key in seen:
+            continue
+        seen.add(key)
+        page.faq.append(item)
+    page.faq = page.faq[:max_faq]
+
+    # Источник
+    facts = ex.get(&quot;source_facts&quot;) if isinstance(ex.get(&quot;source_facts&quot;), dict) else {}
+    for key in SOURCE_FACT_KEYS:
+        if text(facts, key):
+            page.source_facts.append({&quot;key&quot;: key, &quot;label&quot;: SOURCE_FACT_LABELS[key], &quot;text&quot;: text(facts, key)})
+    url = text(ex, &quot;source_url&quot;) or text(ed, &quot;source_url&quot;)
+    if url.startswith((&quot;http://&quot;, &quot;https://&quot;)):
+        page.source_url = url
+        page.source_domain = urlparse(url).netloc.removeprefix(&quot;www.&quot;)
+    return page
+
+
+# ---------- проверка JSON для админки ----------
+def _check_type(kind, value):
+    if value is None:
+        return None
+    if kind == &quot;str&quot;:
+        return None if isinstance(value, str) else &quot;ожидается строка или null&quot;
+    if kind == &quot;bool&quot;:
+        return None if isinstance(value, bool) else &quot;ожидается true, false или null (без кавычек)&quot;
+    if kind.startswith(&quot;enum:&quot;):
+        allowed = kind[5:].split(&quot;,&quot;)
+        return None if value in allowed else f&quot;допустимо: {&#x27;, &#x27;.join(allowed)}&quot;
+    if kind == &quot;list_str&quot;:
+        if not isinstance(value, list):
+            return &quot;ожидается список [ ]&quot;
+        bad = [i for i, v in enumerate(value) if not isinstance(v, str)]
+        return f&quot;элементы {bad} — не строки&quot; if bad else None
+    if kind.startswith(&quot;list_enum:&quot;):
+        if not isinstance(value, list):
+            return &quot;ожидается список [ ]&quot;
+        allowed = kind[10:].split(&quot;,&quot;)
+        bad = [v for v in value if v not in allowed]
+        return f&quot;недопустимые значения {bad}; допустимо: {&#x27;, &#x27;.join(allowed)}&quot; if bad else None
+    if kind == &quot;faq&quot;:
+        if not isinstance(value, list):
+            return &quot;ожидается список [ {question, answer} ]&quot;
+        for i, item in enumerate(value):
+            if not isinstance(item, dict) or not str(item.get(&quot;question&quot;) or &quot;&quot;).strip() or not str(item.get(&quot;answer&quot;) or &quot;&quot;).strip():
+                return f&quot;элемент {i + 1}: нужны непустые question и answer&quot;
+        return None
+    if kind == &quot;facts&quot;:
+        if not isinstance(value, dict):
+            return &quot;ожидается объект { ... }&quot;
+        extra = [k for k in value if k not in SOURCE_FACT_KEYS]
+        bad = [k for k in SOURCE_FACT_KEYS if value.get(k) is not None and not isinstance(value.get(k), str)]
+        if bad:
+            return f&quot;поля {bad} должны быть строкой или null&quot;
+        return f&quot;лишние ключи {extra}&quot; if extra else None
+    return None
+
+
+def validate(data, schema):
+    &quot;&quot;&quot;(errors, warnings). Ошибки блокируют сохранение, предупреждения — нет.&quot;&quot;&quot;
+    errors, warnings = [], []
+    for key, value in data.items():
+        if key not in schema:
+            warnings.append(f&quot;«{key}» — неизвестный ключ, на странице не используется&quot;)
+            continue
+        msg = _check_type(schema[key], value)
+        if msg:
+            if schema[key] == &quot;facts&quot; and msg.startswith(&quot;лишние&quot;):
+                warnings.append(f&quot;«{key}»: {msg}&quot;)
+            else:
+                errors.append(f&quot;«{key}»: {msg}&quot;)
+    missing = [k for k in schema if k not in data]
+    if data and missing:
+        warnings.append(&quot;нет ключей (блоки будут пропущены): &quot; + &quot;, &quot;.join(missing))
+    return errors, warnings
+
+
+def validate_extract(data):
+    return validate(data, EXTRACT_KEYS)
+
+
+def validate_editorial(data):
+    return validate(data, EDITORIAL_KEYS)
+
+
+def course_page_for(course, faqs=None):
+    &quot;&quot;&quot;Для view: context[&quot;cpage&quot;] = course_page_for(course, faqs). Учитывает настройки COURSE_PAGE_*.&quot;&quot;&quot;
+    from django.conf import settings
+
+    questions = [getattr(f, &quot;question&quot;, &quot;&quot;) for f in (faqs or [])]
+    page = build_course_page(course, skip_questions=questions, max_faq=getattr(settings, &quot;COURSE_PAGE_MAX_FAQ&quot;, 8))
+    page.show_source_link = getattr(settings, &quot;COURSE_PAGE_SHOW_SOURCE_LINK&quot;, False)
+    return page</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/templatetags/course_json.py</code><span>Тег {% course_page %}</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>course_json.py</span><button type="button" class="copy-btn" data-target="cj12">Копировать</button></div>
+            <pre class="prompt__code" id="cj12">from django import template
+
+from ..course_json import course_page_for
+
+register = template.Library()
+
+
+@register.simple_tag
+def course_page(course, faqs=None):
+    &quot;&quot;&quot;{% load course_json %}{% course_page course faqs as cpage %} — если cpage не положили в контекст во view.&quot;&quot;&quot;
+    return course_page_for(course, faqs)</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/admin_course_json.py</code><span>Админка: поля JSON, отчёт, фильтр</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>admin_course_json.py</span><button type="button" class="copy-btn" data-target="cj13">Копировать</button></div>
+            <pre class="prompt__code" id="cj13">&quot;&quot;&quot;
+Админка курса: поля extract_json и editorial_json.
+
+- Большие моноширинные поля с кнопками «Форматировать», «Очистить», «Вставить пустой шаблон» и счётчиком.
+- Принимает JSON как есть или в обёртке ```json ... ``` (как отдаёт нейросеть).
+- Проверка при сохранении: синтаксис (с номером строки) и типы по схеме — ошибки не дают сохранить,
+  предупреждения (лишние/отсутствующие ключи) показываются сообщением.
+- Блок «Что выведется на странице»: какие блоки будут показаны, какие пропущены и из какого ключа взяты.
+- Колонка «Разбор» в списке курсов и фильтр «Разбор: есть/нет/частично/ошибка».
+
+Подключение — в CourseAdmin:
+    class CourseAdmin(CourseJsonAdminMixin, ...):  (миксин — первым)
+        fieldsets = (..., CourseJsonAdminMixin.json_fieldset, ...)
+        list_display = (..., &quot;json_status_col&quot;)
+        list_filter = (..., JsonStatusFilter)
+&quot;&quot;&quot;
+import json
+
+from django import forms
+from django.contrib import admin, messages
+from django.db.models import Q
+from django.utils.html import format_html, format_html_join
+
+from .course_json import (
+    EDITORIAL_KEYS, EXTRACT_KEYS, SOURCE_FACT_KEYS, build_course_page, parse_json,
+    validate_editorial, validate_extract,
+)
+
+
+def empty_template(schema):
+    out = {}
+    for key, kind in schema.items():
+        if kind.startswith(&quot;list&quot;) or kind == &quot;faq&quot;:
+            out[key] = []
+        elif kind == &quot;facts&quot;:
+            out[key] = {k: None for k in SOURCE_FACT_KEYS}
+        else:
+            out[key] = None
+    return out
+
+
+class JsonTextarea(forms.Textarea):
+    template_name = &quot;course_page/admin/json_textarea.html&quot;
+
+    def __init__(self, kind, attrs=None):
+        self.kind = kind
+        super().__init__(attrs={&quot;rows&quot;: 18, &quot;class&quot;: &quot;cp-json&quot;, &quot;spellcheck&quot;: &quot;false&quot;, **(attrs or {})})
+
+    def format_value(self, value):
+        if value in (None, &quot;&quot;, {}, []):
+            return &quot;&quot;
+        if isinstance(value, str):
+            try:
+                value = parse_json(value)
+            except (ValueError, TypeError):
+                return value
+        return json.dumps(value, ensure_ascii=False, indent=2)
+
+    def get_context(self, name, value, attrs):
+        ctx = super().get_context(name, value, attrs)
+        schema = EXTRACT_KEYS if self.kind == &quot;extract&quot; else EDITORIAL_KEYS
+        ctx[&quot;widget&quot;][&quot;kind&quot;] = self.kind
+        ctx[&quot;widget&quot;][&quot;template_json&quot;] = json.dumps(empty_template(schema), ensure_ascii=False, indent=2)
+        return ctx
+
+    def render(self, name, value, attrs=None, renderer=None):
+        from django.template.loader import render_to_string
+        from django.utils.safestring import mark_safe
+
+        return mark_safe(render_to_string(self.template_name, self.get_context(name, value, attrs)))
+
+    class Media:
+        css = {&quot;all&quot;: (&quot;admin/course_page/course-json-admin.css&quot;,)}
+        js = (&quot;admin/course_page/course-json-admin.js&quot;,)
+
+
+class JsonDictField(forms.CharField):
+    &quot;&quot;&quot;Текст → dict. Пусто → {} (или None для nullable-поля).&quot;&quot;&quot;
+
+    def __init__(self, kind, nullable=False, **kwargs):
+        self.kind = kind
+        self.nullable = nullable
+        kwargs.setdefault(&quot;required&quot;, False)
+        kwargs[&quot;widget&quot;] = JsonTextarea(kind)
+        kwargs.pop(&quot;encoder&quot;, None)
+        kwargs.pop(&quot;decoder&quot;, None)
+        kwargs.pop(&quot;max_length&quot;, None)
+        super().__init__(**kwargs)
+
+    def prepare_value(self, value):
+        return value
+
+    def to_python(self, value):
+        if value in (None, &quot;&quot;):
+            return None if self.nullable else {}
+        if isinstance(value, dict):
+            return value
+        try:
+            return parse_json(value)
+        except json.JSONDecodeError as e:
+            raise forms.ValidationError(f&quot;Ошибка в JSON: строка {e.lineno}, позиция {e.colno} — {e.msg}. Проверьте запятые и кавычки.&quot;)
+        except ValueError as e:
+            raise forms.ValidationError(str(e))
+
+    def validate(self, value):
+        super().validate(value)
+        if not value:
+            return
+        errors, _ = (validate_extract if self.kind == &quot;extract&quot; else validate_editorial)(value)
+        if errors:
+            raise forms.ValidationError([&quot;Неверный формат:&quot;] + errors)
+
+    def has_changed(self, initial, data):
+        try:
+            return (parse_json(initial) or {}) != (self.to_python(data) or {})
+        except forms.ValidationError:
+            return True
+
+
+class JsonStatusFilter(admin.SimpleListFilter):
+    title = &quot;разбор (JSON)&quot;
+    parameter_name = &quot;json&quot;
+
+    def lookups(self, request, model_admin):
+        return [(&quot;both&quot;, &quot;Оба JSON&quot;), (&quot;extract&quot;, &quot;Только extract&quot;), (&quot;editorial&quot;, &quot;Только editorial&quot;), (&quot;none&quot;, &quot;Нет разбора&quot;), (&quot;failed&quot;, &quot;Статус failed&quot;)]
+
+    def queryset(self, request, qs):
+        has_ex = Q(extract_json__has_key=&quot;extraction_status&quot;) | Q(extract_json__has_key=&quot;course_title&quot;)
+        has_ed = Q(editorial_json__has_key=&quot;draft_status&quot;) | Q(editorial_json__has_key=&quot;editorial_intro&quot;)
+        v = self.value()
+        if v == &quot;both&quot;:
+            return qs.filter(has_ex &amp; has_ed)
+        if v == &quot;extract&quot;:
+            return qs.filter(has_ex).exclude(has_ed)
+        if v == &quot;editorial&quot;:
+            return qs.filter(has_ed).exclude(has_ex)
+        if v == &quot;none&quot;:
+            return qs.exclude(has_ex).exclude(has_ed)
+        if v == &quot;failed&quot;:
+            return qs.filter(Q(extract_json__extraction_status=&quot;failed&quot;) | Q(editorial_json__draft_status=&quot;failed&quot;))
+        return qs
+
+
+class CourseJsonAdminMixin:
+    json_fieldset = (
+        &quot;Разбор курса (JSON)&quot;,
+        {
+            &quot;fields&quot;: (&quot;extract_json&quot;, &quot;editorial_json&quot;, &quot;json_blocks_report&quot;),
+            &quot;description&quot;: &quot;Вставьте ответ нейросети целиком — можно вместе с ```json. Блок на странице выводится, только если в JSON есть данные по ключу.&quot;,
+        },
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        ro = list(super().get_readonly_fields(request, obj))
+        if &quot;json_blocks_report&quot; not in ro:
+            ro.append(&quot;json_blocks_report&quot;)
+        return ro
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name in (&quot;extract_json&quot;, &quot;editorial_json&quot;):
+            kind = &quot;extract&quot; if db_field.name == &quot;extract_json&quot; else &quot;editorial&quot;
+            label = &quot;Факты со страницы школы (extract_json)&quot; if kind == &quot;extract&quot; else &quot;Текст редакции (editorial_json)&quot;
+            return JsonDictField(kind, nullable=db_field.null, label=label, help_text=db_field.help_text)
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        for name, check in ((&quot;extract_json&quot;, validate_extract), (&quot;editorial_json&quot;, validate_editorial)):
+            data = form.cleaned_data.get(name)
+            if not data:
+                continue
+            _, warnings = check(data)
+            for w in warnings[:5]:
+                self.message_user(request, f&quot;{name}: {w}&quot;, messages.WARNING)
+            status = data.get(&quot;extraction_status&quot;) or data.get(&quot;draft_status&quot;)
+            if status == &quot;failed&quot;:
+                self.message_user(request, f&quot;{name}: статус failed — этот JSON на странице не выводится.&quot;, messages.WARNING)
+
+    @admin.display(description=&quot;Что выведется на странице&quot;)
+    def json_blocks_report(self, obj):
+        if not obj or not obj.pk:
+            return &quot;Появится после сохранения.&quot;
+        page = build_course_page(obj)
+        rows = page.report()
+        shown = sum(1 for _, ok, _ in rows if ok)
+        status = []
+        if page.extract_status:
+            status.append(f&quot;extract: {page.extract_status}&quot;)
+        if page.editorial_status:
+            status.append(f&quot;editorial: {page.editorial_status}&quot;)
+        items = format_html_join(
+            &quot;&quot;,
+            &#x27;&lt;li class=&quot;cp-rep__row cp-rep__row--{}&quot;&gt;&lt;span class=&quot;cp-rep__mark&quot;&gt;{}&lt;/span&gt;&lt;span class=&quot;cp-rep__name&quot;&gt;{}&lt;/span&gt;&lt;code class=&quot;cp-rep__src&quot;&gt;{}&lt;/code&gt;&lt;/li&gt;&#x27;,
+            ((&quot;on&quot; if ok else &quot;off&quot;, &quot;✓&quot; if ok else &quot;—&quot;, name, src) for name, ok, src in rows),
+        )
+        link = &quot;&quot;
+        if hasattr(obj, &quot;get_absolute_url&quot;):
+            link = format_html(&#x27; · &lt;a href=&quot;{}&quot; target=&quot;_blank&quot;&gt;Открыть страницу ↗&lt;/a&gt;&#x27;, obj.get_absolute_url())
+        return format_html(
+            &#x27;&lt;div class=&quot;cp-rep&quot;&gt;&lt;p class=&quot;cp-rep__head&quot;&gt;&lt;strong&gt;Блоков на странице: {} из {}&lt;/strong&gt;{}{}&lt;/p&gt;&lt;ul class=&quot;cp-rep__list&quot;&gt;{}&lt;/ul&gt;&lt;/div&gt;&#x27;,
+            shown, len(rows), format_html(&quot; · {}&quot;, &quot;, &quot;.join(status)) if status else &quot;&quot;, link, items,
+        )
+
+    @admin.display(description=&quot;Разбор&quot;)
+    def json_status_col(self, obj):
+        ex = obj.extract_json if isinstance(obj.extract_json, dict) else {}
+        ed = obj.editorial_json if isinstance(obj.editorial_json, dict) else {}
+        def badge(label, data, key):
+            if not data:
+                return format_html(&#x27;&lt;span class=&quot;cp-badge cp-badge--none&quot; title=&quot;Нет данных&quot;&gt;{} —&lt;/span&gt;&#x27;, label)
+            st = data.get(key) or &quot;?&quot;
+            return format_html(&#x27;&lt;span class=&quot;cp-badge cp-badge--{}&quot; title=&quot;{}: {}&quot;&gt;{} {}&lt;/span&gt;&#x27;, st, key, st, label, {&quot;ok&quot;: &quot;✓&quot;, &quot;partial&quot;: &quot;½&quot;, &quot;failed&quot;: &quot;✕&quot;}.get(st, &quot;?&quot;))
+        return format_html(&quot;{} {}&quot;, badge(&quot;E&quot;, ex, &quot;extraction_status&quot;), badge(&quot;R&quot;, ed, &quot;draft_status&quot;))
+
+    class Media:
+        css = {&quot;all&quot;: (&quot;admin/course_page/course-json-admin.css&quot;,)}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/templates/course_page/admin/json_textarea.html</code><span>Шаблон поля JSON</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>json_textarea.html</span><button type="button" class="copy-btn" data-target="cj14">Копировать</button></div>
+            <pre class="prompt__code" id="cj14">&lt;div class=&quot;cp-json-wrap&quot; data-cp-json data-kind=&quot;{{ widget.kind }}&quot;&gt;
+  &lt;div class=&quot;cp-json-tools&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;button&quot; data-cp-format&gt;Форматировать&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;button&quot; data-cp-template&gt;Вставить пустой шаблон&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;button&quot; data-cp-clear&gt;Очистить&lt;/button&gt;
+    &lt;span class=&quot;cp-json-status&quot; data-cp-status aria-live=&quot;polite&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;textarea name=&quot;{{ widget.name }}&quot;{% for k, v in widget.attrs.items %}{% if v is not False %} {{ k }}{% if v is not True %}=&quot;{{ v }}&quot;{% endif %}{% endif %}{% endfor %}&gt;{% if widget.value %}{{ widget.value }}{% endif %}&lt;/textarea&gt;
+  &lt;template data-cp-template-json&gt;{{ widget.template_json }}&lt;/template&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/admin/course_page/course-json-admin.js</code><span>Проверка JSON на лету</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>course-json-admin.js</span><button type="button" class="copy-btn" data-target="cj15">Копировать</button></div>
+            <pre class="prompt__code" id="cj15">/* Поля extract_json / editorial_json: проверка на лету, форматирование, шаблон. */
+(function () {
+  function ready(fn) { if (document.readyState !== &#x27;loading&#x27;) fn(); else document.addEventListener(&#x27;DOMContentLoaded&#x27;, fn); }
+  function strip(text) { return text.trim().replace(/^```(?:json)?\s*/i, &#x27;&#x27;).replace(/\s*```$/, &#x27;&#x27;).trim(); }
+  function lineOf(text, pos) { return text.slice(0, pos).split(&#x27;\n&#x27;).length; }
+  ready(function () {
+    document.querySelectorAll(&#x27;[data-cp-json]&#x27;).forEach(function (box) {
+      var ta = box.querySelector(&#x27;textarea&#x27;);
+      var st = box.querySelector(&#x27;[data-cp-status]&#x27;);
+      function check() {
+        var raw = ta.value;
+        box.classList.remove(&#x27;is-ok&#x27;, &#x27;is-err&#x27;);
+        if (!raw.trim()) { st.textContent = &#x27;Пусто — блоки из этого JSON не выводятся&#x27;; return null; }
+        try {
+          var data = JSON.parse(strip(raw));
+          if (!data || typeof data !== &#x27;object&#x27; || Array.isArray(data)) throw new Error(&#x27;Нужен объект { ... }&#x27;);
+          var keys = Object.keys(data);
+          var filled = keys.filter(function (k) {
+            var v = data[k];
+            if (v === null || v === &#x27;&#x27;) return false;
+            if (Array.isArray(v)) return v.length &gt; 0;
+            if (typeof v === &#x27;object&#x27;) return Object.keys(v).some(function (x) { return v[x] !== null &amp;&amp; v[x] !== &#x27;&#x27;; });
+            return true;
+          });
+          var status = data.extraction_status || data.draft_status;
+          st.textContent = &#x27;JSON корректный · ключей: &#x27; + keys.length + &#x27;, заполнено: &#x27; + filled.length + (status ? &#x27; · статус: &#x27; + status : &#x27;&#x27;);
+          box.classList.add(status === &#x27;failed&#x27; ? &#x27;is-err&#x27; : &#x27;is-ok&#x27;);
+          return data;
+        } catch (e) {
+          var m = /position (\d+)/.exec(e.message);
+          st.textContent = &#x27;Ошибка: &#x27; + e.message + (m ? &#x27; (строка &#x27; + lineOf(strip(raw), +m[1]) + &#x27;)&#x27; : &#x27;&#x27;);
+          box.classList.add(&#x27;is-err&#x27;);
+          return null;
+        }
+      }
+      ta.addEventListener(&#x27;input&#x27;, check);
+      box.querySelector(&#x27;[data-cp-format]&#x27;).addEventListener(&#x27;click&#x27;, function () {
+        var d = check();
+        if (d) { ta.value = JSON.stringify(d, null, 2); check(); }
+      });
+      box.querySelector(&#x27;[data-cp-clear]&#x27;).addEventListener(&#x27;click&#x27;, function () {
+        if (!ta.value.trim() || confirm(&#x27;Очистить поле? Блоки из этого JSON пропадут со страницы после сохранения.&#x27;)) { ta.value = &#x27;&#x27;; check(); }
+      });
+      box.querySelector(&#x27;[data-cp-template]&#x27;).addEventListener(&#x27;click&#x27;, function () {
+        if (ta.value.trim() &amp;&amp; !confirm(&#x27;Заменить текущее содержимое пустым шаблоном?&#x27;)) return;
+        ta.value = box.querySelector(&#x27;[data-cp-template-json]&#x27;).innerHTML.replace(/&amp;quot;/g, &#x27;&quot;&#x27;).replace(/&amp;amp;/g, &#x27;&amp;&#x27;).replace(/&amp;lt;/g, &#x27;&lt;&#x27;).replace(/&amp;gt;/g, &#x27;&gt;&#x27;);
+        check();
+      });
+      check();
+    });
+  });
+})();</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/admin/course_page/course-json-admin.css</code><span>Стили админки</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>course-json-admin.css</span><button type="button" class="copy-btn" data-target="cj16">Копировать</button></div>
+            <pre class="prompt__code" id="cj16">.cp-json-wrap { max-width: 900px; }
+.cp-json-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 6px; }
+.cp-json-status { margin-left: 6px; font-size: 12px; color: var(--body-quiet-color, #666); }
+.cp-json-wrap.is-ok .cp-json-status { color: #2d7a2d; }
+.cp-json-wrap.is-err .cp-json-status { color: #ba2121; font-weight: 600; }
+textarea.cp-json { width: 100%; box-sizing: border-box; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; tab-size: 2; white-space: pre; resize: vertical; }
+.cp-json-wrap.is-ok textarea.cp-json { border-color: #8fca8f; }
+.cp-json-wrap.is-err textarea.cp-json { border-color: #e29a9a; }
+.cp-rep { max-width: 900px; }
+.cp-rep__head { margin: 0 0 8px; }
+.cp-rep__list { margin: 0 !important; padding: 0 !important; list-style: none !important; border: 1px solid var(--border-color, #ddd); border-radius: 4px; }
+.cp-rep__row { display: grid; grid-template-columns: 22px minmax(180px, 1fr) minmax(0, 1.4fr); gap: 10px; align-items: center; padding: 6px 10px !important; list-style: none !important; border-top: 1px solid var(--hairline-color, #eee); }
+.cp-rep__row:first-child { border-top: 0; }
+.cp-rep__row--on .cp-rep__mark { color: #2d7a2d; font-weight: 700; }
+.cp-rep__row--off { color: #999; }
+.cp-rep__src { font-size: 11px; color: #888; background: none; white-space: normal; }
+.cp-badge { display: inline-block; margin-right: 3px; padding: 1px 6px; border-radius: 9px; font-size: 11px; font-weight: 700; background: #eee; color: #888; white-space: nowrap; }
+.cp-badge--ok { background: #e3f4e3; color: #2d7a2d; }
+.cp-badge--partial { background: #fff4d6; color: #8a6100; }
+.cp-badge--failed { background: #ffe3e3; color: #ba2121; }</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>static/edukursy/css/course-page.css</code><span>Стили блоков</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>course-page.css</span><button type="button" class="copy-btn" data-target="cj17">Копировать</button></div>
+            <pre class="prompt__code" id="cj17">/*
+  edukursy — блоки страницы курса из extract_json / editorial_json.
+  Подключить в base.html ПОСЛЕ style.css. Использует переменные --c-* из style.css.
+*/
+.cp-ic {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ----- Факты под заголовком ----- */
+.cp-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.cp-fact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  background: #fff;
+}
+.cp-fact__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #eef3ff;
+  color: var(--c-primary);
+}
+.cp-fact__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.cp-fact__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--c-muted);
+}
+.cp-fact__value {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.cp-fact--muted .cp-fact__icon {
+  background: var(--c-bg-light);
+  color: #8a919e;
+}
+.cp-fact--muted .cp-fact__value {
+  color: var(--c-muted);
+  font-weight: 600;
+}
+
+/* ----- Цена текстом ----- */
+.cp-price-text .price-box__price {
+  font-size: clamp(26px, 3vw, 34px);
+}
+.cp-price-text__inst {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 18px;
+  font-size: 15px;
+  color: var(--c-muted);
+}
+.cp-price-text__inst .cp-ic {
+  margin-top: 1px;
+  color: var(--c-accent);
+}
+
+/* ----- О курсе ----- */
+.cp-about {
+  display: grid;
+  gap: 28px;
+}
+@media (min-width: 960px) {
+  .cp-about {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    align-items: start;
+    gap: 56px;
+  }
+}
+.cp-about .prose p {
+  font-size: 18px;
+  line-height: 1.65;
+}
+.cp-about__meta {
+  margin: 0;
+  padding: 8px 22px;
+  border-radius: 16px;
+  background: var(--c-bg-light);
+}
+.cp-about__meta div {
+  padding: 14px 0;
+}
+.cp-about__meta div + div {
+  border-top: 1px solid var(--c-border);
+}
+.cp-about__meta dt {
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--c-muted);
+}
+.cp-about__meta dd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-weight: 700;
+}
+.cp-level {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+}
+.cp-level i {
+  width: 5px;
+  border-radius: 2px;
+  background: var(--c-border);
+}
+.cp-level i:nth-child(1) { height: 6px; }
+.cp-level i:nth-child(2) { height: 11px; }
+.cp-level i:nth-child(3) { height: 16px; }
+.cp-level--beginner i:nth-child(1),
+.cp-level--beginner_plus i:nth-child(-n + 2),
+.cp-level--intermediate i:nth-child(-n + 2),
+.cp-level--advanced i,
+.cp-level--mixed i {
+  background: var(--c-primary);
+}
+.cp-level--beginner_plus i:nth-child(2) {
+  opacity: 0.45;
+}
+.cp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cp-chips li {
+  padding: 4px 10px;
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+.cp-chips--lg li {
+  padding: 8px 14px;
+  font-size: 15px;
+}
+
+/* ----- Чему научитесь ----- */
+.cp-learn {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: learn;
+}
+.cp-learn__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #fff;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.cp-learn__num {
+  flex: none;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--c-primary);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+/* ----- Кому подойдёт ----- */
+.cp-audience {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 860px) {
+  .cp-audience--two {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.cp-card {
+  padding: 24px;
+  border-radius: 16px;
+}
+.cp-card--yes {
+  background: #ecf8f2;
+}
+.cp-card--no {
+  background: #fdf3ec;
+}
+.cp-card__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-size: 19px;
+  font-weight: 800;
+}
+.cp-card--yes .cp-card__title { color: #17704a; }
+.cp-card--no .cp-card__title { color: #a3501a; }
+.cp-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cp-list li {
+  display: flex;
+  gap: 10px;
+  padding: 7px 0;
+  line-height: 1.45;
+}
+.cp-list .cp-ic {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+}
+.cp-list--yes .cp-ic { color: #1f8a5b; }
+.cp-list--no .cp-ic { color: #c26a1b; }
+
+/* ----- Как проходит обучение ----- */
+.cp-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cp-feature {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: #fff;
+}
+.cp-feature__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #eef3ff;
+  color: var(--c-primary);
+}
+.cp-feature__text {
+  font-weight: 600;
+  line-height: 1.4;
+}
+.cp-prereq {
+  margin-top: 28px;
+}
+.cp-prereq__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 17px;
+  font-weight: 800;
+}
+.cp-prereq__title .cp-ic {
+  color: var(--c-muted);
+}
+
+/* ----- Мнение редакции ----- */
+.cp-badge-ed {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--c-bg-light);
+  font-size: 14px;
+}
+.cp-badge-ed .cp-ic {
+  width: 16px;
+  height: 16px;
+}
+.cp-proscons {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 860px) {
+  .cp-proscons--two {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.cp-pc {
+  padding: 24px;
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  background: #fff;
+}
+.cp-pc--pros { border-top: 4px solid #1f8a5b; }
+.cp-pc--cons { border-top: 4px solid #d97a2b; }
+.cp-pc__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 19px;
+  font-weight: 800;
+}
+.cp-pc__badge {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #fff;
+}
+.cp-pc__badge .cp-ic {
+  width: 16px;
+  height: 16px;
+  stroke-width: 3;
+}
+.cp-pc--pros .cp-pc__badge { background: #1f8a5b; }
+.cp-pc--cons .cp-pc__badge { background: #d97a2b; }
+.cp-pc ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cp-pc li {
+  position: relative;
+  padding: 8px 0 8px 20px;
+  line-height: 1.45;
+}
+.cp-pc li + li {
+  border-top: 1px dashed var(--c-border);
+}
+.cp-pc li::before {
+  content: &quot;&quot;;
+  position: absolute;
+  left: 2px;
+  top: 17px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.cp-pc--pros li::before { background: #1f8a5b; }
+.cp-pc--cons li::before { background: #d97a2b; }
+.cp-verdict {
+  position: relative;
+  margin: 20px 0 0;
+  padding: 28px 28px 24px 84px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #1f5eff 0%, #1546c4 100%);
+  color: #fff;
+}
+.cp-verdict__quote {
+  position: absolute;
+  left: 28px;
+  top: 28px;
+  width: 36px;
+  height: 36px;
+  opacity: 0.5;
+}
+.cp-verdict__text {
+  margin: 0;
+  font-size: clamp(17px, 2vw, 21px);
+  font-weight: 600;
+  line-height: 1.5;
+}
+.cp-verdict__by {
+  margin-top: 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+}
+@media (max-width: 599.98px) {
+  .cp-verdict {
+    padding: 64px 20px 20px;
+  }
+  .cp-verdict__quote {
+    left: 20px;
+    top: 20px;
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* ----- Что уточнить перед покупкой ----- */
+.cp-check {
+  display: grid;
+  gap: 20px;
+  padding: 28px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+}
+@media (min-width: 960px) {
+  .cp-check {
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+.cp-check .section__title {
+  margin-bottom: 10px;
+}
+.cp-check__sub {
+  color: var(--c-muted);
+}
+.cp-check__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: chk;
+}
+.cp-check__list li + li {
+  border-top: 1px solid var(--c-border);
+}
+.cp-check__list label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  cursor: pointer;
+  line-height: 1.45;
+}
+.cp-check__list input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  accent-color: var(--c-accent);
+}
+.cp-check__list input:checked + span {
+  color: var(--c-muted);
+  text-decoration: line-through;
+}
+
+/* ----- Что говорит школа ----- */
+.cp-source {
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  background: #fff;
+}
+.cp-source__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px;
+  cursor: pointer;
+  list-style: none;
+}
+.cp-source__head::-webkit-details-marker {
+  display: none;
+}
+.cp-source__head::after {
+  content: &quot;&quot;;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--c-muted);
+  border-bottom: 2px solid var(--c-muted);
+  transform: rotate(45deg);
+  transition: transform 0.2s;
+}
+.cp-source[open] .cp-source__head::after {
+  transform: rotate(225deg);
+}
+.cp-source__title {
+  display: block;
+  font-size: 19px;
+  font-weight: 800;
+}
+.cp-source__sub {
+  display: block;
+  font-size: 14px;
+  color: var(--c-muted);
+}
+.cp-source__list {
+  margin: 0;
+  padding: 0 22px 8px;
+}
+.cp-source__list div {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0;
+  border-top: 1px solid var(--c-border);
+}
+@media (min-width: 720px) {
+  .cp-source__list div {
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+  }
+}
+.cp-source__list dt {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-muted);
+}
+.cp-source__list dd {
+  margin: 0;
+  font-style: italic;
+}
+.cp-source__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 22px 18px;
+  font-weight: 600;
+  color: var(--c-primary);
+}
+.cp-source__link .cp-ic {
+  width: 16px;
+  height: 16px;
+}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>app/tests/test_course_json.py</code><span>16 тестов</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>test_course_json.py</span><button type="button" class="copy-btn" data-target="cj18">Копировать</button></div>
+            <pre class="prompt__code" id="cj18">&quot;&quot;&quot;Тесты сборки блоков из JSON — без базы данных.&quot;&quot;&quot;
+import json
+from pathlib import Path
+
+from django.test import SimpleTestCase
+
+from ..course_json import build_course_page, parse_json, validate_editorial, validate_extract
+
+SAMPLES = Path(__file__).resolve().parent / &quot;samples&quot;
+
+
+def load(name):
+    return json.loads((SAMPLES / name).read_text(encoding=&quot;utf-8&quot;))
+
+
+class ParseTests(SimpleTestCase):
+    def test_fenced(self):
+        self.assertEqual(parse_json(&#x27;```json\n{&quot;a&quot;: 1}\n```&#x27;), {&quot;a&quot;: 1})
+
+    def test_empty(self):
+        for v in (None, &quot;&quot;, &quot;  &quot;, {}, &quot;null&quot;):
+            self.assertEqual(parse_json(v), {})
+
+    def test_not_object(self):
+        with self.assertRaises(ValueError):
+            parse_json(&quot;[1, 2]&quot;)
+
+
+class BuildTests(SimpleTestCase):
+    def test_full(self):
+        p = build_course_page(extract=load(&quot;extract_full.json&quot;), editorial=load(&quot;editorial_full.json&quot;))
+        self.assertTrue(p.lead.startswith(&quot;Длинная онлайн-программа&quot;))
+        self.assertEqual(p.lead_source, &quot;editorial_intro&quot;)
+        self.assertTrue(p.summary.startswith(&quot;Курс рассчитан&quot;))
+        self.assertEqual(len(p.learn), 8)
+        self.assertEqual([f.key for f in p.facts], [&quot;level&quot;, &quot;format&quot;, &quot;duration&quot;, &quot;certificate&quot;, &quot;employment&quot;])
+        self.assertEqual(len(p.for_whom), 2, &quot;берётся вариант редакции&quot;)
+        self.assertEqual(len(p.check), 4)
+        self.assertTrue(p.verdict.startswith(&quot;Хороший вариант&quot;))
+        self.assertEqual(len(p.faq), 7)
+        self.assertEqual(len(p.source_facts), 6)
+        self.assertEqual(p.source_domain, &quot;school-1.ru&quot;)
+        self.assertFalse(p.is_empty)
+
+    def test_missing_keys_skip_blocks(self):
+        p = build_course_page(extract={&quot;course_title&quot;: &quot;X&quot;, &quot;what_you_learn&quot;: [&quot;SQL&quot;]}, editorial={})
+        self.assertEqual(p.learn, [&quot;SQL&quot;])
+        for attr in (&quot;lead&quot;, &quot;summary&quot;, &quot;verdict&quot;, &quot;price_text&quot;):
+            self.assertEqual(getattr(p, attr), &quot;&quot;)
+        for attr in (&quot;facts&quot;, &quot;for_whom&quot;, &quot;not_for_whom&quot;, &quot;features&quot;, &quot;pros&quot;, &quot;cons&quot;, &quot;check&quot;, &quot;faq&quot;, &quot;source_facts&quot;, &quot;prerequisites&quot;):
+            self.assertEqual(getattr(p, attr), [], attr)
+
+    def test_null_and_empty_values_skip(self):
+        p = build_course_page(extract={&quot;short_summary&quot;: &quot;  &quot;, &quot;pros&quot;: [], &quot;level&quot;: None, &quot;certificate&quot;: None, &quot;source_facts&quot;: {&quot;pricing_excerpt&quot;: None}}, editorial=None)
+        self.assertTrue(p.is_empty)
+
+    def test_false_is_shown(self):
+        p = build_course_page(extract={&quot;employment_support&quot;: False, &quot;certificate&quot;: &quot;false&quot;}, editorial={})
+        self.assertEqual([(f.key, f.value) for f in p.facts], [(&quot;certificate&quot;, &quot;Не выдаётся&quot;), (&quot;employment&quot;, &quot;Помощь не заявлена&quot;)])
+
+    def test_failed_ignored(self):
+        p = build_course_page(extract={&quot;extraction_status&quot;: &quot;failed&quot;, &quot;what_you_learn&quot;: [&quot;X&quot;]}, editorial={&quot;draft_status&quot;: &quot;ok&quot;, &quot;pros&quot;: [&quot;A&quot;]})
+        self.assertEqual(p.learn, [])
+        self.assertEqual(p.pros, [&quot;A&quot;])
+
+    def test_extract_fallback(self):
+        p = build_course_page(extract=load(&quot;extract_full.json&quot;), editorial={})
+        self.assertEqual(p.lead_source, &quot;short_summary&quot;)
+        self.assertEqual(p.summary, &quot;&quot;, &quot;short_summary не повторяется дважды&quot;)
+        self.assertEqual(len(p.for_whom), 3)
+        self.assertEqual(p.verdict_source, &quot;extract.editorial_verdict&quot;)
+
+    def test_faq_dedup_with_admin(self):
+        p = build_course_page(extract=load(&quot;extract_full.json&quot;), editorial=load(&quot;editorial_full.json&quot;), skip_questions=[&quot;Нужен ли опыт программирования?&quot;])
+        self.assertNotIn(&quot;Нужен ли опыт программирования?&quot;, [f[&quot;question&quot;] for f in p.faq])
+
+    def test_bad_types_do_not_crash(self):
+        p = build_course_page(extract={&quot;what_you_learn&quot;: &quot;строка&quot;, &quot;faq&quot;: [{&quot;question&quot;: &quot;Q&quot;}], &quot;format&quot;: [&quot;tv&quot;, &quot;online&quot;], &quot;level&quot;: &quot;pro&quot;}, editorial={&quot;pros&quot;: [1, &quot;Ок&quot;]})
+        self.assertEqual(p.learn, [])
+        self.assertEqual(p.faq, [])
+        self.assertEqual(p.formats, [&quot;Онлайн&quot;])
+        self.assertEqual(p.level, &quot;&quot;)
+        self.assertEqual(p.pros, [&quot;Ок&quot;])
+
+    def test_broken_json_string(self):
+        p = build_course_page(extract=&#x27;{&quot;a&quot;: &#x27;, editorial=&quot;&quot;)
+        self.assertTrue(p.is_empty)
+
+    def test_partial_samples(self):
+        p = build_course_page(extract=load(&quot;extract_partial.json&quot;), editorial=load(&quot;editorial_partial.json&quot;))
+        self.assertEqual(p.learn[0], &quot;SELECT, WHERE, ORDER BY&quot;)
+        self.assertEqual([f.key for f in p.facts], [&quot;format&quot;, &quot;duration&quot;, &quot;employment&quot;])
+        self.assertEqual(p.check, [&quot;Уточнить, будет ли проверка заданий&quot;])
+        self.assertEqual(p.verdict, &quot;&quot;)
+
+
+class ValidateTests(SimpleTestCase):
+    def test_samples_valid(self):
+        for name, fn in ((&quot;extract_full.json&quot;, validate_extract), (&quot;editorial_full.json&quot;, validate_editorial), (&quot;extract_partial.json&quot;, validate_extract)):
+            errors, _ = fn(load(name))
+            self.assertEqual(errors, [], name)
+
+    def test_errors(self):
+        errors, _ = validate_extract({&quot;certificate&quot;: &quot;да&quot;, &quot;format&quot;: [&quot;tv&quot;], &quot;level&quot;: &quot;pro&quot;, &quot;faq&quot;: [{&quot;question&quot;: &quot;Q&quot;}], &quot;pros&quot;: &quot;x&quot;})
+        self.assertEqual(len(errors), 5)
+
+    def test_warnings(self):
+        errors, warnings = validate_editorial({&quot;draft_status&quot;: &quot;ok&quot;, &quot;extra&quot;: 1})
+        self.assertEqual(errors, [])
+        self.assertTrue(any(&quot;extra&quot; in w for w in warnings))
+        self.assertTrue(any(&quot;нет ключей&quot; in w for w in warnings))</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>samples/extract_full.json</code><span>Образец extract_json</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>extract_full.json</span><button type="button" class="copy-btn" data-target="cj19">Копировать</button></div>
+            <pre class="prompt__code" id="cj19">{
+  &quot;source_url&quot;: &quot;https://school-1.ru/courses/python-developer&quot;,
+  &quot;extraction_status&quot;: &quot;ok&quot;,
+  &quot;course_title&quot;: &quot;Python-разработчик с нуля&quot;,
+  &quot;school_name&quot;: &quot;Школа 1&quot;,
+  &quot;course_category&quot;: &quot;Python&quot;,
+  &quot;level&quot;: &quot;beginner&quot;,
+  &quot;format&quot;: [
+    &quot;online&quot;,
+    &quot;recorded&quot;,
+    &quot;mentoring&quot;,
+    &quot;self-paced&quot;
+  ],
+  &quot;duration_text&quot;: &quot;8 месяцев, 6–8 часов в неделю&quot;,
+  &quot;price_text&quot;: &quot;98 000 ₽&quot;,
+  &quot;installment_text&quot;: &quot;Рассрочка на 20 месяцев — от 4 900 ₽ в месяц, без переплаты&quot;,
+  &quot;certificate&quot;: true,
+  &quot;employment_support&quot;: true,
+  &quot;short_summary&quot;: &quot;Онлайн-курс по Python для тех, кто начинает с нуля. Программа идёт от синтаксиса языка к веб-разработке на Django и работе с базами данных. Обучение построено на записанных уроках и практических заданиях с проверкой наставником.&quot;,
+  &quot;for_whom&quot;: [
+    &quot;Для новичков без опыта в программировании&quot;,
+    &quot;Для тех, кто хочет сменить профессию и перейти в IT&quot;,
+    &quot;Для начинающих разработчиков, которым нужна системная база по Python&quot;
+  ],
+  &quot;not_for_whom&quot;: [
+    &quot;Может не подойти тем, кто уже уверенно пишет на Python и ищет продвинутые темы&quot;,
+    &quot;Может быть не лучшим выбором для тех, кто ищет короткий интенсив на 1–2 месяца&quot;
+  ],
+  &quot;what_you_learn&quot;: [
+    &quot;Синтаксис Python и основы алгоритмов&quot;,
+    &quot;Объектно-ориентированное программирование&quot;,
+    &quot;Git и командная работа&quot;,
+    &quot;SQL и PostgreSQL&quot;,
+    &quot;Веб-разработка на Django&quot;,
+    &quot;REST API&quot;,
+    &quot;Тестирование кода с pytest&quot;,
+    &quot;Docker и деплой проекта&quot;
+  ],
+  &quot;course_features&quot;: [
+    &quot;Проверка домашних заданий наставником&quot;,
+    &quot;3 проекта в портфолио&quot;,
+    &quot;Гибкий график — уроки в записи&quot;,
+    &quot;Живые вебинары раз в неделю&quot;,
+    &quot;Карьерная консультация и помощь с резюме&quot;
+  ],
+  &quot;pros&quot;: [
+    &quot;Программа покрывает путь от основ языка до веб-разработки&quot;,
+    &quot;Указана проверка домашних заданий наставником&quot;,
+    &quot;В программу входят проекты для портфолио&quot;,
+    &quot;Есть рассрочка без переплаты&quot;
+  ],
+  &quot;cons&quot;: [
+    &quot;На странице ограниченно раскрыт формат обратной связи на вебинарах&quot;,
+    &quot;Условия помощи с трудоустройством описаны без конкретных обязательств&quot;,
+    &quot;Нагрузка 6–8 часов в неделю может быть заметной при полной занятости&quot;
+  ],
+  &quot;prerequisites&quot;: [
+    &quot;Базовое владение компьютером&quot;,
+    &quot;Компьютер с доступом в интернет&quot;
+  ],
+  &quot;faq&quot;: [
+    {
+      &quot;question&quot;: &quot;Нужен ли опыт программирования?&quot;,
+      &quot;answer&quot;: &quot;Нет, курс рассчитан на начинающих. Достаточно базового владения компьютером.&quot;
+    },
+    {
+      &quot;question&quot;: &quot;Сколько времени нужно уделять учёбе?&quot;,
+      &quot;answer&quot;: &quot;Школа указывает 6–8 часов в неделю на протяжении 8 месяцев.&quot;
+    },
+    {
+      &quot;question&quot;: &quot;Выдают ли документ по окончании?&quot;,
+      &quot;answer&quot;: &quot;Да, на странице курса указано, что выпускники получают документ о прохождении.&quot;
+    },
+    {
+      &quot;question&quot;: &quot;Можно ли оплатить частями?&quot;,
+      &quot;answer&quot;: &quot;Да, доступна рассрочка на 20 месяцев — от 4 900 ₽ в месяц.&quot;
+    }
+  ],
+  &quot;editorial_verdict&quot;: &quot;Курс подойдёт новичкам, которым нужна структурированная программа от основ Python до Django. Перед покупкой стоит уточнить формат помощи с трудоустройством.&quot;,
+  &quot;source_facts&quot;: {
+    &quot;description_excerpt&quot;: &quot;Освоите Python с нуля и соберёте 3 проекта в портфолио&quot;,
+    &quot;pricing_excerpt&quot;: &quot;98 000 ₽ или 4 900 ₽/мес&quot;,
+    &quot;duration_excerpt&quot;: &quot;8 месяцев&quot;,
+    &quot;format_excerpt&quot;: &quot;Онлайн: видеоуроки, вебинары и проверка домашних заданий&quot;,
+    &quot;employment_excerpt&quot;: &quot;Поможем составить резюме и подготовиться к собеседованиям&quot;,
+    &quot;certificate_excerpt&quot;: &quot;Диплом о профессиональной переподготовке&quot;
+  }
+}</pre>
+          </div>
+        </details>
+        <details class="ins-file">
+          <summary><code>samples/editorial_full.json</code><span>Образец editorial_json</span></summary>
+          <div class="prompt">
+            <div class="prompt__bar"><span>editorial_full.json</span><button type="button" class="copy-btn" data-target="cj20">Копировать</button></div>
+            <pre class="prompt__code" id="cj20">{
+  &quot;source_url&quot;: &quot;https://school-1.ru/courses/python-developer&quot;,
+  &quot;draft_status&quot;: &quot;ok&quot;,
+  &quot;course_title&quot;: &quot;Python-разработчик с нуля&quot;,
+  &quot;school_name&quot;: &quot;Школа 1&quot;,
+  &quot;editorial_intro&quot;: &quot;Длинная онлайн-программа по Python для старта с нуля: от синтаксиса языка до веб-разработки на Django. Ориентирована на тех, кто хочет войти в профессию разработчика.&quot;,
+  &quot;editorial_summary&quot;: &quot;Курс рассчитан на 8 месяцев и сочетает уроки в записи, еженедельные вебинары и проверку заданий наставником. В программе — базы данных, Git, тестирование и деплой, а по итогам остаются 3 проекта для портфолио. Школа заявляет помощь с резюме и подготовкой к собеседованиям.&quot;,
+  &quot;for_whom&quot;: [
+    &quot;Новичкам, которым нужен структурированный старт в программировании&quot;,
+    &quot;Тем, кто планирует сменить профессию и готов учиться несколько месяцев&quot;
+  ],
+  &quot;not_for_whom&quot;: [
+    &quot;Разработчикам с опытом, которым нужны только продвинутые темы&quot;,
+    &quot;Тем, кто хочет быстро освоить один инструмент за пару недель&quot;
+  ],
+  &quot;pros&quot;: [
+    &quot;Широкая программа: от основ языка до деплоя&quot;,
+    &quot;Наставник проверяет домашние задания&quot;,
+    &quot;3 проекта в портфолио по итогам обучения&quot;
+  ],
+  &quot;cons&quot;: [
+    &quot;Формат помощи с трудоустройством раскрыт не полностью&quot;,
+    &quot;Высокая нагрузка при совмещении с работой&quot;
+  ],
+  &quot;what_to_check_before_buying&quot;: [
+    &quot;Уточнить, как часто и в каком формате отвечает наставник&quot;,
+    &quot;Проверить, какие именно услуги входят в карьерную поддержку&quot;,
+    &quot;Посмотреть актуальную стоимость и условия рассрочки&quot;,
+    &quot;Спросить про возврат денег, если обучение не подойдёт&quot;
+  ],
+  &quot;faq&quot;: [
+    {
+      &quot;question&quot;: &quot;Подойдёт ли курс, если я совсем не программировал?&quot;,
+      &quot;answer&quot;: &quot;Да, программа начинается с основ, опыт не требуется.&quot;
+    },
+    {
+      &quot;question&quot;: &quot;Что останется после обучения?&quot;,
+      &quot;answer&quot;: &quot;3 проекта для портфолио и документ о прохождении курса.&quot;
+    },
+    {
+      &quot;question&quot;: &quot;Гарантируют ли трудоустройство?&quot;,
+      &quot;answer&quot;: &quot;Школа заявляет помощь с резюме и подготовкой к собеседованиям, но гарантии трудоустройства на странице не указаны.&quot;
+    }
+  ],
+  &quot;editorial_verdict&quot;: &quot;Хороший вариант для системного старта в Python, если вы готовы уделять учёбе 6–8 часов в неделю. Перед оплатой уточните детали карьерной поддержки и обратной связи наставника.&quot;
 }</pre>
           </div>
         </details>

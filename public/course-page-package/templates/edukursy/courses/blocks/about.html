@@ -1,0 +1,17 @@
+{% if cpage.summary %}
+<section class="section" id="course-about">
+  <div class="cp-about">
+    <div class="cp-about__text">
+      <h2 class="section__title">О курсе</h2>
+      <div class="prose"><p>{{ cpage.summary|linebreaksbr }}</p></div>
+    </div>
+    {% if cpage.category or cpage.level or cpage.formats %}
+    <dl class="cp-about__meta">
+      {% if cpage.category %}<div><dt>Направление</dt><dd>{{ cpage.category }}</dd></div>{% endif %}
+      {% if cpage.level %}<div><dt>Уровень</dt><dd><span class="cp-level cp-level--{{ cpage.level_code }}" aria-hidden="true"><i></i><i></i><i></i></span>{{ cpage.level }}</dd></div>{% endif %}
+      {% if cpage.formats %}<div><dt>Формат</dt><dd><ul class="cp-chips">{% for f in cpage.formats %}<li>{{ f }}</li>{% endfor %}</ul></dd></div>{% endif %}
+    </dl>
+    {% endif %}
+  </div>
+</section>
+{% endif %}

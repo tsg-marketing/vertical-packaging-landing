@@ -1,0 +1,13 @@
+{% if cpage.check %}
+<section class="section section--light" id="course-check">
+  <div class="cp-check">
+    <div class="cp-check__head">
+      <h2 class="section__title">Что уточнить перед покупкой</h2>
+      <p class="cp-check__sub">Задайте эти вопросы менеджеру школы — ответы помогут избежать разочарований.</p>
+    </div>
+    <ol class="cp-check__list">
+      {% for x in cpage.check %}<li><label><input type="checkbox"><span>{{ x }}</span></label></li>{% endfor %}
+    </ol>
+  </div>
+</section>
+{% endif %}

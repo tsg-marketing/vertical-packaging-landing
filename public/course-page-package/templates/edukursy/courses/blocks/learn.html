@@ -1,0 +1,13 @@
+{% if cpage.learn %}
+<section class="section section--light" id="course-skills">
+  <div class="section-head">
+    <h2 class="section__title">Чему вы научитесь</h2>
+    <p class="section-head__meta">{{ cpage.learn|length }} {% if cpage.learn|length == 1 %}навык{% elif cpage.learn|length < 5 %}навыка{% else %}навыков{% endif %}</p>
+  </div>
+  <ul class="cp-learn">
+    {% for item in cpage.learn %}
+    <li class="cp-learn__item"><span class="cp-learn__num">{{ forloop.counter|stringformat:"02d" }}</span><span>{{ item }}</span></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}

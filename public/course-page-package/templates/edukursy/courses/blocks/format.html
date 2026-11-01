@@ -1,0 +1,18 @@
+{% if cpage.features or cpage.prerequisites %}
+<section class="section section--light" id="course-format">
+  <h2 class="section__title">Как проходит обучение</h2>
+  {% if cpage.features %}
+  <ul class="cp-features">
+    {% for f in cpage.features %}
+    <li class="cp-feature"><span class="cp-feature__icon">{% include "edukursy/courses/blocks/icon.html" with name=f.icon %}</span><span class="cp-feature__text">{{ f.text }}</span></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% if cpage.prerequisites %}
+  <div class="cp-prereq">
+    <h3 class="cp-prereq__title">{% include "edukursy/courses/blocks/icon.html" with name="key" %}Что нужно для старта</h3>
+    <ul class="cp-chips cp-chips--lg">{% for p in cpage.prerequisites %}<li>{{ p }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+</section>
+{% endif %}

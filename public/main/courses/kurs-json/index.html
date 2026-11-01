@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- DATA: title = «<course.name> — <school.name>: цена, программа, длительность — edukursy.ru» -->
+  <title>Макет: страница курса из extract_json + editorial_json (все блоки)</title>
+  <meta name="description" content="Курс «Python-разработчик»: длительность 8 месяцев, онлайн с наставником, цена и программа по модулям. Сравните с другими курсами профессии.">
+  <!-- DATA: canonical = /courses/<school-slug>/<course-slug>/ -->
+  <link rel="canonical" href="https://edukursy.ru/courses/school-1/python-razrabotchik/">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../course-page.css">
+</head>
+<body data-compare-url="/main/compare/index.html">
+
+  <!-- ============ ШАПКА (общая с главной) ============ -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="/" class="logo">
+        <img src="../../img/logo.png" alt="" class="logo__img" width="48" height="40">
+        <span class="logo__text">edukursy<span>.ru</span></span>
+      </a>
+
+      <button class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label="Основное меню">
+        <ul>
+          <li><a href="/professions/">Профессии</a></li>
+          <li><a href="/courses/" aria-current="page">Курсы</a></li>
+          <li class="nav-drop" data-nav-drop>
+            <!-- PODBORKI: пункт «Подборки курсов». Дерево до 3 уровней строится из CourseTag (is_active, show_in_menu, order).
+                 Без JS: ссылка ведёт на /podborki/ (все подборки). С JS: hover на десктопе / тап на мобильном раскрывает меню. -->
+            <a href="/main/podborki/index.html" class="nav-drop__btn" aria-haspopup="true" aria-expanded="false" data-nav-drop-btn>Подборки курсов<svg class="nav-drop__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
+            <div class="nav-drop__menu" data-nav-drop-menu>
+              <ul class="tnav" role="list"><li class="tnav__item1 has-children" data-tnav-item><a href="/main/podborki/s-trudoustrojstvom/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg><span class="tnav__label">С трудоустройством</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><button type="button" class="tnav__toggle" aria-expanded="false" aria-controls="tnav-p0" aria-label="Показать: С трудоустройством"><svg class="tnav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="tnav__panel" id="tnav-p0"><a href="/main/podborki/s-trudoustrojstvom/index.html" class="tnav__all">Все курсы с трудоустройством <span>111</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><ul class="tnav__l2"><li class="tnav__item2 has-children"><a href="/main/podborki/s-trudoustrojstvom/srazu/index.html" class="tnav__link2">Трудоустройство сразу<span class="tnav__cnt">49</span></a><ul class="tnav__l3"><li><a href="/main/podborki/s-trudoustrojstvom/srazu/v-it/index.html" class="tnav__link3">В IT<span class="tnav__cnt">26</span></a></li><li><a href="/main/podborki/s-trudoustrojstvom/srazu/ne-v-it/index.html" class="tnav__link3">Не в IT<span class="tnav__cnt">15</span></a></li></ul></li><li class="tnav__item2 has-children"><a href="/main/podborki/s-trudoustrojstvom/posle-stazhirovki/index.html" class="tnav__link2">После стажировки<span class="tnav__cnt">59</span></a><ul class="tnav__l3"><li><a href="/main/podborki/s-trudoustrojstvom/posle-stazhirovki/v-it/index.html" class="tnav__link3">В IT<span class="tnav__cnt">47</span></a></li><li><a href="/main/podborki/s-trudoustrojstvom/posle-stazhirovki/ne-v-it/index.html" class="tnav__link3">Не в IT<span class="tnav__cnt">9</span></a></li></ul></li><li class="tnav__item2"><a href="/main/podborki/s-trudoustrojstvom/s-garantiej/index.html" class="tnav__link2">С гарантией в договоре<span class="tnav__cnt">0</span></a></li></ul></div></li><li class="tnav__item1 has-children" data-tnav-item><a href="/main/podborki/dlya-nachinayushchih/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg><span class="tnav__label">Для начинающих</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><button type="button" class="tnav__toggle" aria-expanded="false" aria-controls="tnav-p1" aria-label="Показать: Для начинающих"><svg class="tnav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="tnav__panel" id="tnav-p1"><a href="/main/podborki/dlya-nachinayushchih/index.html" class="tnav__all">Все курсы для начинающих <span>77</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><ul class="tnav__l2"><li class="tnav__item2"><a href="/main/podborki/dlya-nachinayushchih/it-bez-opyta/index.html" class="tnav__link2">IT без опыта<span class="tnav__cnt">29</span></a></li><li class="tnav__item2"><a href="/main/podborki/dlya-nachinayushchih/dlya-gumanitariev/index.html" class="tnav__link2">Для гуманитариев<span class="tnav__cnt">43</span></a></li><li class="tnav__item2"><a href="/main/podborki/dlya-nachinayushchih/posle-40/index.html" class="tnav__link2">После 40 лет<span class="tnav__cnt">0</span></a></li></ul></div></li><li class="tnav__item1 has-children" data-tnav-item><a href="/main/podborki/dlya-detej/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg><span class="tnav__label">Для детей</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><button type="button" class="tnav__toggle" aria-expanded="false" aria-controls="tnav-p2" aria-label="Показать: Для детей"><svg class="tnav__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="tnav__panel" id="tnav-p2"><a href="/main/podborki/dlya-detej/index.html" class="tnav__all">Все курсы для детей <span>93</span><svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a><ul class="tnav__l2"><li class="tnav__item2 has-children"><a href="/main/podborki/dlya-detej/7-10-let/index.html" class="tnav__link2">7–10 лет<span class="tnav__cnt">27</span></a><ul class="tnav__l3"><li><a href="/main/podborki/dlya-detej/7-10-let/programmirovanie/index.html" class="tnav__link3">Программирование<span class="tnav__cnt">8</span></a></li><li><a href="/main/podborki/dlya-detej/7-10-let/risovanie/index.html" class="tnav__link3">Рисование и дизайн<span class="tnav__cnt">11</span></a></li></ul></li><li class="tnav__item2 has-children"><a href="/main/podborki/dlya-detej/11-14-let/index.html" class="tnav__link2">11–14 лет<span class="tnav__cnt">47</span></a><ul class="tnav__l3"><li><a href="/main/podborki/dlya-detej/11-14-let/programmirovanie/index.html" class="tnav__link3">Программирование<span class="tnav__cnt">32</span></a></li><li><a href="/main/podborki/dlya-detej/11-14-let/razrabotka-igr/index.html" class="tnav__link3">Разработка игр<span class="tnav__cnt">10</span></a></li></ul></li><li class="tnav__item2"><a href="/main/podborki/dlya-detej/ege-oge/index.html" class="tnav__link2">ЕГЭ и ОГЭ<span class="tnav__cnt">11</span></a></li></ul></div></li><li class="tnav__item1" data-tnav-item><a href="/main/podborki/besplatnye/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg><span class="tnav__label">Бесплатные</span><span class="tnav__cnt">9</span></a></li><li class="tnav__item1" data-tnav-item><a href="/main/podborki/v-rassrochku/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg><span class="tnav__label">В рассрочку</span><span class="tnav__cnt">42</span></a></li><li class="tnav__item1" data-tnav-item><a href="/main/podborki/korotkie/index.html" class="tnav__link1"><svg class="tnav__icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg><span class="tnav__label">Короткие, до 3 месяцев</span><span class="tnav__cnt">13</span></a></li></ul>
+              <a href="/main/podborki/index.html" class="nav-drop__footer">Все подборки курсов<svg class="tnav__arr" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>
+            </div>
+          </li>
+
+          <li><a href="/schools/">Школы</a></li>
+          <li><a href="/compare/">Сравнения</a></li>
+          <li><a href="/blog/">Блог</a></li>
+          <li><a href="/about/">О проекте</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main itemscope itemtype="https://schema.org/Course">
+
+
+<div itemscope itemtype="https://schema.org/Course">
+
+  <section class="page-head course-hero">
+    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+        <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/" itemprop="item"><span itemprop="name">Главная</span></a><meta itemprop="position" content="1"></li>
+          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/courses/" itemprop="item"><span itemprop="name">Курсы</span></a><meta itemprop="position" content="2"></li>
+          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/professions/backend-razrabotchik/" itemprop="item"><span itemprop="name"><!-- DATA: course.profession.name -->Backend-разработчик</span></a><meta itemprop="position" content="3"></li>
+          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" aria-current="page"><!-- DATA: course.name -->Python-разработчик</span><meta itemprop="position" content="4"></li>
+        </ol>
+      </nav>
+
+
+    <div class="course-hero__grid">
+      <div class="course-hero__info">
+        <a href="/schools/school-1/" class="course-hero__school" itemprop="provider" itemscope itemtype="https://schema.org/EducationalOrganization">
+          
+          <span itemprop="name">Школа 1</span>
+          <span class="course-hero__school-rating">4.8</span>
+        </a>
+        <h1 class="page-head__title course-hero__title" itemprop="name">Python-разработчик с нуля</h1>
+        
+        <p class="course-hero__lead" itemprop="description">Длинная онлайн-программа по Python для старта с нуля: от синтаксиса языка до веб-разработки на Django. Ориентирована на тех, кто хочет войти в профессию разработчика.</p>
+        
+        
+
+        
+
+        
+          
+
+<ul class="cp-facts" aria-label="Коротко о курсе">
+  
+  <li class="cp-fact">
+    <span class="cp-fact__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+</span>
+    <span class="cp-fact__text"><span class="cp-fact__label">Уровень</span><span class="cp-fact__value">С нуля</span></span>
+  </li>
+  
+  <li class="cp-fact">
+    <span class="cp-fact__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+</span>
+    <span class="cp-fact__text"><span class="cp-fact__label">Формат</span><span class="cp-fact__value">Онлайн, Уроки в записи, С наставником, В своём темпе</span></span>
+  </li>
+  
+  <li class="cp-fact">
+    <span class="cp-fact__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+</span>
+    <span class="cp-fact__text"><span class="cp-fact__label">Длительность</span><span class="cp-fact__value" itemprop="timeRequired">8 месяцев, 6–8 часов в неделю</span></span>
+  </li>
+  
+  <li class="cp-fact">
+    <span class="cp-fact__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>
+</span>
+    <span class="cp-fact__text"><span class="cp-fact__label">Документ</span><span class="cp-fact__value">Выдаётся</span></span>
+  </li>
+  
+  <li class="cp-fact">
+    <span class="cp-fact__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
+</span>
+    <span class="cp-fact__text"><span class="cp-fact__label">Трудоустройство</span><span class="cp-fact__value">Помощь заявлена</span></span>
+  </li>
+  
+</ul>
+
+
+        
+        
+      </div>
+
+      
+      <aside class="price-box" aria-label="Цена и запись на курс" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <p class="price-box__label">Стоимость курса</p>
+          <p class="price-box__price"><span itemprop="price" content="98000"><!-- DATA: course.price -->98 000</span> <span itemprop="priceCurrency" content="RUB">₽</span></p>
+          <p class="price-box__old"><s><!-- DATA: course.old_price -->140 000 ₽</s> <span class="price-box__discount">−<!-- DATA: course.discount_percent -->30%</span></p>
+          <p class="price-box__month">или <strong><!-- DATA: course.price_month -->4 900 ₽/мес</strong> в рассрочку на <!-- DATA: course.installment_months -->24 месяца</p>
+
+          <!-- DATA: course.partner_url — партнёрская ссылка на сайт школы -->
+          <a href="https://example.com/python-razrabotchik/" class="btn btn--primary btn--lg btn--block" rel="sponsored noopener" target="_blank" itemprop="url">Перейти на сайт школы</a>
+          <a href="https://example.com/python-razrabotchik/#program" class="btn btn--outline btn--block" rel="sponsored noopener" target="_blank">Бесплатный вводный урок</a>
+
+          <!-- COMPARE: кнопка в карточке цены + ссылка на сравнение (видна, когда выбран хотя бы 1 курс) -->
+          <button type="button" class="cmp-btn cmp-btn--block" data-compare-id="school-1/python-razrabotchik" data-compare-name="Python-разработчик" data-compare-school="Школа 1" aria-pressed="false"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="cmp-btn__off">Добавить к сравнению</span><span class="cmp-btn__on">Добавлен к сравнению</span></button>
+          <a href="/main/compare/index.html" class="cmp-link" data-compare-link hidden>Перейти к сравнению <span data-compare-count>0</span></a>
+
+          <ul class="price-box__notes">
+            <li>Оплата и договор — напрямую со школой</li>
+            <li>Возврат за непройденную часть</li>
+            <li>Налоговый вычет 13%</li>
+          </ul>
+          <p class="price-box__checked">Цена проверена <!-- DATA: course.checked_at -->1 октября 2025</p>
+        </aside>
+      
+    </div>
+  </section>
+
+  
+  <nav class="page-tabs" aria-label="Разделы страницы курса">
+    <ul>
+      <li><a href="#course-about">О курсе</a></li>
+      <li><a href="#course-skills">Чему вы научитесь</a></li>
+      <li><a href="#course-audience">Кому подойдёт</a></li>
+      <li><a href="#course-format">Обучение</a></li>
+      
+      
+      <li><a href="#course-usp">Преимущества</a></li><li><a href="#course-program">Программа</a></li><li><a href="#course-review">Мнение редакции</a></li>
+      <li><a href="#course-check">Что уточнить</a></li>
+      <li><a href="#course-school">О школе</a></li>
+      
+      <li><a href="#course-faq">Вопросы</a></li>
+    </ul>
+  </nav>
+  
+
+  
+  
+<section class="section" id="course-about">
+  <div class="cp-about">
+    <div class="cp-about__text">
+      <h2 class="section__title">О курсе</h2>
+      <div class="prose"><p>Курс рассчитан на 8 месяцев и сочетает уроки в записи, еженедельные вебинары и проверку заданий наставником. В программе — базы данных, Git, тестирование и деплой, а по итогам остаются 3 проекта для портфолио. Школа заявляет помощь с резюме и подготовкой к собеседованиям.</p></div>
+    </div>
+    
+    <dl class="cp-about__meta">
+      <div><dt>Направление</dt><dd>Python</dd></div>
+      <div><dt>Уровень</dt><dd><span class="cp-level cp-level--beginner" aria-hidden="true"><i></i><i></i><i></i></span>С нуля</dd></div>
+      <div><dt>Формат</dt><dd><ul class="cp-chips"><li>Онлайн</li><li>Уроки в записи</li><li>С наставником</li><li>В своём темпе</li></ul></dd></div>
+    </dl>
+    
+  </div>
+</section>
+
+
+
+  
+  
+    
+<section class="section section--light" id="course-skills">
+  <div class="section-head">
+    <h2 class="section__title">Чему вы научитесь</h2>
+    <p class="section-head__meta">8 навыков</p>
+  </div>
+  <ul class="cp-learn">
+    
+    <li class="cp-learn__item"><span class="cp-learn__num">01</span><span>Синтаксис Python и основы алгоритмов</span></li>
+    
+    <li class="cp-learn__item"><span class="cp-learn__num">02</span><span>Объектно-ориентированное программирование</span></li>
+    
+    <li class="cp-learn__item"><span class="cp-learn__num">03</span><span>Git и командная работа</span></li>
+    
+    <li class="cp-learn__item"><span class="cp-learn__num">04</span><span>SQL и PostgreSQL</span></li>
+    
+    <li class="cp-learn__item"><span class="cp-learn__num">05</span><span>Веб-разработка на Django</span></li>
+    
+    <li class="cp-learn__item"><span class="cp-learn__num">06</span><span>REST API</span></li>
+    
+    <li class="cp-learn__item"><span class="cp-learn__num">07</span><span>Тестирование кода с pytest</span></li>
+    
+    <li class="cp-learn__item"><span class="cp-learn__num">08</span><span>Docker и деплой проекта</span></li>
+    
+  </ul>
+</section>
+
+
+  
+
+  
+  
+    
+<section class="section" id="course-audience">
+  <h2 class="section__title">Кому подойдёт курс</h2>
+  <div class="cp-audience cp-audience--two">
+    
+    <div class="cp-card cp-card--yes">
+      <h3 class="cp-card__title"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg>
+Подойдёт</h3>
+      <ul class="cp-list cp-list--yes"><li><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M20 6 9 17l-5-5"/></svg>
+<span>Новичкам, которым нужен структурированный старт в программировании</span></li><li><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M20 6 9 17l-5-5"/></svg>
+<span>Тем, кто планирует сменить профессию и готов учиться несколько месяцев</span></li></ul>
+    </div>
+    
+    
+    <div class="cp-card cp-card--no">
+      <h3 class="cp-card__title"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m17 8 5 5"/><path d="m22 8-5 5"/></svg>
+Может не подойти</h3>
+      <ul class="cp-list cp-list--no"><li><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+<span>Разработчикам с опытом, которым нужны только продвинутые темы</span></li><li><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+<span>Тем, кто хочет быстро освоить один инструмент за пару недель</span></li></ul>
+    </div>
+    
+  </div>
+</section>
+
+
+  
+
+  
+  
+<section class="section section--light" id="course-format">
+  <h2 class="section__title">Как проходит обучение</h2>
+  
+  <ul class="cp-features">
+    
+    <li class="cp-feature"><span class="cp-feature__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg>
+</span><span class="cp-feature__text">Проверка домашних заданий наставником</span></li>
+    
+    <li class="cp-feature"><span class="cp-feature__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9L9.6 3.9A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/><path d="M12 10v6"/><path d="M9 13h6"/></svg>
+</span><span class="cp-feature__text">3 проекта в портфолио</span></li>
+    
+    <li class="cp-feature"><span class="cp-feature__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+</span><span class="cp-feature__text">Гибкий график — уроки в записи</span></li>
+    
+    <li class="cp-feature"><span class="cp-feature__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="m16 13 5.2 3.5a.5.5 0 0 0 .8-.4V7.9a.5.5 0 0 0-.8-.4L16 11"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+</span><span class="cp-feature__text">Живые вебинары раз в неделю</span></li>
+    
+    <li class="cp-feature"><span class="cp-feature__icon"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
+</span><span class="cp-feature__text">Карьерная консультация и помощь с резюме</span></li>
+    
+  </ul>
+  
+  
+  <div class="cp-prereq">
+    <h3 class="cp-prereq__title"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
+Что нужно для старта</h3>
+    <ul class="cp-chips cp-chips--lg"><li>Базовое владение компьютером</li><li>Компьютер с доступом в интернет</li></ul>
+  </div>
+  
+</section>
+
+
+
+  
+  
+
+  
+  
+
+  
+  
+
+<!-- Блоки лендинга из полей курса (usps, modules) — как сейчас в вашем detail.html -->
+<section class="section" id="course-usp">
+      <h2 class="section__title">Почему стоит выбрать этот курс</h2>
+      <ul class="usp-grid">
+        <!-- DATA: цикл по УТП курса (course.usp), 4–6 пунктов -->
+        <li class="usp">
+          <span class="usp__icon" aria-hidden="true">🎓</span>
+          <h3 class="usp__title"><!-- DATA: usp.title -->Личный наставник</h3>
+          <p class="usp__text"><!-- DATA: usp.text -->Практикующий разработчик проверяет каждое задание и отвечает на вопросы в течение суток.</p>
+        </li>
+        <li class="usp">
+          <span class="usp__icon" aria-hidden="true">🛠️</span>
+          <h3 class="usp__title">7 проектов в портфолио</h3>
+          <p class="usp__text">От телеграм-бота до полноценного веб-сервиса с API и базой данных.</p>
+        </li>
+        <li class="usp">
+          <span class="usp__icon" aria-hidden="true">🔍</span>
+          <h3 class="usp__title">Код-ревью как в компании</h3>
+          <p class="usp__text">Работа через Git и пул-реквесты: учитесь так, как работают в командах разработки.</p>
+        </li>
+        <li class="usp">
+          <span class="usp__icon" aria-hidden="true">🕑</span>
+          <h3 class="usp__title">Гибкий график</h3>
+          <p class="usp__text">Уроки в записи, вебинары раз в неделю. Можно взять академический отпуск.</p>
+        </li>
+        <li class="usp">
+          <span class="usp__icon" aria-hidden="true">✍️</span>
+          <h3 class="usp__title">Помощь с резюме</h3>
+          <p class="usp__text">Карьерный консультант помогает составить резюме и подготовиться к собеседованию.</p>
+        </li>
+        <li class="usp">
+          <span class="usp__icon" aria-hidden="true">♾️</span>
+          <h3 class="usp__title">Доступ навсегда</h3>
+          <p class="usp__text">Материалы курса и обновления программы остаются доступны после окончания.</p>
+        </li>
+      </ul>
+    </section>
+<section class="section" id="course-program">
+      <div class="section-head">
+        <h2 class="section__title">Программа курса</h2>
+        <p class="section-head__meta"><!-- DATA: course.modules_count -->7 модулей · <!-- DATA: course.hours_total -->320 часов</p>
+      </div>
+      <ol class="modules">
+        <!-- DATA: цикл по модулям программы. Раскрытие — нативный details, без JS -->
+          <li class="module">
+            <details open>
+              <summary class="module__head"><span class="module__num">01</span><span class="module__title"><!-- DATA: module.title -->Основы Python</span><span class="module__dur"><!-- DATA: module.duration -->1 месяц</span></summary>
+              <p class="module__text"><!-- DATA: module.description -->Переменные, условия, циклы, функции. Первые консольные программы.</p>
+            </details>
+          </li>
+          <li class="module">
+            <details>
+              <summary class="module__head"><span class="module__num">02</span><span class="module__title">Структуры данных и ООП</span><span class="module__dur">1 месяц</span></summary>
+              <p class="module__text">Списки, словари, классы и наследование. Работа с файлами и исключениями.</p>
+            </details>
+          </li>
+          <li class="module">
+            <details>
+              <summary class="module__head"><span class="module__num">03</span><span class="module__title">Базы данных и SQL</span><span class="module__dur">1 месяц</span></summary>
+              <p class="module__text">Проектирование таблиц, запросы, PostgreSQL, ORM.</p>
+            </details>
+          </li>
+          <li class="module">
+            <details>
+              <summary class="module__head"><span class="module__num">04</span><span class="module__title">Веб-разработка на Django</span><span class="module__dur">2 месяца</span></summary>
+              <p class="module__text">Модели, представления, шаблоны, авторизация, админка. Первый веб-проект.</p>
+            </details>
+          </li>
+          <li class="module">
+            <details>
+              <summary class="module__head"><span class="module__num">05</span><span class="module__title">API и FastAPI</span><span class="module__dur">1 месяц</span></summary>
+              <p class="module__text">REST API, асинхронность, документация, интеграции с внешними сервисами.</p>
+            </details>
+          </li>
+          <li class="module">
+            <details>
+              <summary class="module__head"><span class="module__num">06</span><span class="module__title">Docker, Git и деплой</span><span class="module__dur">1 месяц</span></summary>
+              <p class="module__text">Контейнеры, CI, запуск проекта на сервере.</p>
+            </details>
+          </li>
+          <li class="module">
+            <details>
+              <summary class="module__head"><span class="module__num">07</span><span class="module__title">Дипломный проект</span><span class="module__dur">1 месяц</span></summary>
+              <p class="module__text">Собственный сервис от идеи до публикации — проект для портфолио.</p>
+            </details>
+          </li>
+      </ol>
+    </section>
+  <section class="section" id="course-review">
+  <div class="section-head">
+    <h2 class="section__title">Мнение редакции</h2>
+    <p class="section-head__meta cp-badge-ed"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+Разбор на основе страницы школы</p>
+  </div>
+  
+  <div class="cp-proscons cp-proscons--two">
+    
+    <div class="cp-pc cp-pc--pros">
+      <h3 class="cp-pc__title"><span class="cp-pc__badge"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+</span>Плюсы</h3>
+      <ul><li>Широкая программа: от основ языка до деплоя</li><li>Наставник проверяет домашние задания</li><li>3 проекта в портфолио по итогам обучения</li></ul>
+    </div>
+    
+    
+    <div class="cp-pc cp-pc--cons">
+      <h3 class="cp-pc__title"><span class="cp-pc__badge"><svg class="cp-ic" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M5 12h14"/></svg>
+</span>Минусы и оговорки</h3>
+      <ul><li>Формат помощи с трудоустройством раскрыт не полностью</li><li>Высокая нагрузка при совмещении с работой</li></ul>
+    </div>
+    
+  </div>
+  
+  
+  <figure class="cp-verdict">
+    <svg class="cp-ic cp-verdict__quote" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
+
+    <blockquote class="cp-verdict__text">Хороший вариант для системного старта в Python, если вы готовы уделять учёбе 6–8 часов в неделю. Перед оплатой уточните детали карьерной поддержки и обратной связи наставника.</blockquote>
+    <figcaption class="cp-verdict__by">Вердикт редакции edukursy.ru</figcaption>
+  </figure>
+  
+</section>
+
+
+
+  
+  
+<section class="section section--light" id="course-check">
+  <div class="cp-check">
+    <div class="cp-check__head">
+      <h2 class="section__title">Что уточнить перед покупкой</h2>
+      <p class="cp-check__sub">Задайте эти вопросы менеджеру школы — ответы помогут избежать разочарований.</p>
+    </div>
+    <ol class="cp-check__list">
+      <li><label><input type="checkbox"><span>Уточнить, как часто и в каком формате отвечает наставник</span></label></li><li><label><input type="checkbox"><span>Проверить, какие именно услуги входят в карьерную поддержку</span></label></li><li><label><input type="checkbox"><span>Посмотреть актуальную стоимость и условия рассрочки</span></label></li><li><label><input type="checkbox"><span>Спросить про возврат денег, если обучение не подойдёт</span></label></li>
+    </ol>
+  </div>
+</section>
+
+
+
+  
+  <section class="course-cta">
+    <div class="course-cta__text">
+      <p class="course-cta__title">Python-разработчик с нуля <span>· Школа 1</span></p>
+      <p class="course-cta__sub">98 000 ₽</p>
+    </div>
+    <a href="https://example.com/?utm=edukursy" class="btn btn--light btn--lg" rel="sponsored noopener" target="_blank">Перейти на сайт школы</a>
+  </section>
+  
+
+  
+  <section class="section" id="course-school">
+      <h2 class="section__title">О школе</h2>
+      <div class="school-about">
+        <div class="course-school">
+          <div class="course-school__head">
+            <img src="../../img/school-1.jpg" alt="" class="course-school__logo" width="64" height="64">
+            <div>
+              <h3 class="course-school__name"><!-- DATA: school.name -->Школа 1</h3>
+              <p class="school-tile__rating"><span class="school-tile__stars"><!-- DATA: school.rating -->4.78</span> · на рынке с <!-- DATA: school.founded -->2015 года</p>
+            </div>
+          </div>
+          <p class="course-school__text"><!-- DATA: school.short_description -->Онлайн-школа программирования, дизайна и аналитики. Обучение с нуля и для практикующих специалистов, проверка заданий наставниками из профессии.</p>
+          <div class="course-school__actions">
+            <a href="/schools/school-1/" class="btn btn--outline">Все курсы школы (<!-- DATA: school.courses_count -->412)</a>
+            <a href="https://example.com/python-razrabotchik/" class="btn btn--primary" rel="sponsored noopener" target="_blank">Сайт школы</a>
+          </div>
+        </div>
+
+        <dl class="school-details">
+          <div><dt>Лицензия</dt><dd><!-- DATA: school.license -->Есть</dd></div>
+          <div><dt>Документ</dt><dd><!-- DATA: school.certificate -->Удостоверение о повышении квалификации</dd></div>
+          <div><dt>Возврат</dt><dd><!-- DATA: school.refund -->За непройденную часть программы</dd></div>
+          <div><dt>Рассрочка</dt><dd><!-- DATA: school.installment -->До 24 месяцев</dd></div>
+          <div><dt>Юрлицо</dt><dd><!-- DATA: school.legal_name -->ООО «Название», ИНН 0000000000</dd></div>
+        </dl>
+      </div>
+    </section>
+  
+
+  
+  
+
+<section class="section" id="course-source">
+  <details class="cp-source" open>
+    <summary class="cp-source__head">
+      <span><span class="cp-source__title">Что говорит школа</span><span class="cp-source__sub">Цитаты со страницы курса на school-1.ru</span></span>
+    </summary>
+    <dl class="cp-source__list">
+      <div><dt>О курсе</dt><dd>«Освоите Python с нуля и соберёте 3 проекта в портфолио»</dd></div><div><dt>Стоимость</dt><dd>«98 000 ₽ или 4 900 ₽/мес»</dd></div><div><dt>Длительность</dt><dd>«8 месяцев»</dd></div><div><dt>Формат</dt><dd>«Онлайн: видеоуроки, вебинары и проверка домашних заданий»</dd></div><div><dt>Трудоустройство</dt><dd>«Поможем составить резюме и подготовиться к собеседованиям»</dd></div><div><dt>Документ</dt><dd>«Диплом о профессиональной переподготовке»</dd></div>
+    </dl>
+    
+  </details>
+</section>
+
+
+
+  
+
+  
+
+  
+  
+  <section class="section faq-section" id="course-faq" itemscope itemtype="https://schema.org/FAQPage">
+    <h2 class="section__title">Часто задаваемые вопросы</h2>
+    <div class="faq faq--wide">
+      
+      <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <h3 class="faq-item__q">
+          <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-1" id="faq-q-1">
+            
+            <span itemprop="name">Нужен ли опыт программирования?</span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faq-a-1" role="region" aria-labelledby="faq-q-1" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text"><p>Из админки: нет.</p></div>
+        </div>
+      </div>
+      
+      
+      <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <h3 class="faq-item__q">
+          <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-j1" id="faq-q-j1">
+            <span itemprop="name">Подойдёт ли курс, если я совсем не программировал?</span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faq-a-j1" role="region" aria-labelledby="faq-q-j1" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text"><p>Да, программа начинается с основ, опыт не требуется.</p></div>
+        </div>
+      </div>
+      
+      <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <h3 class="faq-item__q">
+          <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-j2" id="faq-q-j2">
+            <span itemprop="name">Что останется после обучения?</span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faq-a-j2" role="region" aria-labelledby="faq-q-j2" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text"><p>3 проекта для портфолио и документ о прохождении курса.</p></div>
+        </div>
+      </div>
+      
+      <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <h3 class="faq-item__q">
+          <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-j3" id="faq-q-j3">
+            <span itemprop="name">Гарантируют ли трудоустройство?</span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faq-a-j3" role="region" aria-labelledby="faq-q-j3" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text"><p>Школа заявляет помощь с резюме и подготовкой к собеседованиям, но гарантии трудоустройства на странице не указаны.</p></div>
+        </div>
+      </div>
+      
+      <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <h3 class="faq-item__q">
+          <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-j4" id="faq-q-j4">
+            <span itemprop="name">Сколько времени нужно уделять учёбе?</span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faq-a-j4" role="region" aria-labelledby="faq-q-j4" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text"><p>Школа указывает 6–8 часов в неделю на протяжении 8 месяцев.</p></div>
+        </div>
+      </div>
+      
+      <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <h3 class="faq-item__q">
+          <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-j5" id="faq-q-j5">
+            <span itemprop="name">Выдают ли документ по окончании?</span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faq-a-j5" role="region" aria-labelledby="faq-q-j5" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text"><p>Да, на странице курса указано, что выпускники получают документ о прохождении.</p></div>
+        </div>
+      </div>
+      
+      <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <h3 class="faq-item__q">
+          <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-j6" id="faq-q-j6">
+            <span itemprop="name">Можно ли оплатить частями?</span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faq-a-j6" role="region" aria-labelledby="faq-q-j6" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text"><p>Да, доступна рассрочка на 20 месяцев — от 4 900 ₽ в месяц.</p></div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+  
+
+</div>
+
+<div class="sticky-cta">
+  <p class="sticky-cta__price">98 000 ₽ </p>
+  <div class="sticky-cta__actions">
+<a href="https://example.com/?utm=edukursy" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт школы</a></div>
+</div>
+
+
+</main>
+
+  <!-- ===== Липкая кнопка на мобильном ===== -->
+  <div class="sticky-cta">
+    <p class="sticky-cta__price"><!-- DATA: course.price -->98 000 ₽ <span>или <!-- DATA: course.price_month -->4 900 ₽/мес</span></p>
+    <div class="sticky-cta__actions">
+      <!-- COMPARE: иконка в мобильной липкой панели -->
+      <button type="button" class="cmp-btn cmp-btn--icon" data-compare-id="school-1/python-razrabotchik" data-compare-name="Python-разработчик" data-compare-school="Школа 1" aria-pressed="false" aria-label="Сравнить курс"><svg class="cmp-btn__icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg><svg class="cmp-btn__icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></button>
+      <a href="https://example.com/python-razrabotchik/" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт школы</a>
+    </div>
+  </div>
+
+  <!-- ============ ПОДВАЛ (общий с главной) ============ -->
+  <footer class="site-footer">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a href="/" class="logo logo--light">
+          <img src="../../img/logo.png" alt="" class="logo__img" width="48" height="40">
+          <span class="logo__text">edukursy<span>.ru</span></span>
+        </a>
+        <p>Сравнение онлайн-курсов ведущих школ: программы, цены и длительность в одном месте.</p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Информация">
+        <h2 class="site-footer__heading">Проект</h2>
+        <ul>
+          <li><a href="/about">О проекте</a></li>
+          <li><a href="/contacts">Контакты</a></li>
+        </ul>
+      </nav>
+
+      <nav class="site-footer__nav" aria-label="Документы">
+        <h2 class="site-footer__heading">Документы</h2>
+        <ul>
+          <li><a href="/privacy">Политика конфиденциальности</a></li>
+          <li><a href="/terms">Пользовательское соглашение</a></li>
+        </ul>
+      </nav>
+
+      <nav class="site-footer__nav" aria-label="Каталог">
+        <h2 class="site-footer__heading">Каталог</h2>
+        <ul>
+          <li><a href="/professions/">Профессии</a></li>
+          <li><a href="/courses/">Курсы</a></li>
+          <li><a href="/schools/">Школы</a></li>
+          <li><a href="/compare/">Сравнения</a></li>
+          <li><a href="/blog/">Блог</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <p class="site-footer__disclosure">Мы можем получать вознаграждение от школ за переходы по ссылкам. На цену для вас это не влияет.</p>
+    <p class="site-footer__copy">© <!-- DATA: current_year -->2025 edukursy.ru</p>
+  </footer>
+
+  <script src="../../script.js"></script>
+  <!-- PODBORKI: выпадающее меню подборок -->
+  <script src="../../podborki.js"></script>
+  <!-- COMPARE: скрипт кнопки «Сравнить» и плавающей панели -->
+  <script src="../../compare.js"></script>
+</body>
+</html>

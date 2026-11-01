@@ -1,0 +1,283 @@
+{% extends "edukursy/base.html" %}
+{% load edukursy course_json %}
+{% comment %}
+Страница курса = лендинг (поля курса из админки) + разбор редакции (extract_json и editorial_json).
+Блоки из JSON — в templates/edukursy/courses/blocks/. Каждый выводится, только если в JSON есть данные по ключу.
+Порядок: шапка → навигация → О курсе → Чему научитесь → Кому подойдёт → Как проходит обучение → Преимущества →
+Программа → Мнение редакции → Что уточнить → CTA → О школе → Что говорит школа → Похожие → Реклама → Вопросы.
+
+Данные блоков — переменная cpage. Лучше положить её в контекст во view: context["cpage"] = course_page_for(course, faqs).
+Если view не трогать — тег {% course_page %} соберёт её сам (внутри блоков: теги вне {% block %} Django игнорирует).
+{% endcomment %}
+{% block title %}{{ course.title }} — {{ course.school.name }}: цена, программа, длительность — edukursy.ru{% endblock %}
+{% block meta_description %}{% course_page course faqs as cpage %}{% if cpage.lead %}{{ cpage.lead|truncatechars:158 }}{% else %}Курс «{{ course.title }}»{% if course.duration_months %}: длительность {{ course.duration_months }} {{ course.duration_months|plural:"месяц,месяца,месяцев" }}{% endif %}. Сравните с другими курсами профессии.{% endif %}{% endblock %}
+{% block canonical %}<link rel="canonical" href="https://{{ request.get_host }}{{ course.get_absolute_url }}">{% endblock %}
+
+{% block content %}
+{% if not cpage %}{% course_page course faqs as cpage %}{% endif %}
+<div itemscope itemtype="https://schema.org/Course">
+
+  <section class="page-head course-hero">
+    {% include "edukursy/partials/breadcrumbs.html" %}
+
+    <div class="course-hero__grid">
+      <div class="course-hero__info">
+        <a href="{{ course.school.get_absolute_url }}" class="course-hero__school" itemprop="provider" itemscope itemtype="https://schema.org/EducationalOrganization">
+          {% if course.school.logo %}<img src="{{ course.school.logo.url }}" alt="" width="28" height="28">{% endif %}
+          <span itemprop="name">{{ course.school.name }}</span>
+          {% if course.school.rating %}<span class="course-hero__school-rating">{{ course.school.rating }}</span>{% endif %}
+        </a>
+        <h1 class="page-head__title course-hero__title" itemprop="name">{{ course.title }}</h1>
+        {% if course.content %}
+        {% if course.content_css %}<style>{{ course.content_css|scope_css:".course-hero__content" }}</style>{% endif %}
+        <div class="course-hero__content prose">{{ course.content|safe }}</div>
+        {% else %}
+        {% if cpage.lead %}<p class="course-hero__lead" itemprop="description">{{ cpage.lead }}</p>
+        {% elif course.description %}<p class="course-hero__lead" itemprop="description">{{ course.description }}</p>{% endif %}
+        {% if course.usp_text %}<p class="course-hero__usp">{{ course.usp_text }}</p>{% endif %}
+
+        {% if course.keywords.all %}
+        <ul class="course-tags">
+          {% for tag in course.keywords.all %}<li>{{ tag.name }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if cpage.facts %}
+          {% include "edukursy/courses/blocks/facts.html" %}
+        {% elif facts %}
+        <dl class="course-facts">
+          {% for label, value, iso in facts %}
+          <div><dt>{{ label }}</dt><dd{% if iso %} itemprop="timeRequired" content="{{ iso }}"{% endif %}>{{ value }}</dd></div>
+          {% endfor %}
+        </dl>
+        {% endif %}
+        {% endif %}
+      </div>
+
+      {% if course.has_price %}
+      <aside class="price-box" aria-label="Цена и запись на курс" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+        <p class="price-box__label">Стоимость курса</p>
+        <p class="price-box__price"><span itemprop="price" content="{{ course.price }}">{{ course.price|rub }}</span><meta itemprop="priceCurrency" content="RUB"></p>
+        {% if course.old_price and discount_percent %}
+        <p class="price-box__old"><s>{{ course.old_price|rub }}</s> <span class="price-box__discount">−{{ discount_percent }}%</span></p>
+        {% endif %}
+        {% if price_month %}
+        <p class="price-box__month">или <strong>{{ price_month|rub }}/мес</strong>{% if course.installment_months %} в рассрочку на {{ course.installment_months }} месяцев{% endif %}</p>
+        {% elif cpage.installment_text %}
+        <p class="price-box__month">{{ cpage.installment_text }}</p>
+        {% endif %}
+
+        {% if partner_url %}
+        <a href="{{ partner_url }}" class="btn btn--primary btn--lg btn--block" rel="sponsored noopener" target="_blank" itemprop="url">Перейти на сайт школы</a>
+        <a href="{{ partner_url }}" class="btn btn--outline btn--block" rel="sponsored noopener" target="_blank">Бесплатный вводный урок</a>
+        {% endif %}
+        {% include "edukursy/partials/compare/button.html" with course=course variant="block" label_off="Добавить к сравнению" label_on="Добавлен к сравнению" %}
+        {% include "edukursy/partials/compare/link.html" %}
+
+        <ul class="price-box__notes">
+          <li>Оплата и договор — напрямую со школой</li>
+          <li>Возврат за непройденную часть</li>
+          {% if course.tax_deduction %}<li>Налоговый вычет 13%</li>{% endif %}
+        </ul>
+        {% if course.checked_at %}<p class="price-box__checked">Цена проверена {{ course.checked_at }}</p>{% endif %}
+      </aside>
+      {% else %}
+        {% include "edukursy/courses/blocks/price_text.html" %}
+      {% endif %}
+    </div>
+  </section>
+
+  {% if cpage.summary or cpage.learn or course.features or cpage.has_audience or course.audience_text or cpage.features or usps or modules or cpage.has_review or cpage.check or partner_url or similar or faqs or cpage.faq %}
+  <nav class="page-tabs" aria-label="Разделы страницы курса">
+    <ul>
+      {% if cpage.summary %}<li><a href="#course-about">О курсе</a></li>{% endif %}
+      {% if cpage.learn or course.features and not course.content %}<li><a href="#course-skills">Чему вы научитесь</a></li>{% endif %}
+      {% if cpage.has_audience or course.audience_text and not course.content %}<li><a href="#course-audience">Кому подойдёт</a></li>{% endif %}
+      {% if cpage.features or cpage.prerequisites %}<li><a href="#course-format">Обучение</a></li>{% endif %}
+      {% if usps and not course.content %}<li><a href="#course-usp">Преимущества</a></li>{% endif %}
+      {% if modules and not course.content %}<li><a href="#course-program">Программа</a></li>{% endif %}
+      {% if cpage.has_review %}<li><a href="#course-review">Мнение редакции</a></li>{% endif %}
+      {% if cpage.check %}<li><a href="#course-check">Что уточнить</a></li>{% endif %}
+      {% if not course.content %}<li><a href="#course-school">О школе</a></li>{% endif %}
+      {% if similar %}<li><a href="#course-similar">Похожие курсы</a></li>{% endif %}
+      {% if faqs or cpage.faq %}<li><a href="#course-faq">Вопросы</a></li>{% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+
+  {# ===== Разбор: О курсе (editorial_summary / short_summary) ===== #}
+  {% include "edukursy/courses/blocks/about.html" %}
+
+  {# ===== Чему научитесь: what_you_learn, иначе — поле курса features ===== #}
+  {% if cpage.learn %}
+    {% include "edukursy/courses/blocks/learn.html" %}
+  {% elif course.features and not course.content %}
+  <section class="section" id="course-skills">
+    <h2 class="section__title">Чему вы научитесь</h2>
+    <ul class="skills">
+      {% for f in course.features %}
+      <li class="skill">
+        <svg class="skill__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#e2f5ec"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="#1f8a5b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="skill__text">{{ f }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {# ===== Кому подойдёт: for_whom / not_for_whom, иначе — поле audience_text ===== #}
+  {% if cpage.has_audience %}
+    {% include "edukursy/courses/blocks/audience.html" %}
+  {% elif course.audience_text and not course.content %}
+  <section class="section section--light" id="course-audience">
+    <h2 class="section__title">Кому подойдёт</h2>
+    <div class="prose prose--wide">{{ course.audience_text|linebreaksbr }}</div>
+  </section>
+  {% endif %}
+
+  {# ===== Как проходит обучение: course_features + prerequisites ===== #}
+  {% include "edukursy/courses/blocks/format.html" %}
+
+  {% if not course.content %}
+  {% if usps %}
+  <section class="section" id="course-usp">
+    <h2 class="section__title">Почему стоит выбрать этот курс</h2>
+    <ul class="usp-grid">
+      {% for u in usps %}
+      <li class="usp">
+        {% if u.icon %}<span class="usp__icon" aria-hidden="true">{{ u.icon }}</span>{% endif %}
+        <h3 class="usp__title">{{ u.title }}</h3>
+        {% if u.text %}<p class="usp__text">{{ u.text }}</p>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if modules %}
+  <section class="section section--light" id="course-program">
+    <div class="section-head">
+      <h2 class="section__title">Программа курса</h2>
+      {% if modules_count %}<p class="section-head__meta">{{ modules_count }} {{ modules_count|plural:"модуль,модуля,модулей" }}{% if hours_total %} · {{ hours_total }} часов{% endif %}</p>{% endif %}
+    </div>
+    <ol class="modules">
+      {% for m in modules %}
+      <li class="module">
+        <details{% if forloop.first %} open{% endif %}>
+          <summary class="module__head"><span class="module__num">{{ forloop.counter|stringformat:"02d" }}</span><span class="module__title">{{ m.title }}</span>{% if m.duration %}<span class="module__dur">{{ m.duration }}</span>{% endif %}</summary>
+          {% if m.description %}<p class="module__text">{{ m.description }}</p>{% endif %}
+        </details>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+  {% endif %}
+  {% endif %}
+
+  {# ===== Мнение редакции: pros / cons / editorial_verdict ===== #}
+  {% include "edukursy/courses/blocks/review.html" %}
+
+  {# ===== Что уточнить перед покупкой: what_to_check_before_buying ===== #}
+  {% include "edukursy/courses/blocks/check.html" %}
+
+  {% if partner_url %}
+  <section class="course-cta">
+    <div class="course-cta__text">
+      <p class="course-cta__title">{{ course.title }} <span>· {{ course.school.name }}</span></p>
+      <p class="course-cta__sub">{% if course.has_price %}{{ course.price|rub }}{% if price_month %} или {{ price_month|rub }}/мес{% endif %}{% elif cpage.price_text %}{{ cpage.price_text }}{% endif %}{% if course.start_date %} · старт {{ course.start_date }}{% endif %}</p>
+    </div>
+    <a href="{{ partner_url }}" class="btn btn--light btn--lg" rel="sponsored noopener" target="_blank">Перейти на сайт школы</a>
+  </section>
+  {% endif %}
+
+  {% if not course.content %}
+  <section class="section" id="course-school">
+    <h2 class="section__title">О школе</h2>
+    <div class="school-about">
+      <div class="course-school">
+        <div class="course-school__head">
+          {% if course.school.logo %}<img src="{{ course.school.logo.url }}" alt="" class="course-school__logo" width="64" height="64">{% endif %}
+          <div>
+            <h3 class="course-school__name">{{ course.school.name }}</h3>
+            <p class="school-tile__rating">{% if course.school.rating %}<span class="school-tile__stars">{{ course.school.rating }}</span>{% endif %}{% if course.school.year_founded %} · на рынке с {{ course.school.year_founded }} года{% endif %}</p>
+          </div>
+        </div>
+        {% if course.school.short_description %}<p class="course-school__text">{{ course.school.short_description }}</p>{% endif %}
+        <div class="course-school__actions">
+          <a href="{{ course.school.get_absolute_url }}" class="btn btn--outline">Все курсы школы{% if school_courses_count %} ({{ school_courses_count }}){% endif %}</a>
+          {% if course.school.official_url %}<a href="{{ course.school.official_url }}" class="btn btn--primary" rel="sponsored noopener" target="_blank">Сайт школы</a>{% endif %}
+        </div>
+      </div>
+
+      <dl class="school-details">
+        {% if course.school.license %}<div><dt>Лицензия</dt><dd>Есть</dd></div>{% endif %}
+        {% if course.school.certificate %}<div><dt>Документ</dt><dd>{{ course.school.certificate }}</dd></div>{% endif %}
+        {% if course.school.refund %}<div><dt>Возврат</dt><dd>{{ course.school.refund }}</dd></div>{% endif %}
+        {% if course.school.installment %}<div><dt>Рассрочка</dt><dd>{{ course.school.installment }}</dd></div>{% endif %}
+        {% if course.school.legal_name %}<div><dt>Юрлицо</dt><dd>{{ course.school.legal_name }}</dd></div>{% endif %}
+      </dl>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ===== Что говорит школа: source_facts ===== #}
+  {% include "edukursy/courses/blocks/source.html" %}
+
+  {% if similar %}
+  <section class="section section--light" id="course-similar">
+    <div class="section-head">
+      <h2 class="section__title">Похожие курсы других школ</h2>
+      {% if profession %}<a href="{{ profession.get_absolute_url }}" class="link-arrow">Все курсы профессии →</a>{% endif %}
+    </div>
+    <div class="catalog-grid catalog-grid--similar">
+      {% for c in similar %}
+        {% include "edukursy/partials/cards/course_card.html" with course=c %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% banner request.path "inline" "inline" %}
+
+  {# ===== Вопросы: FAQ из админки + faq из editorial_json и extract_json (без повторов) ===== #}
+  {% if faqs or cpage.faq %}
+  <section class="section faq-section" id="course-faq" itemscope itemtype="https://schema.org/FAQPage">
+    <h2 class="section__title">Часто задаваемые вопросы</h2>
+    <div class="faq faq--wide">
+      {% for f in faqs %}
+      <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <h3 class="faq-item__q">
+          <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-{{ f.id }}" id="faq-q-{{ f.id }}">
+            {% if f.icon %}<span class="faq-item__icon" aria-hidden="true">{{ f.icon }}</span>{% endif %}
+            <span itemprop="name">{{ f.question }}</span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faq-a-{{ f.id }}" role="region" aria-labelledby="faq-q-{{ f.id }}" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">{{ f.answer|linebreaks }}</div>
+        </div>
+      </div>
+      {% endfor %}
+      {% for f in cpage.faq %}
+      <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <h3 class="faq-item__q">
+          <button type="button" class="faq-item__btn" aria-expanded="false" aria-controls="faq-a-j{{ forloop.counter }}" id="faq-q-j{{ forloop.counter }}">
+            <span itemprop="name">{{ f.question }}</span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faq-a-j{{ forloop.counter }}" role="region" aria-labelledby="faq-q-j{{ forloop.counter }}" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">{{ f.answer|linebreaks }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+</div>
+
+<div class="sticky-cta">
+  <p class="sticky-cta__price">{% if course.has_price %}{{ course.price|rub }} {% if price_month %}<span>или {{ price_month|rub }}/мес</span>{% endif %}{% elif cpage.price_text %}{{ cpage.price_text }}{% endif %}</p>
+  {% if partner_url %}<div class="sticky-cta__actions">{% include "edukursy/partials/compare/button.html" with course=course variant="icon" %}<a href="{{ partner_url }}" class="btn btn--primary" rel="sponsored noopener" target="_blank">На сайт школы</a></div>{% endif %}
+</div>
+
+{% endblock %}

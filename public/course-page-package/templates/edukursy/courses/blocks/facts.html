@@ -1,0 +1,11 @@
+{% comment %}Факты под заголовком: уровень, формат, длительность, документ, трудоустройство. Только то, что есть в extract_json.{% endcomment %}
+{% if cpage.facts %}
+<ul class="cp-facts" aria-label="Коротко о курсе">
+  {% for f in cpage.facts %}
+  <li class="cp-fact{% if f.tone %} cp-fact--{{ f.tone }}{% endif %}">
+    <span class="cp-fact__icon">{% include "edukursy/courses/blocks/icon.html" with name=f.icon %}</span>
+    <span class="cp-fact__text"><span class="cp-fact__label">{{ f.label }}</span><span class="cp-fact__value"{% if f.key == "duration" %} itemprop="timeRequired"{% endif %}>{{ f.value }}</span></span>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}

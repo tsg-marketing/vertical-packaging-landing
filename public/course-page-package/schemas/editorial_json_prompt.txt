@@ -1,0 +1,125 @@
+{
+  "source_url": "string | null",
+  "draft_status": "ok | partial | failed",
+  "course_title": "string | null",
+  "school_name": "string | null",
+  "editorial_intro": "string | null",
+  "editorial_summary": "string | null",
+  "for_whom": [],
+  "not_for_whom": [],
+  "pros": [],
+  "cons": [],
+  "what_to_check_before_buying": [],
+  "faq": [
+    {
+      "question": "string",
+      "answer": "string"
+    }
+  ],
+  "editorial_verdict": "string | null"
+}
+
+Field rules:
+
+1. source_url
+- Copy from input JSON if available, otherwise null.
+
+2. draft_status
+- "ok" if there is enough information to create a meaningful editorial draft.
+- "partial" if only part of the draft can be created confidently.
+- "failed" if the input data is too poor to create a safe editorial draft.
+
+3. course_title
+- Copy from input JSON if available, otherwise null.
+
+4. school_name
+- Copy from input JSON if available, otherwise null.
+
+5. editorial_intro
+- 1 to 2 sentences.
+- A neutral opening that introduces the course.
+- Should mention what kind of course it appears to be and for whom it may be relevant.
+- Must be based only on the input JSON.
+- null if not enough information.
+
+6. editorial_summary
+- 2 to 4 sentences.
+- A compact neutral summary of the course.
+- May mention format, level, duration, or positioning if present in input.
+- Must not repeat the same point several times.
+- null if not enough information.
+
+7. for_whom
+- Array of specific audience groups supported by the input JSON.
+- Examples:
+  - "Для новичков, которым нужен структурированный старт"
+  - "Для тех, кто хочет освоить базовые навыки Python"
+- Return [] if unsupported.
+
+8. not_for_whom
+- Array of cautious statements about who may find the course less suitable.
+- Must be justified by the input JSON.
+- Examples:
+  - "Может не подойти тем, кто уже уверенно владеет основами и ищет продвинутые темы"
+  - "Может быть не лучшим выбором для тех, кто ищет только короткий интенсив"
+- Return [] if unsupported.
+
+9. pros
+- Array of concise strengths based only on input facts.
+- Examples:
+  - "На странице указана структурированная программа обучения"
+  - "Курс ориентирован на начинающий уровень"
+  - "Предусмотрены практические задания"
+- No hype.
+- Return [] if there is not enough support.
+
+10. cons
+- Array of concise limitations or cautious reservations.
+- Must be grounded in the input JSON.
+- Good examples:
+  - "На странице ограниченно раскрыты детали сопровождения"
+  - "Информация о трудоустройстве не подтверждена"
+  - "Курс может показаться базовым для тех, у кого уже есть опыт"
+- Return [] if there is not enough support.
+
+11. what_to_check_before_buying
+- Array of practical things a learner should verify before purchase.
+- These should be derived from unclear or important fields in the input JSON.
+- Examples:
+  - "Уточнить формат обратной связи с преподавателями"
+  - "Проверить, входит ли в программу работа над проектами"
+  - "Посмотреть актуальную стоимость и условия рассрочки"
+- Return [] if nothing important needs clarification.
+
+12. faq
+- 3 to 6 items if enough information exists.
+- Questions should be useful for a learner.
+- Answers must rely only on the input JSON.
+- If little information exists, return fewer items or [].
+- Do not invent missing details.
+
+13. editorial_verdict
+- 1 to 3 sentences.
+- A balanced closing assessment.
+- Should summarize who the course may fit and any key caution.
+- Must remain neutral.
+- null if not enough information.
+
+Quality rules:
+- Keep all keys present in the output.
+- Do not add extra keys.
+- Do not remove keys.
+- If a text field cannot be written safely, use null.
+- If a list field has no reliable content, use [].
+- Avoid repeating the same wording across intro, summary, and verdict.
+- Avoid direct marketing phrases such as:
+  - "идеальный выбор"
+  - "лучший курс"
+  - "гарантированно поможет"
+  - "точно приведет к трудоустройству"
+
+Decision logic:
+- If input extraction_status is "failed", then draft_status should usually be "failed".
+- If course_title, short_summary, and most supporting fields are missing, use "failed".
+- If some useful facts exist but many fields are missing, use "partial".
+- If enough facts exist for a coherent draft, use "ok".
